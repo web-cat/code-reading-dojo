@@ -1,0 +1,16 @@
+{{ember-notify}}
+{{#each names as |name|}}
+  {{#if (eq name 's')}}
+    &#9733;
+  {{/if}}
+{{/each}}
+<br/>
+<strong>{{program.difficulty}}</strong>
+
+<pre>
+  <p>
+    {{program.code}}
+  </p>
+</pre>
+
+<button {{action "clickCode"}}>Click here to start</button>

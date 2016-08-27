@@ -1,0 +1,14 @@
+<ul>
+  <button {{action "getCurrentUrl" "clicked"}}>Ready?</button>
+  {{#each model as |program|}}
+    {{#if (eq clicked 'true')}}
+      {{#if (eq program.level currentUrl)}}
+      {{x-timer autoStart='true' format='HH:MM:SS' stopRequired=false}}
+          {{program-details program=program}}
+          {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'unclicked')}}
+            NEXT LEVEL
+          {{/link-to}}
+      {{/if}}
+    {{/if}}
+  {{/each}}
+</ul>
