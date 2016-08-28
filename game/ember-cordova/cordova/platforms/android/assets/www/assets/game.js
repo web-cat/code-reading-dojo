@@ -8,7 +8,7 @@
 
 define('game/adapters/application', ['exports', 'ember-data/adapters/json-api'], function (exports, _emberDataAdaptersJsonApi) {
   exports['default'] = _emberDataAdaptersJsonApi['default'].extend({
-    host: 'http://127.0.0.1:3000'
+    host: 'http://192.168.1.142:3000'
   });
 });
 define('game/app', ['exports', 'ember', 'game/resolver', 'ember-load-initializers', 'game/config/environment'], function (exports, _ember, _gameResolver, _emberLoadInitializers, _gameConfigEnvironment) {
@@ -4139,7 +4139,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+081f216c"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+2aa6bdeb"});
 }
 
 /* jshint ignore:end */
