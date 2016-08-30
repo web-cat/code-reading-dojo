@@ -1,14 +1,28 @@
 <div class="jumbotron text-center">
 <p>Please select difficulty</p>
     <div class="form-horizontal form-group form-group-lg row">
+      <div class="col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4">
 
-        <div class="col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4">
+          <button {{action "clickedBeginner"}} class="btn btn-info btn-lg btn-block">Beginners</button>
+          {{#if (eq beginnerClicked 'true')}}
+              {{#each model as |p|}}
+              {{#link-to 'programs' p.level class="list-group-item" }}Level {{p.level}}{{/link-to}}
+            {{/each}}
+          {{/if}}
 
-            {{#link-to 'programs' 1 class="btn btn-primary btn-lg btn-block"}}Beginners{{/link-to}}
-            {{#link-to 'intermediate' 1 class="btn btn-primary btn-lg btn-block" }}Intermediates{{/link-to}}
-            {{#link-to 'advanced' 1 class="btn btn-primary btn-lg btn-block" }}Advancedes{{/link-to}}
+          {{#link-to 'programs' 1 class="btn btn-primary btn-lg btn-block" invokeAction=(action 'clickedAdvanced')}}Intermediates{{/link-to}}
+          {{#if (eq intermediateClicked 'true')}}
+            {{#each programs as |program|}}
+              Test
+            {{/each}}
+          {{/if}}
 
-        </div>
-
+          {{#link-to 'programs' 1 class="btn btn-primary btn-lg btn-block" }}Advancedes{{/link-to}}
+          {{#if (eq advancedClicked 'true')}}
+          {{#each programs as |program|}}
+            Test3
+          {{/each}}
+          {{/if}}
+      </div>
     </div>
 </div>

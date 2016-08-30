@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 t=""
 l=1
-Dir['/Users/zahra/Documents/workspace/Final/*'].each do |fname|
+Dir['/Users/zahra/Documents/workspace/Final/beginner/*'].each do |fname|
   s = ""
   File.open(fname, "r") do |f|
     f.each_line do |line|
@@ -16,6 +16,20 @@ Dir['/Users/zahra/Documents/workspace/Final/*'].each do |fname|
     end
   end
   Program.create(code: s, difficulty:"beginner", level:l.to_s, errorindexes:"1 2 3")
+  l += 1
+end
+
+t=""
+l=1
+Dir['/Users/zahra/Documents/workspace/Final/*'].each do |fname|
+  s = ""
+  File.open(fname, "r") do |f|
+    f.each_line do |line|
+      s += line
+      s += " "
+    end
+  end
+  Program.create(code: s, difficulty:"intermediate", level:l.to_s, errorindexes:"1 2 3")
   l += 1
 end
 
