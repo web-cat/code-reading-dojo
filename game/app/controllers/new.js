@@ -4,7 +4,6 @@ export default Ember.Controller.extend({
   beginnerClicked: 'false',
   intermediateClicked: 'false',
   advancedClicked: 'false',
-  test:[1,2,3],
   beginnerTest: '',
   actions: {
     clickedBeginner: function(){
@@ -19,9 +18,6 @@ export default Ember.Controller.extend({
     },
     clickedAdvanced: function(){
       this.set('beginnerClicked','true');
-    },
-    // beginnerTestFunc: function(){
-    //   this.set('beginnerTest', this.get(program.model));
-    // },
+    }
   }
 });

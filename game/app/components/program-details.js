@@ -23,12 +23,6 @@ export default Ember.Component.extend({
     nextLevel(){
       this.set('level',parseInt(this.get('level'))+1);
     },
-    imageShow() {
-      this.set('isImageShowing', true);
-    },
-    imageHide() {
-      this.set('isImageShowing', false);
-    },
     clickCode(){
       var current = this;
       var temp = $("p:first").text();
@@ -55,21 +49,19 @@ export default Ember.Component.extend({
         }
         if (flag === true)
         {
-          current.get('notify').info("YOU FOUND THE ERROR!");
+          current.get('notify').success("YOU FOUND THE ERROR!");
           $(this).css("background-color","#00CC66");
           current.get('names').pushObject("s");
         }
         else {
-          current.get('notify').info("NO ERROR!");
+          current.get('notify').warning("NO ERROR!");
           $(this).css("background-color","#ff4d4d");
         }
  	    });
       this.set('returnValue',s);
-
     },
 
     done(){
-
       this.get('notify').alert('Hello there!', {
         radius: true
       });
