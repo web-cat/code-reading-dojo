@@ -1,9 +1,9 @@
 import Ember from 'ember';
-
 import {
   Component,
   inject
 } from 'ember';
+
 export default Ember.Component.extend({
   notify: Ember.inject.service('notify'),
   isImageShowing: false,
@@ -24,6 +24,7 @@ export default Ember.Component.extend({
       this.set('level',parseInt(this.get('level'))+1);
     },
     clickCode(){
+      // this.get('notify').info('Hello there!');
       var current = this;
       var temp = $("p:first").text();
     	var words = temp.split(" ");
@@ -31,11 +32,12 @@ export default Ember.Component.extend({
 
   		$("p:first").html("<span>" + text + "</span>");
       var s;
-  		$("span").click(function () {
+  		$("span").click(function ()
+      {
+
       	$(this).css("background-color","yellow");
         s = $(this).text();
         var message = "You clicked "+ s;
-        current.get('notify').info(message);
         var k = 0;
         var len = current.errors.length;
         var flag = false;
@@ -49,12 +51,14 @@ export default Ember.Component.extend({
         }
         if (flag === true)
         {
-          current.get('notify').success("YOU FOUND THE ERROR!");
+          var finalMessage = message + "\n" + "you found the error!";
+          current.get('notify').success(finalMessage);
           $(this).css("background-color","#00CC66");
           current.get('names').pushObject("s");
         }
         else {
-          current.get('notify').warning("NO ERROR!");
+          var finalMessage = message + "\n" + "No error!"
+          current.get('notify').alert(finalMessage);
           $(this).css("background-color","#ff4d4d");
         }
  	    });

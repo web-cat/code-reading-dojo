@@ -1,1 +1,20 @@
 @import "bootstrap";
+/* main container */
+
+.jumbotron {
+height:100%;
+}
+.custom-notify {
+    position: fixed;
+    top: 40%;
+    right: 20%;
+    left: 20%;
+}
+/* message box */
+.custom-notify .callout {
+    position: relative;
+    overflow: hidden;
+}
+/* classes applied for animating in/out */
+.custom-notify .ember-notify-show {}
+.custom-notify .ember-notify-hide {}

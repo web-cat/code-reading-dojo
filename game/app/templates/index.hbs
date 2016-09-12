@@ -1,30 +1,19 @@
 <div class="jumbotron text-center">
-    <h1>CodeReadingDojo</h1>
+<h1>CodeReadingDojo</h1>
+<h4>A new and fun way to find bugs!</h4>
+<img src="assets/images/logo.png" >
+<br/><br/>
 
-    <br/><br/>
-    {{#if hasFacebook}}
-  {{partial "comment-form"}}
-{{else}}
-  <a href="#" {{action 'signInToComment'}}>
-    Sign in to comment
-  </a>
-{{/if}}
-{{#code-block language='markup'}}//Can be left blank for the default
-&lt;a href='link'&gt;value&lt;/a&gt;
-{{/code-block}}
+<h3>Welcome!</h3>
 
-    <div class="form-horizontal form-group form-group-lg row">
+  CodeReadingDojo is an educationally-oriented Android game aimed at promoting code reading skills.
 
-
-        <div class="col-xs-10 col-xs-offset-1 col-sm-offset-3 col-sm-4 col-md-6">
-          {{#link-to 'login' class="btn btn-primary btn-lg btn-block" }}Quick Play{{/link-to}}
-        </div>
-
-        <div class="col-xs-10 col-xs-offset-1 col-sm-offset-3 col-sm-4 col-md-6">
-          {{#link-to 'practice' class="btn btn-info btn-lg btn-block" }}Practice{{/link-to}}
-        </div>
-
+<div class="form-horizontal form-group form-group-lg row">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-offset-3 col-sm-4 col-md-6">
+      {{#link-to 'login' class="btn btn-primary btn-lg btn-block" }}Sign Up{{/link-to}}
     </div>
+
+</div>
 
 
     {{#if responseMessage}}
