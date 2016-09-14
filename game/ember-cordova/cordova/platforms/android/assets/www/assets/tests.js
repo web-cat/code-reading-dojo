@@ -1,3 +1,5 @@
+'use strict';
+
 define('game/tests/adapters/application.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -22,34 +24,7 @@ define('game/tests/components/program-details.jshint', ['exports'], function (ex
   QUnit.module('JSHint | components/program-details.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'components/program-details.js should pass jshint.\ncomponents/program-details.js: line 48, col 13, \'j\' is defined but never used.\ncomponents/program-details.js: line 34, col 18, \'$\' is not defined.\ncomponents/program-details.js: line 38, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 40, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 41, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 42, col 13, \'$\' is not defined.\ncomponents/program-details.js: line 59, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 64, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 4, col 3, \'Component\' is defined but never used.\ncomponents/program-details.js: line 5, col 3, \'inject\' is defined but never used.\n\n10 errors');
-  });
-});
-define('game/tests/components/template-advanced.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | components/template-advanced.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(false, 'components/template-advanced.js should pass jshint.\ncomponents/template-advanced.js: line 34, col 14, Expected \'===\' and instead saw \'==\'.\ncomponents/template-advanced.js: line 6, col 16, \'Ember\' is not defined.\ncomponents/template-advanced.js: line 7, col 11, \'Ember\' is not defined.\ncomponents/template-advanced.js: line 24, col 18, \'$\' is not defined.\ncomponents/template-advanced.js: line 27, col 11, \'$\' is not defined.\ncomponents/template-advanced.js: line 29, col 11, \'$\' is not defined.\ncomponents/template-advanced.js: line 30, col 9, \'$\' is not defined.\ncomponents/template-advanced.js: line 31, col 11, \'$\' is not defined.\ncomponents/template-advanced.js: line 36, col 7, \'$\' is not defined.\ncomponents/template-advanced.js: line 40, col 11, \'$\' is not defined.\ncomponents/template-advanced.js: line 47, col 11, \'$\' is not defined.\ncomponents/template-advanced.js: line 48, col 9, \'$\' is not defined.\ncomponents/template-advanced.js: line 49, col 15, \'$\' is not defined.\ncomponents/template-advanced.js: line 51, col 7, \'current\' is not defined.\ncomponents/template-advanced.js: line 3, col 3, \'Component\' is defined but never used.\ncomponents/template-advanced.js: line 4, col 3, \'inject\' is defined but never used.\n\n16 errors');
-  });
-});
-define('game/tests/components/template-beginner.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | components/template-beginner.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(false, 'components/template-beginner.js should pass jshint.\ncomponents/template-beginner.js: line 34, col 14, Expected \'===\' and instead saw \'==\'.\ncomponents/template-beginner.js: line 6, col 16, \'Ember\' is not defined.\ncomponents/template-beginner.js: line 7, col 11, \'Ember\' is not defined.\ncomponents/template-beginner.js: line 24, col 18, \'$\' is not defined.\ncomponents/template-beginner.js: line 27, col 11, \'$\' is not defined.\ncomponents/template-beginner.js: line 29, col 11, \'$\' is not defined.\ncomponents/template-beginner.js: line 30, col 9, \'$\' is not defined.\ncomponents/template-beginner.js: line 31, col 11, \'$\' is not defined.\ncomponents/template-beginner.js: line 36, col 7, \'$\' is not defined.\ncomponents/template-beginner.js: line 40, col 11, \'$\' is not defined.\ncomponents/template-beginner.js: line 47, col 11, \'$\' is not defined.\ncomponents/template-beginner.js: line 48, col 9, \'$\' is not defined.\ncomponents/template-beginner.js: line 49, col 15, \'$\' is not defined.\ncomponents/template-beginner.js: line 51, col 7, \'current\' is not defined.\ncomponents/template-beginner.js: line 3, col 3, \'Component\' is defined but never used.\ncomponents/template-beginner.js: line 4, col 3, \'inject\' is defined but never used.\n\n16 errors');
-  });
-});
-define('game/tests/components/template-intermediate.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | components/template-intermediate.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(false, 'components/template-intermediate.js should pass jshint.\ncomponents/template-intermediate.js: line 34, col 14, Expected \'===\' and instead saw \'==\'.\ncomponents/template-intermediate.js: line 6, col 16, \'Ember\' is not defined.\ncomponents/template-intermediate.js: line 7, col 11, \'Ember\' is not defined.\ncomponents/template-intermediate.js: line 24, col 18, \'$\' is not defined.\ncomponents/template-intermediate.js: line 27, col 11, \'$\' is not defined.\ncomponents/template-intermediate.js: line 29, col 11, \'$\' is not defined.\ncomponents/template-intermediate.js: line 30, col 9, \'$\' is not defined.\ncomponents/template-intermediate.js: line 31, col 11, \'$\' is not defined.\ncomponents/template-intermediate.js: line 36, col 7, \'$\' is not defined.\ncomponents/template-intermediate.js: line 40, col 11, \'$\' is not defined.\ncomponents/template-intermediate.js: line 47, col 11, \'$\' is not defined.\ncomponents/template-intermediate.js: line 48, col 9, \'$\' is not defined.\ncomponents/template-intermediate.js: line 49, col 15, \'$\' is not defined.\ncomponents/template-intermediate.js: line 51, col 7, \'current\' is not defined.\ncomponents/template-intermediate.js: line 3, col 3, \'Component\' is defined but never used.\ncomponents/template-intermediate.js: line 4, col 3, \'inject\' is defined but never used.\n\n16 errors');
+    assert.ok(false, 'components/program-details.js should pass jshint.\ncomponents/program-details.js: line 60, col 15, \'finalMessage\' is already defined.\ncomponents/program-details.js: line 60, col 58, Missing semicolon.\ncomponents/program-details.js: line 44, col 13, \'j\' is defined but never used.\ncomponents/program-details.js: line 29, col 18, \'$\' is not defined.\ncomponents/program-details.js: line 33, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 35, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 38, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 39, col 13, \'$\' is not defined.\ncomponents/program-details.js: line 56, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 62, col 11, \'$\' is not defined.\ncomponents/program-details.js: line 3, col 3, \'Component\' is defined but never used.\ncomponents/program-details.js: line 4, col 3, \'inject\' is defined but never used.\n\n12 errors');
   });
 });
 define('game/tests/controllers/completed.jshint', ['exports'], function (exports) {
@@ -59,6 +34,15 @@ define('game/tests/controllers/completed.jshint', ['exports'], function (exports
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'controllers/completed.js should pass jshint.');
+  });
+});
+define('game/tests/controllers/new.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/new.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/new.js should pass jshint.');
   });
 });
 define('game/tests/controllers/programs.jshint', ['exports'], function (exports) {
@@ -86,6 +70,15 @@ define('game/tests/helpers/add.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'helpers/add.js should pass jshint.');
+  });
+});
+define('game/tests/helpers/concat.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | helpers/concat.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'helpers/concat.js should pass jshint.');
   });
 });
 define('game/tests/helpers/destroy-app', ['exports', 'ember'], function (exports, _ember) {
@@ -257,6 +250,15 @@ define('game/tests/models/advanced.jshint', ['exports'], function (exports) {
     assert.ok(true, 'models/advanced.js should pass jshint.');
   });
 });
+define('game/tests/models/new.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/new.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/new.js should pass jshint.');
+  });
+});
 define('game/tests/models/program.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -293,31 +295,13 @@ define('game/tests/router.jshint', ['exports'], function (exports) {
     assert.ok(true, 'router.js should pass jshint.');
   });
 });
-define('game/tests/routes/advanceds.jshint', ['exports'], function (exports) {
+define('game/tests/routes/new.jshint', ['exports'], function (exports) {
   'use strict';
 
-  QUnit.module('JSHint | routes/advanceds.js');
+  QUnit.module('JSHint | routes/new.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'routes/advanceds.js should pass jshint.');
-  });
-});
-define('game/tests/routes/beginners.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | routes/beginners.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'routes/beginners.js should pass jshint.');
-  });
-});
-define('game/tests/routes/intermediates.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | routes/intermediates.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'routes/intermediates.js should pass jshint.');
+    assert.ok(true, 'routes/new.js should pass jshint.');
   });
 });
 define('game/tests/routes/programs.jshint', ['exports'], function (exports) {

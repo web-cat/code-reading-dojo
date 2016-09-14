@@ -11,7 +11,7 @@ export default Ember.Component.extend({
   level: '',
   returnValue: 'em',
   currentUrl:'s',
-  errors: ["static", "void", "list"],
+  errors: [],
   names: [],
   actions: {
     setCurrentUrl(){
@@ -23,6 +23,9 @@ export default Ember.Component.extend({
     nextLevel(){
       this.set('level',parseInt(this.get('level'))+1);
     },
+    findErrors(){
+      this.set('errors', this.get('level').split(" "));
+    }
     clickCode(){
       // this.get('notify').info('Hello there!');
       var current = this;
