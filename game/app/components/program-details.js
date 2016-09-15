@@ -25,9 +25,8 @@ export default Ember.Component.extend({
     },
     findErrors(){
       this.set('errors', this.get('level').split(" "));
-    }
+    },
     clickCode(){
-      // this.get('notify').info('Hello there!');
       var current = this;
       var temp = $("p:first").text();
     	var words = temp.split(" ");
