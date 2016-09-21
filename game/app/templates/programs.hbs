@@ -1,20 +1,50 @@
 <div class="jumbotron text-center">
-<img id="new-logo" src="assets/images/logo.png" >
-{{#if (eq clicked false)}}
-<button  id='confirm-button' class="btn btn-primary bt-lg" {{action "getCurrentUrl" "clicked"}}>Ready?</button>
+{{ember-notify messageStyle='bootstrap' classPrefix="custom-notify"}}
+{{#if (eq clicked 'false')}}
+  <img id="new-logo" src="assets/images/logo.png" >
+  <h2>Level One</h2>
+    <h2>Beginner</h2>
+<button  id='continue-button' class="btn btn-primary bt-lg" {{action "getCurrentUrl" "clicked"}}>Touch to Continue</button>
 {{/if}}
+
 </div>
 {{#each model as |program|}}
-  {{#if (eq clicked 'true')}}
-    {{#if (eq program.difficulty "beginner")}}
-      {{#if (eq program.level currentUrl)}}
-        {{program.errorindexes}}
-      {{x-timer autoStart='true' format='HH:MM:SS' stopRequired=false}}
-          {{program-details program=program}}
-          {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked')}}
-            NEXT LEVEL
-          {{/link-to}}
-      {{/if}}
+{{#if (eq program.difficulty "beginner")}}
+
+  {{#if (eq program.level currentUrl)}}
+
+    {{#if (eq clicked 'true')}}
+        <img id="level-logo" src={{concat (concat "assets/images/beginner/" program.level) ".png"}} >
+
+        {{#if (eq started 'true')}}
+          <span id="timer">
+            {{x-timer autoStart='true' format='HH:MM:SS' stopRequired=false}}
+          </span>
+          <span id="stars">
+          {{#each clickedWords as |clickedWord|}}
+            <span class="star-icon full">☆</span>
+          {{/each}}
+        </span>
+        {{/if}}
+
+        <pre id="code-content">
+          {{program.code}}
+        </pre>
+        <div class="jumbotron text-center">
+        {{#if (eq started 'false')}}
+        <h2>EXPECTATIONS</h2>
+        <h4>
+          You have 90 seconds to find three errors in the code.
+        </h4>
+        <button id="start-button" {{action "clickCode" program.errorindexes}} class='btn btn-primary btn-lg'>Start</button>
+        {{/if}}
+      </div>
+        <!-- {{#if (eq score 3)}}
+        {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked')}}
+          NEXT LEVEL
+        {{/link-to}}
+        {{/if}} -->
       {{/if}}
     {{/if}}
-  {{/each}}
+  {{/if}}
+{{/each}}

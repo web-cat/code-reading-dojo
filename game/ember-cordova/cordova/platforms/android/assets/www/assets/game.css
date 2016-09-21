@@ -5815,22 +5815,43 @@ button.close {
     display: none !important; } }
 
 /* main container */
-p, h4, h3 {
-  color: white; }
+h4, h3 {
+  color: white;
+  max-width: 100%; }
 
 #index-title {
   color: #FF6600; }
 
 #index-logo {
-  width: 50%; }
+  max-width: 50%; }
 
 #new-logo {
+  max-width: 25%;
+  display: block;
+  margin-left: 38%;
+  margin-right: 37%; }
+
+#level-logo {
+  max-width: 25%;
+  display: block;
+  margin-left: 38%;
+  margin-right: 37%;
+  margin-top: 0px; }
+
+#item-notcompleted {
+  opacity: 0.5;
   width: 25%; }
 
-#item {
-  width: 10%; }
+.item-completed {
+  width: 25%; }
 
 #index-button {
+  background-color: #660000;
+  border-color: #660000;
+  color: white;
+  width: 40% !important; }
+
+#continue-button {
   background-color: #660000;
   border-color: #660000;
   color: white;
@@ -5843,7 +5864,7 @@ p, h4, h3 {
 
 .custom-notify {
   position: fixed;
-  top: 40%;
+  top: 20%;
   right: 20%;
   left: 20%; }
 
@@ -5861,6 +5882,35 @@ p, h4, h3 {
   padding: 5px;
   margin-bottom: 0; }
 
+.star-icon {
+  color: #ddd;
+  font-size: 2em;
+  position: relative; }
+
+.star-icon.full:before {
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+  color: #FDE16D;
+  content: '\2605';
+  /* Full star in UTF-8 */
+  position: absolute;
+  left: 0; }
+
+.star-icon.half:before {
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+  color: #FDE16D;
+  content: '\2605';
+  /* Full star in UTF-8 */
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden; }
+
+@-moz-document url-prefix() {
+  /* Firefox Hack :( */
+  .star-icon {
+    font-size: 50px;
+    line-height: 34px; } }
+
 #beginner-item {
   display: inline;
   /*  margin-left: 5px;
@@ -5868,5 +5918,18 @@ p, h4, h3 {
   background-color: maroon;
   margin: 0 5px;
   padding: 0; }
+
+#code-content {
+  display: none;
+  max-width: 100%; }
+
+#timer {
+  margin-left: 40%; }
+
+#start-button {
+  background-color: #660000;
+  border-color: #660000;
+  color: white;
+  max-width: 40%; }
 
 /*# sourceMappingURL=game.css.map */

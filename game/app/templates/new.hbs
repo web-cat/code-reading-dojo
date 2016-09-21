@@ -1,14 +1,14 @@
 <div class="jumbotron text-center">
 <img id="new-logo" src="assets/images/logo.png" >
-<p>Select an excercise you want to play</p>
+<h4>Select an excercise you want to play</h4>
   <div class="form-horizontal form-group form-group-lg row">
   <!-- <div class="col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4"> -->
   <!-- <button {{action "clickedBeginner"}} class="btn btn-info btn-lg btn-block">Beginners</button> -->
     <div class="levels">
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'beginner')}}
-          {{#link-to 'programs' p.level id="item-completed"}}
-            <img id="item-completed" src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
+          {{#link-to 'programs' p.level class="item-completed"}}
+            <img class="item-completed" src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
           {{/link-to}}
           <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
         {{/if}}
@@ -19,8 +19,8 @@
 
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'intermediate')}}
-          {{#link-to 'programs' p.level id="item-notcompleted"}}
-            <img id="item-notcompleted" src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
+          {{#link-to 'programs' p.level class="item-notcompleted"}}
+            <img class="item-notcompleted" src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
           {{/link-to}}
           <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
         {{/if}}
@@ -31,8 +31,8 @@
 
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'advanced')}}
-          {{#link-to 'programs' p.level id="item-notcompleted"}}
-              <img id="item-notcompleted" src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
+          {{#link-to 'programs' p.level class="item-notcompleted"}}
+              <img class="item-notcompleted" src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
           {{/link-to}}
           <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
         {{/if}}

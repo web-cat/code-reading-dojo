@@ -11,8 +11,9 @@ export default Ember.Component.extend({
   level: '',
   returnValue: 'em',
   currentUrl:'s',
-  errors: [],
+  errors: 'a b c',
   names: [],
+  started: 'false',
   actions: {
     setCurrentUrl(){
       this.set('currentUrl', window.location.href.split("/").pop());
@@ -23,20 +24,19 @@ export default Ember.Component.extend({
     nextLevel(){
       this.set('level',parseInt(this.get('level'))+1);
     },
-    findErrors(){
-      this.set('errors', this.get('level').split(" "));
-    },
-    clickCode(){
+
+    clickCode(errorindexes){
+      var result = errorindexes.split(' ');
+      this.set('errors', result);
       var current = this;
-      var temp = $("p:first").text();
+      var temp = $("pre:first").text();
     	var words = temp.split(" ");
  	 	  var text = words.join("</span> <span>");
 
-  		$("p:first").html("<span>" + text + "</span>");
+  		$("pre:first").html("<span>" + text + "</span>");
       var s;
   		$("span").click(function ()
       {
-
       	$(this).css("background-color","yellow");
         s = $(this).text();
         var message = "You clicked "+ s;
@@ -65,6 +65,7 @@ export default Ember.Component.extend({
         }
  	    });
       this.set('returnValue',s);
+      this.set('started','true');
     },
 
     done(){

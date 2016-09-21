@@ -1,19 +1,19 @@
 {{ember-notify messageStyle='bootstrap' classPrefix="custom-notify"}}
 
-{{#each names as |name|}}
+{{#each clickedWords as |clickedWord|}}
   {{#if (eq name 's')}}
     &#9733;
   {{/if}}
 {{/each}}
 <br/>
 <!-- <strong>{{program.difficulty}}</strong> -->
-{{errors}}
-<pre id="code-content">
-  <p id="code">
+{{#if (eq started 'true')}}
+  {{x-timer autoStart='true' format='HH:MM:SS' stopRequired=false}}
+  <pre id="code-content">
     {{program.code}}
-  </p>
-</pre>
-
-{{#link-to 'login' id='index-button' class="btn btn-primary btn-lg" }}Sign Up{{/link-to}}
-
-<button {{action "clickCode"}}>Click here to start</button>
+  </pre>
+{{/if}}
+<!-- {{#link-to 'login' id='index-button' class='btn btn-primary btn-lg' invokeAction=(action 'clickCode' program.errorindexes) }}Start{{/link-to}} -->
+{{#if (eq started 'false')}}
+  <button id="start-button" {{action "clickCode" program.errorindexes}} class='btn btn-primary btn-lg'>Start</button>
+{{/if}}
