@@ -8,7 +8,6 @@ export default Ember.Controller.extend({
   isImageShowing: false,
   isComplete: false,
   level: '',
-  returnValue: 'em',
   currentUrl:'s',
   errors: ['a','b'],
   clickedWords: [],
@@ -20,10 +19,11 @@ export default Ember.Controller.extend({
       this.set('clicked','true');
     },
     clicked: function(){
-      if(this.get('clicked')=='true')
+      if(this.get('clicked')==='true'){
         this.set('clicked','false');
-      else
+      } else {
         this.set('clicked','true');
+      }
     },
     clickCode(errorindexes){
       // $("span:first").css("display","block");
@@ -45,7 +45,6 @@ export default Ember.Controller.extend({
         var k = 0;
         var len = current.errors.length;
         var flag = false;
-        var j = '1';
         for (; k < len; k++)
         {
           if(current.errors[k] === s)
@@ -53,11 +52,13 @@ export default Ember.Controller.extend({
             flag = true;
           }
         }
+        var newScore;
+        var finalMessage;
         if (flag === true)
         {
-          var newScore = current.get('score') + 1;
+          newScore = current.get('score') + 1;
           current.set('score', newScore);
-          var finalMessage = message + "\n" + "you found the error!";
+          finalMessage = message + "\n" + "you found the error!";
           current.get('notify').success(finalMessage);
           $(this).css("background-color","#00CC66");
           current.get('clickedWords').pushObject(s);
@@ -65,9 +66,9 @@ export default Ember.Controller.extend({
           // current.get('notify').success(print);
         }
         else {
-          var newScore = current.get('score') - 1;
+          newScore = current.get('score') - 1;
           current.set('score', newScore);
-          var finalMessage = message + "\n" + "No error!"
+          finalMessage = message + "\n" + "No error!";
           current.get('notify').alert(finalMessage);
           $(this).css("background-color","#ff4d4d");
           // current.get('notify').success(newScore);

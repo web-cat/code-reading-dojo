@@ -51,7 +51,7 @@ define('game/tests/controllers/programs.jshint', ['exports'], function (exports)
   QUnit.module('JSHint | controllers/programs.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/programs.js should pass jshint.\ncontrollers/programs.js: line 12, col 13, Duplicate key \'currentUrl\'.\ncontrollers/programs.js: line 23, col 31, Expected \'===\' and instead saw \'==\'.\ncontrollers/programs.js: line 24, col 9, Expected \'{\' and instead saw \'this\'.\ncontrollers/programs.js: line 26, col 9, Expected \'{\' and instead saw \'this\'.\ncontrollers/programs.js: line 68, col 15, \'newScore\' is already defined.\ncontrollers/programs.js: line 70, col 15, \'finalMessage\' is already defined.\ncontrollers/programs.js: line 70, col 58, Missing semicolon.\ncontrollers/programs.js: line 48, col 13, \'j\' is defined but never used.\ncontrollers/programs.js: line 30, col 7, \'$\' is not defined.\ncontrollers/programs.js: line 34, col 18, \'$\' is not defined.\ncontrollers/programs.js: line 38, col 11, \'$\' is not defined.\ncontrollers/programs.js: line 40, col 11, \'$\' is not defined.\ncontrollers/programs.js: line 42, col 11, \'$\' is not defined.\ncontrollers/programs.js: line 43, col 13, \'$\' is not defined.\ncontrollers/programs.js: line 62, col 11, \'$\' is not defined.\ncontrollers/programs.js: line 72, col 11, \'$\' is not defined.\n\n16 errors');
+    assert.ok(false, 'controllers/programs.js should pass jshint.\ncontrollers/programs.js: line 11, col 13, Duplicate key \'currentUrl\'.\ncontrollers/programs.js: line 30, col 7, \'$\' is not defined.\ncontrollers/programs.js: line 34, col 18, \'$\' is not defined.\ncontrollers/programs.js: line 38, col 11, \'$\' is not defined.\ncontrollers/programs.js: line 40, col 11, \'$\' is not defined.\ncontrollers/programs.js: line 42, col 11, \'$\' is not defined.\ncontrollers/programs.js: line 43, col 13, \'$\' is not defined.\ncontrollers/programs.js: line 63, col 11, \'$\' is not defined.\ncontrollers/programs.js: line 73, col 11, \'$\' is not defined.\n\n9 errors');
   });
 });
 define('game/tests/flows.jshint', ['exports'], function (exports) {
@@ -144,7 +144,7 @@ define('game/tests/helpers/eq.jshint', ['exports'], function (exports) {
   QUnit.module('JSHint | helpers/eq.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'helpers/eq.js should pass jshint.\nhelpers/eq.js: line 4, col 7, \'add\' is defined but never used.\n\n1 error');
+    assert.ok(true, 'helpers/eq.js should pass jshint.');
   });
 });
 define('game/tests/helpers/module-for-acceptance', ['exports', 'qunit', 'ember', 'game/tests/helpers/start-app', 'game/tests/helpers/destroy-app'], function (exports, _qunit, _ember, _gameTestsHelpersStartApp, _gameTestsHelpersDestroyApp) {
