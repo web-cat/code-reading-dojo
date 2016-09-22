@@ -1,0 +1,29 @@
+{
+  "name": "dom-ruler",
+  "dependencies": {
+    "loader.js": ">=3.2.0"
+  },
+  "version": "0.1.13",
+  "homepage": "https://github.com/tim-evans/dom-ruler",
+  "authors": [
+    "Tim Evans <tim.c.evans@me.com>"
+  ],
+  "description": "DOM layout metric utility",
+  "main": "dist/dom-ruler.js",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "tests"
+  ],
+  "_release": "0.1.13",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.13",
+    "commit": "32e64c2c87ceb18422ec75b3e0030c10b7b67e64"
+  },
+  "_source": "https://github.com/tim-evans/dom-ruler.git",
+  "_target": "0.1.13",
+  "_originalSource": "dom-ruler"
+}

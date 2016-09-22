@@ -1,0 +1,1 @@
+/Users/zahra/Desktop/Ember/07-11-2016/code-reading-dojo/tmp/funnel-input_base_path-KWN2QpOK.tmp/0/lib/helpers/singularize.js

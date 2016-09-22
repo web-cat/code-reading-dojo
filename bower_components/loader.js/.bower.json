@@ -1,0 +1,14 @@
+{
+  "name": "loader.js",
+  "homepage": "https://github.com/stefanpenner/loader.js",
+  "version": "4.0.11",
+  "_release": "4.0.11",
+  "_resolution": {
+    "type": "version",
+    "tag": "v4.0.11",
+    "commit": "40a9251e1652d69c718028057ab5d71dd3c6f4e6"
+  },
+  "_source": "https://github.com/stefanpenner/loader.js.git",
+  "_target": ">=3.2.0",
+  "_originalSource": "loader.js"
+}

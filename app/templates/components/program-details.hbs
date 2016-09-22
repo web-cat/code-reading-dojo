@@ -1,0 +1,18 @@
+{{ember-notify messageStyle='bootstrap' classPrefix="custom-notify"}}
+
+{{#each names as |name|}}
+  {{#if (eq name 's')}}
+    &#9733;
+  {{/if}}
+{{/each}}
+<br/>
+<!-- <strong>{{program.difficulty}}</strong> -->
+<pre id="code-content">
+  <p id="code">
+    {{program.code}}
+  </p>
+</pre>
+
+{{#link-to 'login' id='index-button' class="btn btn-primary btn-lg" }}Sign Up{{/link-to}}
+
+<button {{action "clickCode" program.errorindexes}}>Click here to start</button>

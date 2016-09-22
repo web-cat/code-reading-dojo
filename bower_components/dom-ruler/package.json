@@ -1,0 +1,20 @@
+{
+  "name": "dom-ruler",
+  "version": "0.1.8",
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "author": "Tim Evans <tim.c.evans@me.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "broccoli": "^0.16.5",
+    "broccoli-babel-transpiler": "^5.4.2",
+    "broccoli-concat": "0.0.13",
+    "broccoli-funnel": "^0.2.7",
+    "broccoli-merge-trees": "^0.2.3"
+  }
+}
