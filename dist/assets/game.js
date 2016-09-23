@@ -7731,7 +7731,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+63c7e53d"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+bdbd4408"});
 }
 
 /* jshint ignore:end */
