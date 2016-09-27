@@ -53,8 +53,5 @@
     "ember-welcome-page": "^1.0.1",
     "loader.js": "^4.0.1",
     "torii": "^0.8.0"
-  },
-  "dependencies": {
-    "ember-tether": "^0.3.1"
   }
 }

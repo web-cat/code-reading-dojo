@@ -1,0 +1,1 @@
+/Users/zahra/Desktop/Ember/07-11-2016/code-reading-dojo/tmp/funnel-input_base_path-4k7tySed.tmp/0/index.js

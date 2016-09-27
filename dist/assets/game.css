@@ -5842,7 +5842,8 @@ p, h4, h3 {
   background-color: #660000;
   border-color: #660000;
   color: white;
-  width: 40% !important; }
+  width: 40% !important;
+  margin-top: 10px; }
 
 .jumbotron.text-center {
   height: 100%;
@@ -5892,5 +5893,12 @@ p, h4, h3 {
 
 #details-page {
   max-width: 100%; }
+
+.jumbotron p {
+  margin-bottom: 0; }
+
+.user-pass {
+  margin-bottom: 0;
+  text-align: left; }
 
 /*# sourceMappingURL=game.css.map */
