@@ -1,18 +1,26 @@
 {{ember-notify messageStyle='bootstrap' classPrefix="custom-notify"}}
 
-{{#each names as |name|}}
+<!-- {{#each names as |name|}}
   {{#if (eq name 's')}}
     &#9733;
   {{/if}}
-{{/each}}
-<br/>
+{{/each}} -->
+
 <!-- <strong>{{program.difficulty}}</strong> -->
+<div id="scores">
+  <span id="first-score" class="star-icon">☆</span>
+  <span id="second-score" class="star-icon">☆</span>
+  <span id="third-score" class="star-icon">☆</span>
+</div>
 <pre id="code-content">
   <p id="code">
     {{program.code}}
   </p>
 </pre>
 
-{{#link-to 'login' id='index-button' class="btn btn-primary btn-lg" }}Sign Up{{/link-to}}
+<!-- {{#link-to 'login' id='index-button' class="btn btn-primary btn-lg" }}login{{/link-to}} -->
 
-<button {{action "clickCode" program.errorindexes}}>Click here to start</button>
+<button {{action "clickCode" program.errorindexes}} id="start-button">Start</button>
+
+
+<button  id="start-button">Start2</button>

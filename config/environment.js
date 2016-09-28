@@ -1,5 +1,4 @@
 /* jshint node: true */
-
 module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'game',
@@ -19,6 +18,10 @@ module.exports = function(environment) {
     }
   };
 
+
+
+
+ ENV.SERVER_URL='http://192.168.1.145:3000';
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;

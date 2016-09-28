@@ -53,6 +53,8 @@ export default Ember.Component.extend({
         if (flag === true)
         {
           finalMessage = message + "\n" + "you found the error!";
+          Ember.$('#third-score').attr("class","star-icon full");
+          // document.getElementById("third-score").classList.add("full");
           current.get('notify').success(finalMessage);
           Ember.$(this).css("background-color","#00CC66");
           current.get('names').pushObject(s);

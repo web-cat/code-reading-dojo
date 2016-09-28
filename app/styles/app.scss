@@ -98,7 +98,65 @@ p,h4,h3 {
 .jumbotron p {
   margin-bottom: 0;
 }
+
 .user-pass {
   margin-bottom: 0;
   text-align: left;
+}
+
+
+
+#play{
+  text-align: center;
+  background-color: #660000;
+  margin-left:30%;
+  margin-right:30%;
+  max-width:40%;
+  border-color: #660000;
+  display:block;
+  margin-bottom: 0px;
+}
+
+#logout {
+  float: right;
+  margin-right: 10px;
+  margin-top: 10px;
+  background-color: #660000;
+  border-color: #660000;
+  padding-top: 1px;
+  padding-bottom: 0px;
+  display: block;
+}
+
+#login {
+  float: right;
+  margin-right: 10px;
+  margin-top: 10px;
+  background-color: #660000;
+  border-color: #660000;
+  padding-top: 1px;
+  padding-bottom: 0px;
+  display: block;
+}
+
+
+/*Make yellow stars for the score*/
+.star-icon {
+  color: #ddd;
+  font-size: 4vmin;
+  position: relative;
+}
+
+.star-icon.full:before {
+  text-shadow: 0 0 0px rgba(0,0,0,0.7);
+  color: #FDE16D;
+  content: '\2605';
+  position: absolute;
+  left: 0;
+}
+
+.star-icon {
+  color: #ddd;
+  font-size: 4vmin;
+  position: relative;
 }

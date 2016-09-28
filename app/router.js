@@ -17,6 +17,7 @@ Router.map(function() {
   this.route('beginner', { path: '/beginner/:beginner_id' });
   this.route('intermediate', { path: '/intermediate/:intermediate_id' });
   this.route('advanced', { path: '/advanced/:advanced_id' });
+  this.route('protected');
 });
 
 export default Router;

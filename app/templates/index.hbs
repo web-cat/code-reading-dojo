@@ -1,15 +1,29 @@
 <div class="jumbotron text-center">
 <h1 id="index-title">CodeReadingDojo</h1>
 <h4>A new and fun way to find bugs!</h4>
+
 <img id="index-logo" src="assets/images/logo.png" >
 <br/><br/>
+{{#if session.isAuthenticated}}
+{{#link-to 'new' class="btn btn-primary btn-lg" id="play"}}Play{{/link-to}}
+
+{{else}}
 
 <h3>Welcome!</h3>
 <p>
 CodeReadingDojo is an educationally-oriented Android game aimed at promoting code reading skills.
 </p>
+{{/if}}
+<!-- {{#if session.isAuthenticated}}
+  <button {{action 'signout'}}>Sign Out</button>
+{{else}}
+  {{#link-to 'login' id='index-button' class="btn btn-primary btn-lg"}}
+    Sign In
+  {{/link-to}}
+{{/if}} -->
+<!-- {{#link-to 'login' id='index-button' class="btn btn-primary btn-lg" }}Sign Up{{/link-to}} -->
 
-{{#link-to 'login' id='index-button' class="btn btn-primary btn-lg" }}Sign Up{{/link-to}}
+
 
 <br/><br/>
 </div>

@@ -16,6 +16,24 @@ define('game/tests/app.jshint', ['exports'], function (exports) {
     assert.ok(true, 'app.js should pass jshint.');
   });
 });
+define('game/tests/authenticators/devise.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | authenticators/devise.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'authenticators/devise.js should pass jshint.');
+  });
+});
+define('game/tests/authenticators/oauth2.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | authenticators/oauth2.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'authenticators/oauth2.js should pass jshint.');
+  });
+});
 define('game/tests/components/program-details.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -25,6 +43,15 @@ define('game/tests/components/program-details.jshint', ['exports'], function (ex
     assert.ok(true, 'components/program-details.js should pass jshint.');
   });
 });
+define('game/tests/controllers/application.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/application.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/application.js should pass jshint.');
+  });
+});
 define('game/tests/controllers/completed.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -32,6 +59,24 @@ define('game/tests/controllers/completed.jshint', ['exports'], function (exports
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'controllers/completed.js should pass jshint.');
+  });
+});
+define('game/tests/controllers/index.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/index.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/index.js should pass jshint.');
+  });
+});
+define('game/tests/controllers/login.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/login.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/login.js should pass jshint.');
   });
 });
 define('game/tests/controllers/new.jshint', ['exports'], function (exports) {
@@ -239,6 +284,15 @@ define('game/tests/helpers/torii', ['exports'], function (exports) {
     });
   }
 });
+define('game/tests/initializers/simple-auth-config.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | initializers/simple-auth-config.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'initializers/simple-auth-config.js should pass jshint.\ninitializers/simple-auth-config.js: line 4, col 8, \'DeviseAuthenticator\' is defined but never used.\n\n1 error');
+  });
+});
 define('game/tests/models/advanced.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -293,6 +347,33 @@ define('game/tests/router.jshint', ['exports'], function (exports) {
     assert.ok(true, 'router.js should pass jshint.');
   });
 });
+define('game/tests/routes/application.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/application.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/application.js should pass jshint.');
+  });
+});
+define('game/tests/routes/index.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/index.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/index.js should pass jshint.');
+  });
+});
+define('game/tests/routes/login.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/login.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/login.js should pass jshint.');
+  });
+});
 define('game/tests/routes/new.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -309,6 +390,15 @@ define('game/tests/routes/programs.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/programs.js should pass jshint.');
+  });
+});
+define('game/tests/routes/protected.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/protected.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/protected.js should pass jshint.');
   });
 });
 define('game/tests/routes/users.jshint', ['exports'], function (exports) {
@@ -427,6 +517,27 @@ define('game/tests/unit/routes/programs-test.jshint', ['exports'], function (exp
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'unit/routes/programs-test.js should pass jshint.');
+  });
+});
+define('game/tests/unit/routes/protected-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
+
+  (0, _emberQunit.moduleFor)('route:protected', 'Unit | Route | protected', {
+    // Specify the other units that are required for this test.
+    // needs: ['controller:foo']
+  });
+
+  (0, _emberQunit.test)('it exists', function (assert) {
+    var route = this.subject();
+    assert.ok(route);
+  });
+});
+define('game/tests/unit/routes/protected-test.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | unit/routes/protected-test.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'unit/routes/protected-test.js should pass jshint.');
   });
 });
 define('game/tests/unit/routes/users-test', ['exports', 'ember-qunit'], function (exports, _emberQunit) {
