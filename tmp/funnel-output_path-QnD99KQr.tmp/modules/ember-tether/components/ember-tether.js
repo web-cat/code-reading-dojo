@@ -1,0 +1,1 @@
+/Users/zahra/Desktop/Ember/07-11-2016/code-reading-dojo/tmp/funnel-input_base_path-4l5an7xX.tmp/0/components/ember-tether.js

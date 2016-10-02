@@ -19,9 +19,18 @@ module.exports = function(environment) {
   };
 
 
+  ENV['ember-simple-auth'] = {
+      authorizer: 'authorizer:devise'
+    };
 
-
- ENV.SERVER_URL='http://192.168.1.145:3000';
+  ENV.SERVER_URL='http://192.168.1.145:3000';
+  //
+  //
+  //   ENV['simple-auth'] = {
+  //     store: 'session-store:local-storage',
+  //     crossOriginWhitelist: [ENV.SERVER_URL],
+  //     routeAfterAuthentication: 'new'
+  //   };
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;

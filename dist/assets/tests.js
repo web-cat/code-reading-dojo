@@ -290,7 +290,7 @@ define('game/tests/initializers/simple-auth-config.jshint', ['exports'], functio
   QUnit.module('JSHint | initializers/simple-auth-config.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'initializers/simple-auth-config.js should pass jshint.\ninitializers/simple-auth-config.js: line 4, col 8, \'DeviseAuthenticator\' is defined but never used.\n\n1 error');
+    assert.ok(true, 'initializers/simple-auth-config.js should pass jshint.');
   });
 });
 define('game/tests/models/advanced.jshint', ['exports'], function (exports) {

@@ -1,25 +1,22 @@
-// app/initializers/simple-auth-config.js
-// app/initializers/simple-auth-config.js
-import ENV from 'game/config/environment';
-import DeviseAuthenticator from 'ember-simple-auth/authenticators/devise';
-/// app/initializers/simple-auth-config.js
+import MyAppnameENV from '../config/environment';
 export default {
   name: 'simple-auth-config',
-  before: 'simple-auth',
+  before: 'ember-simple-auth',
   initialize: function() {
 
     var tokenEndpoint = '/users/sign_in';
-    ENV['simple-auth'] = {
-      authorizer: 'simple-auth-authorizer:devise',
+    MyAppnameENV['ember-simple-auth'] = {
+      authorizer: 'authorizer:devise',
       crossOriginWhitelist:[
-        ENV.SERVER_URL
-      ]
+        MyAppnameENV.SERVER_URL
+      ],
+      serverTokenEndpoint: MyAppnameENV.SERVER_URL + tokenEndpoint
     };
 
-    ENV['simple-auth-devise'] = {
-      serverTokenEndpoint: ENV.SERVER_URL + tokenEndpoint
+    MyAppnameENV['simple-auth-devise'] = {
+      serverTokenEndpoint: MyAppnameENV.SERVER_URL + tokenEndpoint
     };
 
-    window.ENV = ENV;
+    window.ENV = MyAppnameENV;
   }
 };

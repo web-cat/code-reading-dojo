@@ -945,17 +945,17 @@ define("game/initializers/pop-over", ["exports", "ember-pop-over/system/flow", "
     initialize: initialize
   };
 });
-define('game/initializers/simple-auth-config', ['exports', 'game/config/environment', 'ember-simple-auth/authenticators/devise'], function (exports, _gameConfigEnvironment, _emberSimpleAuthAuthenticatorsDevise) {
-  /// app/initializers/simple-auth-config.js
+define('game/initializers/simple-auth-config', ['exports', 'game/config/environment'], function (exports, _gameConfigEnvironment) {
   exports['default'] = {
     name: 'simple-auth-config',
-    before: 'simple-auth',
+    before: 'ember-simple-auth',
     initialize: function initialize() {
 
       var tokenEndpoint = '/users/sign_in';
-      _gameConfigEnvironment['default']['simple-auth'] = {
-        authorizer: 'simple-auth-authorizer:devise',
-        crossOriginWhitelist: [_gameConfigEnvironment['default'].SERVER_URL]
+      _gameConfigEnvironment['default']['ember-simple-auth'] = {
+        authorizer: 'authorizer:devise',
+        crossOriginWhitelist: [_gameConfigEnvironment['default'].SERVER_URL],
+        serverTokenEndpoint: _gameConfigEnvironment['default'].SERVER_URL + tokenEndpoint
       };
 
       _gameConfigEnvironment['default']['simple-auth-devise'] = {
@@ -966,8 +966,6 @@ define('game/initializers/simple-auth-config', ['exports', 'game/config/environm
     }
   };
 });
-// app/initializers/simple-auth-config.js
-// app/initializers/simple-auth-config.js
 define('game/initializers/store', ['exports', 'ember'], function (exports, _ember) {
 
   /*
@@ -7997,7 +7995,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+e2df534f"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+2a297aa1"});
 }
 
 /* jshint ignore:end */
