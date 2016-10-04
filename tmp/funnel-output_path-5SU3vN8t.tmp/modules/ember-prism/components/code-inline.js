@@ -1,1 +1,0 @@
-/Users/zahra/Desktop/Ember/07-11-2016/code-reading-dojo/tmp/funnel-input_base_path-j36oL98Q.tmp/0/components/code-inline.js

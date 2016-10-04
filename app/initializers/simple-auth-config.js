@@ -1,4 +1,7 @@
 import MyAppnameENV from '../config/environment';
+
+
+// app/initializers/simple-auth-config.js
 export default {
   name: 'simple-auth-config',
   before: 'ember-simple-auth',
@@ -6,15 +9,15 @@ export default {
 
     var tokenEndpoint = '/users/sign_in';
     MyAppnameENV['ember-simple-auth'] = {
-      authorizer: 'authorizer:devise',
+      authorizer: 'simple-auth-authorizer:devise',
+      
       crossOriginWhitelist:[
-        MyAppnameENV.SERVER_URL
-      ],
-      serverTokenEndpoint: MyAppnameENV.SERVER_URL + tokenEndpoint
+        MyAppnameENV.host
+      ]
     };
 
     MyAppnameENV['simple-auth-devise'] = {
-      serverTokenEndpoint: MyAppnameENV.SERVER_URL + tokenEndpoint
+      serverTokenEndpoint: MyAppnameENV.host + tokenEndpoint
     };
 
     window.ENV = MyAppnameENV;

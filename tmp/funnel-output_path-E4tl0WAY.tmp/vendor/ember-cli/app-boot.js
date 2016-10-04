@@ -1,1 +1,0 @@
-/Users/zahra/Desktop/Ember/07-11-2016/code-reading-dojo/tmp/funnel-input_base_path-24I2P6l8.tmp/0//app-boot.js

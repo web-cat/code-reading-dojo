@@ -1,1 +1,0 @@
-{"modulePrefix":"game","environment":"test","baseURL":"/","locationType":"none","EmberENV":{"FEATURES":{}},"APP":{"LOG_ACTIVE_GENERATION":false,"LOG_VIEW_LOOKUPS":false,"rootElement":"#ember-testing","name":"game","version":"0.0.0+3892ce9f"},"exportApplicationGlobal":true,"ember-devtools":{"global":true,"enabled":false}}

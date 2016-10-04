@@ -6,9 +6,10 @@
 
 /* jshint ignore:end */
 
-define('game/adapters/application', ['exports', 'ember-data/adapters/json-api'], function (exports, _emberDataAdaptersJsonApi) {
-  exports['default'] = _emberDataAdaptersJsonApi['default'].extend({
-    host: 'http://192.168.1.145:3000'
+define('game/adapters/application', ['exports', 'ember-data/adapters/json-api', 'ember-simple-auth/mixins/data-adapter-mixin', 'game/config/environment'], function (exports, _emberDataAdaptersJsonApi, _emberSimpleAuthMixinsDataAdapterMixin, _gameConfigEnvironment) {
+  exports['default'] = _emberDataAdaptersJsonApi['default'].extend(_emberSimpleAuthMixinsDataAdapterMixin['default'], {
+    authorizer: 'authorizer:devise',
+    host: _gameConfigEnvironment['default'].host
   });
 });
 define('game/app', ['exports', 'ember', 'game/resolver', 'ember-load-initializers', 'game/config/environment'], function (exports, _ember, _gameResolver, _emberLoadInitializers, _gameConfigEnvironment) {
@@ -331,12 +332,6 @@ define('game/components/bs-textarea', ['exports', 'ember-bootstrap/components/bs
       return _emberBootstrapComponentsBsTextarea['default'];
     }
   });
-});
-define('game/components/code-block', ['exports', 'ember-prism/components/code-block'], function (exports, _emberPrismComponentsCodeBlock) {
-  exports['default'] = _emberPrismComponentsCodeBlock['default'];
-});
-define('game/components/code-inline', ['exports', 'ember-prism/components/code-inline'], function (exports, _emberPrismComponentsCodeInline) {
-  exports['default'] = _emberPrismComponentsCodeInline['default'];
 });
 define('game/components/code-section', ['exports', 'ember-marked/components/code-section'], function (exports, _emberMarkedComponentsCodeSection) {
   exports['default'] = _emberMarkedComponentsCodeSection['default'];
@@ -943,6 +938,29 @@ define("game/initializers/pop-over", ["exports", "ember-pop-over/system/flow", "
   exports["default"] = {
     name: "register-pop-over-flows",
     initialize: initialize
+  };
+});
+define('game/initializers/simple-auth-config', ['exports', 'game/config/environment'], function (exports, _gameConfigEnvironment) {
+
+  // app/initializers/simple-auth-config.js
+  exports['default'] = {
+    name: 'simple-auth-config',
+    before: 'ember-simple-auth',
+    initialize: function initialize() {
+
+      var tokenEndpoint = '/users/sign_in';
+      _gameConfigEnvironment['default']['ember-simple-auth'] = {
+        authorizer: 'simple-auth-authorizer:devise',
+
+        crossOriginWhitelist: [_gameConfigEnvironment['default'].host]
+      };
+
+      _gameConfigEnvironment['default']['simple-auth-devise'] = {
+        serverTokenEndpoint: _gameConfigEnvironment['default'].host + tokenEndpoint
+      };
+
+      window.ENV = _gameConfigEnvironment['default'];
+    }
   };
 });
 define('game/initializers/store', ['exports', 'ember'], function (exports, _ember) {
@@ -3703,52 +3721,6 @@ define("game/templates/components/bs-select", ["exports"], function (exports) {
     };
   })());
 });
-define("game/templates/components/code-block", ["exports"], function (exports) {
-  exports["default"] = Ember.HTMLBars.template((function () {
-    return {
-      meta: {
-        "fragmentReason": false,
-        "revision": "Ember@2.6.2",
-        "loc": {
-          "source": null,
-          "start": {
-            "line": 1,
-            "column": 0
-          },
-          "end": {
-            "line": 2,
-            "column": 0
-          }
-        },
-        "moduleName": "game/templates/components/code-block.hbs"
-      },
-      isEmpty: false,
-      arity: 0,
-      cachedFragment: null,
-      hasRendered: false,
-      buildFragment: function buildFragment(dom) {
-        var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("code");
-        var el2 = dom.createComment("");
-        dom.appendChild(el1, el2);
-        dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n");
-        dom.appendChild(el0, el1);
-        return el0;
-      },
-      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0]);
-        var morphs = new Array(2);
-        morphs[0] = dom.createAttrMorph(element0, 'class');
-        morphs[1] = dom.createMorphAt(element0, 0, 0);
-        return morphs;
-      },
-      statements: [["attribute", "class", ["get", "languageClass", ["loc", [null, [1, 14], [1, 27]]]]], ["content", "yield", ["loc", [null, [1, 30], [1, 39]]]]],
-      locals: [],
-      templates: []
-    };
-  })());
-});
 define("game/templates/components/code-section", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     return {
@@ -6424,6 +6396,42 @@ define("game/templates/index", ["exports"], function (exports) {
 });
 define("game/templates/login", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 16,
+              "column": 12
+            },
+            "end": {
+              "line": 18,
+              "column": 12
+            }
+          },
+          "moduleName": "game/templates/login.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("              new\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
     return {
       meta: {
         "fragmentReason": {
@@ -6437,7 +6445,7 @@ define("game/templates/login", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 20,
+            "line": 23,
             "column": 0
           }
         },
@@ -6516,7 +6524,11 @@ define("game/templates/login", ["exports"], function (exports) {
         var el5 = dom.createTextNode("\n            ");
         dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n        ");
+        var el4 = dom.createTextNode("\n");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createComment("");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("        ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n    ");
@@ -6530,16 +6542,18 @@ define("game/templates/login", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 7, 1, 1]);
-        var morphs = new Array(3);
-        morphs[0] = dom.createElementMorph(element0);
-        morphs[1] = dom.createMorphAt(element0, 3, 3);
-        morphs[2] = dom.createMorphAt(element0, 7, 7);
+        var element0 = dom.childAt(fragment, [0, 7, 1]);
+        var element1 = dom.childAt(element0, [1]);
+        var morphs = new Array(4);
+        morphs[0] = dom.createElementMorph(element1);
+        morphs[1] = dom.createMorphAt(element1, 3, 3);
+        morphs[2] = dom.createMorphAt(element1, 7, 7);
+        morphs[3] = dom.createMorphAt(element0, 3, 3);
         return morphs;
       },
-      statements: [["element", "action", ["authenticate"], ["on", "submit"], ["loc", [null, [7, 18], [7, 55]]]], ["inline", "input", [], ["type", "email", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [9, 41], [9, 46]]]]], [], []], "class", "form-control", "placeholder", "Email", "autofocus", "autofocus"], ["loc", [null, [9, 14], [9, 111]]]], ["inline", "input", [], ["type", "password", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [12, 44], [12, 52]]]]], [], []], "class", "form-control", "placeholder", "Password", "autofocus", "autofocus"], ["loc", [null, [12, 14], [12, 120]]]]],
+      statements: [["element", "action", ["authenticate"], ["on", "submit"], ["loc", [null, [7, 18], [7, 55]]]], ["inline", "input", [], ["type", "email", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [9, 41], [9, 46]]]]], [], []], "class", "form-control", "placeholder", "Email", "autofocus", "autofocus"], ["loc", [null, [9, 14], [9, 111]]]], ["inline", "input", [], ["type", "password", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [12, 44], [12, 52]]]]], [], []], "class", "form-control", "placeholder", "Password", "autofocus", "autofocus"], ["loc", [null, [12, 14], [12, 120]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary btn-lg", "id", "new"], 0, null, ["loc", [null, [16, 12], [18, 24]]]]],
       locals: [],
-      templates: []
+      templates: [child0]
     };
   })());
 });
@@ -7974,7 +7988,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"LOG_TRANSITIONS":true,"LOG_TRANSITIONS_INTERNAL":true,"name":"game","version":"0.0.0+2a297aa1"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+a24b6fdc"});
 }
 
 /* jshint ignore:end */

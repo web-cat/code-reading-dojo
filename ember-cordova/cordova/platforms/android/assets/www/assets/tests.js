@@ -284,6 +284,15 @@ define('game/tests/helpers/torii', ['exports'], function (exports) {
     });
   }
 });
+define('game/tests/initializers/simple-auth-config.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | initializers/simple-auth-config.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'initializers/simple-auth-config.js should pass jshint.');
+  });
+});
 define('game/tests/models/advanced.jshint', ['exports'], function (exports) {
   'use strict';
 

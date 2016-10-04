@@ -1,1 +1,0 @@
-/Users/zahra/Desktop/Ember/07-11-2016/code-reading-dojo/bower_components/ember-cli-test-loader/test-loader.js

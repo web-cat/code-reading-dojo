@@ -1,6 +1,7 @@
 /* jshint node: true */
 module.exports = function(environment) {
   var ENV = {
+    host: 'http://172.30.236.156:3000',
     modulePrefix: 'game',
     environment: environment,
     baseURL: '/',
@@ -19,11 +20,8 @@ module.exports = function(environment) {
   };
 
 
-  ENV['ember-simple-auth'] = {
-      authorizer: 'authorizer:devise'
-    };
 
-  ENV.SERVER_URL='http://192.168.1.145:3000';
+
   //
   //
   //   ENV['simple-auth'] = {
@@ -52,8 +50,8 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
-
   }
+
 
   return ENV;
 };

@@ -6,9 +6,7 @@
     "ember-cli-test-loader": "0.2.2",
     "ember-qunit-notifications": "0.1.0",
     "bootstrap-sass": "^3.3.6",
-    "prism": "^1.5.1",
     "dom-ruler": "0.1.13",
-    "bootstrap": "~3.3.5",
-    "ember-simple-auth": "0.8.0"
+    "bootstrap": "~3.3.5"
   }
 }
