@@ -5835,7 +5835,7 @@ p, h4, h3 {
   opacity: 0.5;
   width: 25%; }
 
-#item-completed {
+.item-completed {
   width: 25%; }
 
 #index-button {

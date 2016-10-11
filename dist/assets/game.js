@@ -33,6 +33,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
+    serverTokenEndpoint: 'http://192.168.0.14:3000/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
         if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.uid) && !isEmpty(data.client)) {
@@ -947,16 +948,14 @@ define('game/initializers/simple-auth-config', ['exports', 'game/config/environm
     name: 'simple-auth-config',
     before: 'ember-simple-auth',
     initialize: function initialize() {
-
       var tokenEndpoint = '/users/sign_in';
       _gameConfigEnvironment['default']['ember-simple-auth'] = {
         authorizer: 'simple-auth-authorizer:devise',
-
-        crossOriginWhitelist: [_gameConfigEnvironment['default'].host]
+        crossOriginWhitelist: [_gameConfigEnvironment['default'].SERVER_URL]
       };
 
       _gameConfigEnvironment['default']['simple-auth-devise'] = {
-        serverTokenEndpoint: _gameConfigEnvironment['default'].host + tokenEndpoint
+        serverTokenEndpoint: _gameConfigEnvironment['default'].SERVER_URL + tokenEndpoint
       };
 
       window.ENV = _gameConfigEnvironment['default'];
@@ -6420,7 +6419,7 @@ define("game/templates/login", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("              new\n");
+          var el1 = dom.createTextNode("              new3\n");
           dom.appendChild(el0, el1);
           return el0;
         },
@@ -6918,7 +6917,7 @@ define("game/templates/new", ["exports"], function (exports) {
               var el1 = dom.createTextNode("            ");
               dom.appendChild(el0, el1);
               var el1 = dom.createElement("img");
-              dom.setAttribute(el1, "id", "item-completed");
+              dom.setAttribute(el1, "class", "item-completed");
               dom.appendChild(el0, el1);
               var el1 = dom.createTextNode("\n");
               dom.appendChild(el0, el1);
@@ -6930,7 +6929,7 @@ define("game/templates/new", ["exports"], function (exports) {
               morphs[0] = dom.createAttrMorph(element2, 'src');
               return morphs;
             },
-            statements: [["attribute", "src", ["subexpr", "concat", [["subexpr", "concat", ["assets/images/beginner/", ["get", "p.level", ["loc", [null, [11, 84], [11, 91]]]]], [], ["loc", [null, [11, 50], [11, 92]]]], ".png"], [], ["loc", [null, [11, 41], [11, 101]]]]]],
+            statements: [["attribute", "src", ["subexpr", "concat", [["subexpr", "concat", ["assets/images/beginner/", ["get", "p.level", ["loc", [null, [11, 87], [11, 94]]]]], [], ["loc", [null, [11, 53], [11, 95]]]], ".png"], [], ["loc", [null, [11, 44], [11, 104]]]]]],
             locals: [],
             templates: []
           };
@@ -6974,7 +6973,7 @@ define("game/templates/new", ["exports"], function (exports) {
             dom.insertBoundary(fragment, 0);
             return morphs;
           },
-          statements: [["block", "link-to", ["programs", ["get", "p.level", ["loc", [null, [10, 32], [10, 39]]]]], ["id", "item-completed"], 0, null, ["loc", [null, [10, 10], [12, 22]]]]],
+          statements: [["block", "link-to", ["programs", ["get", "p.level", ["loc", [null, [10, 32], [10, 39]]]]], ["class", "item-completed"], 0, null, ["loc", [null, [10, 10], [12, 22]]]]],
           locals: [],
           templates: [child0]
         };
@@ -7988,7 +7987,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+a24b6fdc"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+6cb8f7c6"});
 }
 
 /* jshint ignore:end */
