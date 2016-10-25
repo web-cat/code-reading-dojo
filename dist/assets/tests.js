@@ -4,7 +4,7 @@ define('game/tests/adapters/application.jshint', ['exports'], function (exports)
   QUnit.module('JSHint | adapters/application.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'adapters/application.js should pass jshint.');
+    assert.ok(false, 'adapters/application.js should pass jshint.\nadapters/application.js: line 6, col 12, \'Ember\' is not defined.\n\n1 error');
   });
 });
 define('game/tests/app.jshint', ['exports'], function (exports) {
@@ -32,6 +32,15 @@ define('game/tests/authenticators/oauth2.jshint', ['exports'], function (exports
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'authenticators/oauth2.js should pass jshint.');
+  });
+});
+define('game/tests/authorizers/devise.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | authorizers/devise.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'authorizers/devise.js should pass jshint.');
   });
 });
 define('game/tests/components/program-details.jshint', ['exports'], function (exports) {

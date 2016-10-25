@@ -5,17 +5,18 @@
     <div class="form-horizontal form-group form-group-lg row">
         <div id="signin-container" class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1 col-md-4 col-md-offset-4">
             <form {{action 'authenticate' on='submit'}}>
-              <p class="user-pass">Email:</p>
-              {{input type="email" value=email class="form-control" placeholder="Email" autofocus="autofocus"}}
-
-              <p class="user-pass">password:</p>
-              {{input type="password" value=password class="form-control" placeholder="Password" autofocus="autofocus"}}
-
-              <button id="index-button" class="btn btn-primary btn-lg btn-block"  type="submit">Submit</button>
+              <p class="user-pass" for="identification">Login</p>
+              {{input id='identification' class="form-control" placeholder='Enter Login' value=identification}}
+              <p class="user-pass" for="password">Password</p>
+              {{input id='password' class="form-control" placeholder='Enter Password' type='password' value=password}}
+              <button id="index-button" class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
+              {{#if errorMessage}}
+                <p>{{errorMessage}}</p>
+              {{/if}}
             </form>
-            {{#link-to 'new' class="btn btn-primary btn-lg" id="new"}}
+            <!-- {{#link-to 'new' class="btn btn-primary btn-lg" id="new"}}
               new3
-            {{/link-to}}
+            {{/link-to}} -->
         </div>
     </div>
 

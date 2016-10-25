@@ -74884,6 +74884,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
   var Test = _ember['default'].Test;
   var get = _ember['default'].get;
   var isArray = _ember['default'].isArray;
+  var isEmpty = _ember['default'].isEmpty;
   var isNone = _ember['default'].isNone;
   var merge = _ember['default'].merge;
   var run = _ember['default'].run;
@@ -75047,7 +75048,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
 
       var hash = this.options(url, options);
       return new Promise(function (resolve, reject) {
-        _this._makeRequest(url, hash).then(function (_ref) {
+        _this._makeRequest(hash).then(function (_ref) {
           var response = _ref.response;
 
           resolve(response);
@@ -75070,7 +75071,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
      */
     raw: function raw(url, options) {
       var hash = this.options(url, options);
-      return this._makeRequest(url, hash);
+      return this._makeRequest(hash);
     },
 
     /**
@@ -75078,11 +75079,11 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
      *
      * @method _makeRequest
      * @private
-     * @param {string} url The url to make a request to
      * @param {Object} hash The options for the request
+     * @param {string} hash.url The URL to make the request to
      * @return {Promise} The result of the request
      */
-    _makeRequest: function _makeRequest(url, hash) {
+    _makeRequest: function _makeRequest(hash) {
       var _this2 = this;
 
       var requestData = {
@@ -75111,7 +75112,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
 
         hash.error = function (jqXHR, textStatus, errorThrown) {
           runInDebug(function () {
-            var message = 'The server returned an empty string for ' + requestData.type + ' ' + url + ', which cannot be parsed into a valid JSON. Return either null or {}.';
+            var message = 'The server returned an empty string for ' + requestData.type + ' ' + requestData.url + ', which cannot be parsed into a valid JSON. Return either null or {}.';
             var validJSONString = !(textStatus === 'parsererror' && jqXHR.responseText === '');
             warn(message, validJSONString, {
               id: 'ds.adapter.returned-empty-string-as-JSON'
@@ -75268,7 +75269,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
       _options.url = this._buildURL(url, _options);
       _options.type = _options.type || 'GET';
       _options.dataType = _options.dataType || 'json';
-      _options.contentType = _options.contentType || get(this, 'contentType');
+      _options.contentType = isEmpty(_options.contentType) ? get(this, 'contentType') : _options.contentType;
 
       if (this._shouldSendHeaders(_options)) {
         _options.headers = this._getFullHeadersHash(_options.headers);
@@ -75307,6 +75308,12 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
       var namespace = options.namespace || get(this, 'namespace');
       if (namespace) {
         namespace = stripSlashes(namespace);
+      }
+
+      // If the URL has already been constructed (presumably, by Ember Data), then we should just leave it alone
+      var hasNamespaceRegex = new RegExp('^(/)?' + namespace);
+      if (hasNamespaceRegex.test(url)) {
+        return url;
       }
 
       var fullUrl = '';
@@ -75738,16 +75745,11 @@ define('ember-ajax/mixins/ajax-support', ['exports', 'ember'], function (exports
      */
     headers: alias('ajaxService.headers'),
 
-    ajax: function ajax(url, type, options) {
-      options = this.ajaxOptions.apply(this, arguments);
-      return this.get('ajaxService').request(url, options);
-    },
-
-    ajaxOptions: function ajaxOptions(url, type) {
+    ajax: function ajax(url, type) {
       var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
       options.type = type;
-      return this.get('ajaxService').options(url, options);
+      return this.get('ajaxService').request(url, options);
     }
   });
 });
@@ -85561,13 +85563,6 @@ define("ember-data/-private/system/model/model", ["exports", "ember", "ember-dat
     */
     rolledBack: _ember["default"].K,
 
-    /**
-      @property data
-      @private
-      @type {Object}
-    */
-    data: _ember["default"].computed.readOnly('_internalModel._data'),
-
     //TODO Do we want to deprecate these?
     /**
       @method send
@@ -85982,6 +85977,17 @@ define("ember-data/-private/system/model/model", ["exports", "ember", "ember-dat
     setId: _ember["default"].observer('id', function () {
       this._internalModel.setId(this.get('id'));
     })
+  });
+
+  /**
+   @property data
+   @private
+   @type {Object}
+   */
+  Object.defineProperty(Model.prototype, 'data', {
+    get: function get() {
+      return this._internalModel._data;
+    }
   });
 
   Model.reopenClass({
@@ -91617,7 +91623,7 @@ define('ember-data/-private/system/store', ['exports', 'ember', 'ember-data/mode
         this._backburner.schedule('normalizeRelationships', this, '_setupRelationships', internalModel, data);
         this.updateId(internalModel, data);
       }
-      (0, _emberDataPrivateDebug.assert)('Your ' + internalModel.type.modelName + ' record was saved but it does not have an id. Please make the server provides an id in the createRecord response or you are setting the on the client side before saving the record.', internalModel.id !== null);
+
       //We first make sure the primary data has been updated
       //TODO try to move notification to the user to the end of the runloop
       internalModel.adapterDidCommit(data);
@@ -95054,25 +95060,17 @@ define('ember-data/adapters/rest', ['exports', 'ember', 'ember-data/adapter', 'e
         var hash = adapter.ajaxOptions(url, type, options);
 
         hash.success = function (payload, textStatus, jqXHR) {
-          try {
-            var response = ajaxSuccess(adapter, jqXHR, payload, requestData);
-            _ember['default'].run.join(null, resolve, response);
-          } catch (error) {
-            _ember['default'].run.join(null, reject, error);
-          }
+          var response = ajaxSuccess(adapter, jqXHR, payload, requestData);
+          _ember['default'].run.join(null, resolve, response);
         };
 
         hash.error = function (jqXHR, textStatus, errorThrown) {
-          try {
-            var responseData = {
-              textStatus: textStatus,
-              errorThrown: errorThrown
-            };
-            var error = ajaxError(adapter, jqXHR, requestData, responseData);
-            _ember['default'].run.join(null, reject, error);
-          } catch (error) {
-            _ember['default'].run.join(null, reject, error);
-          }
+          var responseData = {
+            textStatus: textStatus,
+            errorThrown: errorThrown
+          };
+          var error = ajaxError(adapter, jqXHR, requestData, responseData);
+          _ember['default'].run.join(null, reject, error);
         };
 
         adapter._ajaxRequest(hash);
@@ -95444,25 +95442,17 @@ define('ember-data/adapters/rest', ['exports', 'ember', 'ember-data/adapter', 'e
         return new _ember['default'].RSVP.Promise(function (resolve, reject) {
 
           hash.success = function (payload, textStatus, jqXHR) {
-            try {
-              var response = ajaxSuccess(adapter, jqXHR, payload, requestData);
-              _ember['default'].run.join(null, resolve, response);
-            } catch (error) {
-              _ember['default'].run.join(null, reject, error);
-            }
+            var response = ajaxSuccess(adapter, jqXHR, payload, requestData);
+            _ember['default'].run.join(null, resolve, response);
           };
 
           hash.error = function (jqXHR, textStatus, errorThrown) {
-            try {
-              var responseData = {
-                textStatus: textStatus,
-                errorThrown: errorThrown
-              };
-              var error = ajaxError(adapter, jqXHR, requestData, responseData);
-              _ember['default'].run.join(null, reject, error);
-            } catch (error) {
-              _ember['default'].run.join(null, reject, error);
-            }
+            var responseData = {
+              textStatus: textStatus,
+              errorThrown: errorThrown
+            };
+            var error = ajaxError(adapter, jqXHR, requestData, responseData);
+            _ember['default'].run.join(null, reject, error);
           };
 
           adapter._ajaxRequest(hash);
@@ -95472,7 +95462,12 @@ define('ember-data/adapters/rest', ['exports', 'ember', 'ember-data/adapter', 'e
   }
 
   function ajaxSuccess(adapter, jqXHR, payload, requestData) {
-    var response = adapter.handleResponse(jqXHR.status, (0, _emberDataPrivateUtilsParseResponseHeaders['default'])(jqXHR.getAllResponseHeaders()), payload, requestData);
+    var response = undefined;
+    try {
+      response = adapter.handleResponse(jqXHR.status, (0, _emberDataPrivateUtilsParseResponseHeaders['default'])(jqXHR.getAllResponseHeaders()), payload, requestData);
+    } catch (error) {
+      return Promise.reject(error);
+    }
 
     if (response && response.isAdapterError) {
       return Promise.reject(response);
@@ -95499,7 +95494,11 @@ define('ember-data/adapters/rest', ['exports', 'ember', 'ember-data/adapter', 'e
     } else if (responseData.textStatus === 'abort') {
       error = new _emberDataAdaptersErrors.AbortError();
     } else {
-      error = adapter.handleResponse(jqXHR.status, (0, _emberDataPrivateUtilsParseResponseHeaders['default'])(jqXHR.getAllResponseHeaders()), adapter.parseErrorResponse(jqXHR.responseText) || responseData.errorThrown, requestData);
+      try {
+        error = adapter.handleResponse(jqXHR.status, (0, _emberDataPrivateUtilsParseResponseHeaders['default'])(jqXHR.getAllResponseHeaders()), adapter.parseErrorResponse(jqXHR.responseText) || responseData.errorThrown, requestData);
+      } catch (e) {
+        error = e;
+      }
     }
 
     return error;
@@ -99642,7 +99641,7 @@ define('ember-data/transform', ['exports', 'ember'], function (exports, _ember) 
 define("ember-data/version", ["exports"], function (exports) {
   "use strict";
 
-  exports["default"] = "2.8.0";
+  exports["default"] = "2.8.1";
 });
 define('ember-getowner-polyfill/fake-owner', ['exports', 'ember'], function (exports, _ember) {
   'use strict';
@@ -100956,7 +100955,7 @@ define('ember-notify/components/ember-notify/message', ['exports', 'ember', 'emb
 
   exports['default'] = _ember['default'].Component.extend({
     layout: _emberNotifyTemplatesComponentsEmberNotifyMessage['default'],
-    message: null,
+    message: {},
     closeAfter: null,
 
     classNameBindings: ['message.visible:ember-notify-show:ember-notify-hide', 'radius::', 'themeClassNames'],
@@ -101065,7 +101064,7 @@ define('ember-notify/components/ember-notify/message', ['exports', 'ember', 'emb
     }
   });
 });
-define('ember-notify/index', ['exports', 'ember', 'ember-notify/message'], function (exports, _ember, _emberNotifyMessage) {
+define('ember-notify/index', ['exports', 'ember', 'ember-notify/message', 'ember-string-ishtmlsafe-polyfill'], function (exports, _ember, _emberNotifyMessage, _emberStringIshtmlsafePolyfill) {
   'use strict';
 
   function aliasToShow(type) {
@@ -101090,7 +101089,7 @@ define('ember-notify/index', ['exports', 'ember', 'ember-notify/message'], funct
       var assign = _ember['default'].assign || _ember['default'].merge;
 
       // If the text passed is `SafeString`, convert it
-      if (text instanceof _ember['default'].String.htmlSafe) {
+      if ((0, _emberStringIshtmlsafePolyfill['default'])(text)) {
         text = text.toString();
       }
       if (typeof text === 'object') {
@@ -103090,6 +103089,114 @@ define('ember-pop-over/system/target', ['exports', 'ember', 'ember-metal/get', '
 
   });
 });
+define('ember-radio-button/components/labeled-radio-button', ['exports', 'ember'], function (exports, _ember) {
+  'use strict';
+
+  var computed = _ember['default'].computed;
+
+  exports['default'] = _ember['default'].Component.extend({
+    tagName: 'label',
+    attributeBindings: ['for'],
+    classNameBindings: ['checked'],
+    classNames: ['ember-radio-button'],
+    defaultLayout: null, // ie8 support
+
+    checked: computed('groupValue', 'value', function () {
+      return this.get('groupValue') === this.get('value');
+    }).readOnly(),
+
+    'for': computed.readOnly('radioId'),
+
+    actions: {
+      innerRadioChanged: function innerRadioChanged(value) {
+        this.sendAction('changed', value);
+      }
+    }
+  });
+});
+define('ember-radio-button/components/radio-button-input', ['exports', 'ember'], function (exports, _ember) {
+  'use strict';
+
+  var computed = _ember['default'].computed;
+
+  exports['default'] = _ember['default'].Component.extend({
+    tagName: 'input',
+    type: 'radio',
+
+    // value - required
+    // groupValue - required
+
+    // disabled - optional
+    // name - optional
+    // required - optional
+    // radioClass - string
+    // radioId - string
+
+    defaultLayout: null, // ie8 support
+
+    attributeBindings: ['checked', 'disabled', 'name', 'required', 'type', 'value'],
+
+    checked: computed('groupValue', 'value', function () {
+      return this.get('groupValue') === this.get('value');
+    }).readOnly(),
+
+    sendChangedAction: function sendChangedAction() {
+      this.sendAction('changed', this.get('value'));
+    },
+
+    change: function change() {
+      var value = this.get('value');
+      var groupValue = this.get('groupValue');
+
+      if (groupValue !== value) {
+        this.set('groupValue', value); // violates DDAU
+        _ember['default'].run.once(this, 'sendChangedAction');
+      }
+    }
+  });
+});
+define('ember-radio-button/components/radio-button', ['exports', 'ember'], function (exports, _ember) {
+  'use strict';
+
+  var computed = _ember['default'].computed;
+
+  exports['default'] = _ember['default'].Component.extend({
+    tagName: '',
+    // value - passed in, required, the value for this radio button
+    // groupValue - passed in, required, the currently selected value
+
+    // optionally passed in:
+    // disabled - boolean
+    // required - boolean
+    // name - string
+    // radioClass - string
+    // radioId - string
+
+    // polyfill hasBlock for ember versions < 1.13
+    hasBlock: computed.bool('template').readOnly(),
+
+    joinedClassNames: computed('classNames', function () {
+      var classNames = this.get('classNames');
+      if (classNames && classNames.length && classNames.join) {
+        return classNames.join(' ');
+      }
+      return classNames;
+    }),
+
+    // is this needed here or just on radio-button-input?
+    defaultLayout: null, // ie8 support
+
+    checked: computed('groupValue', 'value', function () {
+      return this.get('groupValue') === this.get('value');
+    }).readOnly(),
+
+    actions: {
+      changed: function changed(newValue) {
+        this.sendAction('changed', newValue);
+      }
+    }
+  });
+});
 define('ember-resolver/container-debug-adapter', ['exports', 'ember', 'ember-resolver/utils/module-registry'], function (exports, _ember, _emberResolverUtilsModuleRegistry) {
   'use strict';
 
@@ -103657,6 +103764,206 @@ define('ember-resolver/utils/module-registry', ['exports', 'ember'], function (e
   };
 
   exports['default'] = ModuleRegistry;
+});
+define('ember-rl-dropdown/components/rl-dropdown-container', ['exports', 'ember', 'ember-rl-dropdown/mixins/rl-dropdown-component'], function (exports, _ember, _emberRlDropdownMixinsRlDropdownComponent) {
+  'use strict';
+
+  exports['default'] = _ember['default'].Component.extend(_emberRlDropdownMixinsRlDropdownComponent['default'], {
+    classNameBindings: ['dropdownExpanded']
+  });
+});
+define('ember-rl-dropdown/components/rl-dropdown-toggle', ['exports', 'ember', 'ember-rl-dropdown/components/rl-dropdown-container'], function (exports, _ember, _emberRlDropdownComponentsRlDropdownContainer) {
+  'use strict';
+
+  exports['default'] = _ember['default'].Component.extend({
+    classNames: ['rl-dropdown-toggle'],
+
+    tagName: 'button',
+
+    attributeBindings: ['type'],
+
+    type: _ember['default'].computed('tagName', function () {
+      return this.get('tagName') === 'button' ? 'button' : null;
+    }),
+
+    dropdownContainer: _ember['default'].computed(function () {
+      return this.nearestOfType(_emberRlDropdownComponentsRlDropdownContainer['default']);
+    }),
+
+    action: 'toggleDropdown',
+
+    propagateClicks: true,
+
+    click: function click(event) {
+      var propagateClicks = this.get('propagateClicks');
+
+      this.get('dropdownContainer').send(this.get('action'));
+
+      if (propagateClicks === false || propagateClicks === 'false') {
+        event.stopPropagation();
+      }
+    }
+  });
+});
+define('ember-rl-dropdown/components/rl-dropdown', ['exports', 'ember', 'ember-rl-dropdown/components/rl-dropdown-container'], function (exports, _ember, _emberRlDropdownComponentsRlDropdownContainer) {
+  'use strict';
+
+  exports['default'] = _ember['default'].Component.extend({
+    classNames: ['rl-dropdown'],
+
+    dropdownContainer: _ember['default'].computed(function () {
+      return this.nearestOfType(_emberRlDropdownComponentsRlDropdownContainer['default']);
+    }),
+
+    isExpanded: _ember['default'].computed.alias('dropdownContainer.dropdownExpanded'),
+
+    closeOnChildClick: false,
+
+    propagateClicks: true,
+
+    manageVisibility: _ember['default'].on('didInsertElement', _ember['default'].observer('isExpanded', function () {
+      if (this.get('isExpanded')) {
+        this.$().css('display', 'block');
+      } else {
+        this.$().css('display', 'none');
+      }
+    })),
+
+    click: function click(event) {
+      var closeOnChildClick = this.get('closeOnChildClick');
+      var propagateClicks = this.get('propagateClicks');
+      var $target = _ember['default'].$(event.target);
+      var $c = this.$();
+
+      if ($target !== $c) {
+        if ((closeOnChildClick === true || closeOnChildClick === "true") && $target.closest($c).length) {
+          this.set('isExpanded', false);
+        } else if (closeOnChildClick && $target.closest($c.find(closeOnChildClick)).length) {
+          this.set('isExpanded', false);
+        }
+      }
+
+      if (propagateClicks === false || propagateClicks === "false") {
+        event.stopPropagation();
+      }
+    }
+  });
+});
+define('ember-rl-dropdown/mixins/rl-dropdown-component', ['exports', 'ember'], function (exports, _ember) {
+  'use strict';
+
+  exports['default'] = _ember['default'].Mixin.create({
+    init: function init() {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      this._super.apply(this, args);
+
+      this.set('boundClickoutHandler', _ember['default'].run.bind(this, this.clickoutHandler));
+      this.set('boundEscapeHandler', _ember['default'].run.bind(this, this.escapeHandler));
+    },
+
+    onOpen: _ember['default'].K,
+    onClose: _ember['default'].K,
+
+    dropdownExpanded: false,
+
+    dropdownToggleSelector: '.rl-dropdown-toggle',
+
+    dropdownSelector: '.rl-dropdown',
+
+    closingEventNamespace: 'rl-dropdown',
+
+    closeOnEscape: true,
+
+    actions: {
+      toggleDropdown: function toggleDropdown() {
+        this.toggleProperty('dropdownExpanded');
+
+        if (this.get('dropdownExpanded')) {
+          this.get('onOpen')();
+        } else {
+          this.get('onClose')();
+        }
+      },
+
+      openDropdown: function openDropdown() {
+        this.set('dropdownExpanded', true);
+        this.get('onOpen')();
+      },
+
+      closeDropdown: function closeDropdown() {
+        this.set('dropdownExpanded', false);
+        this.get('onClose')();
+      }
+    },
+
+    manageClosingEvents: _ember['default'].on('didInsertElement', _ember['default'].observer('dropdownExpanded', function () {
+      var namespace = this.get('closingEventNamespace');
+      var clickEventName = 'click.' + namespace;
+      var focusEventName = 'focusin.' + namespace;
+      var touchEventName = 'touchstart.' + namespace;
+      var escapeEventName = 'keydown.' + namespace;
+      var component = this;
+      var $document = _ember['default'].$(document);
+
+      if (this.get('dropdownExpanded')) {
+
+        /* Add clickout handler with 1ms delay, to allow opening the dropdown
+         * by clicking e.g. a checkbox and binding to dropdownExpanded, without
+         * having the handler close the dropdown immediately. */
+        _ember['default'].run.later(function () {
+          $document.bind(clickEventName, { component: component }, component.boundClickoutHandler);
+          $document.bind(focusEventName, { component: component }, component.boundClickoutHandler);
+          $document.bind(touchEventName, { component: component }, component.boundClickoutHandler);
+        }, 1);
+
+        if (this.get('closeOnEscape')) {
+          $document.bind(escapeEventName, { component: component }, component.boundEscapeHandler);
+        }
+      } else {
+        $document.unbind(clickEventName, component.boundClickoutHandler);
+        $document.unbind(focusEventName, component.boundClickoutHandler);
+        $document.unbind(touchEventName, component.boundClickoutHandler);
+        $document.unbind(escapeEventName, component.boundEscapeHandler);
+      }
+    })),
+
+    unbindClosingEvents: _ember['default'].on('willDestroyElement', function () {
+      var namespace = this.get('closingEventNamespace');
+      var $document = _ember['default'].$(document);
+
+      $document.unbind('click.' + namespace, this.boundClickoutHandler);
+      $document.unbind('focusin.' + namespace, this.boundClickoutHandler);
+      $document.unbind('touchstart.' + namespace, this.boundClickoutHandler);
+      $document.unbind('keydown.' + namespace, this.boundEscapeHandler);
+    }),
+
+    clickoutHandler: function clickoutHandler(event) {
+      var component = event.data.component;
+      var $c = component.$();
+      var $target = _ember['default'].$(event.target);
+
+      /* There is an issue when the click triggered a dom change in the
+       * dropdown that unloaded the target element. The ancestry of the target
+       * can no longer be determined. We can check if html is still an ancestor
+       * to determine if this has happened. The safe option then seems to be to
+       * not close the dropdown, as occasionaly not closing the dropdown when it
+       * should have closed, seems to be less bad for usability than occasionaly
+       * closing the dropdown when it should not have closed.
+       */
+      if (component.get('dropdownExpanded') && $target.closest('html').length && !($target.closest($c.find(component.get('dropdownToggleSelector'))).length || $target.closest($c.find(component.get('dropdownSelector'))).length)) {
+        component.send('closeDropdown');
+      }
+    },
+
+    escapeHandler: function escapeHandler(event) {
+      if (event.keyCode === 27) {
+        event.data.component.send('closeDropdown');
+      }
+    }
+  });
 });
 define('ember-simple-auth/authenticators/base', ['exports', 'ember'], function (exports, _ember) {
   'use strict';
@@ -106180,6 +106487,15 @@ define('ember-simple-auth/utils/objects-are-equal', ['exports'], function (expor
 
     return compare(a, b);
   }
+});
+define('ember-string-ishtmlsafe-polyfill/index', ['exports', 'ember'], function (exports, _ember) {
+  'use strict';
+
+  function isHTMLSafePolyfill(str) {
+    return str && typeof str.toHTML === 'function';
+  }
+
+  exports['default'] = _ember['default'].String.isHTMLSafe || isHTMLSafePolyfill;
 });
 define('ember-tether/components/ember-tether', ['exports', 'ember'], function (exports, _ember) {
   'use strict';

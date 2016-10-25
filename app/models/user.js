@@ -3,6 +3,7 @@ import attr from 'ember-data/attr';
 // import { belongsTo, hasMany } from 'ember-data/relationships';
 
 export default Model.extend({
+  email: attr('string'),
   username: attr('string'),
   levelcompleted: attr('string')
 });
