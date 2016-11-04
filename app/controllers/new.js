@@ -1,6 +1,10 @@
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
+const { inject: { service }, Controller } = Ember;
+
+export default Controller.extend({
+  session:     service('session'),
+  currentUser: service('current-user'),
   beginnerClicked: 'false',
   intermediateClicked: 'false',
   advancedClicked: 'false',

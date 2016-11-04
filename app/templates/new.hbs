@@ -1,3 +1,13 @@
+<nav>
+  <!-- {{#link-to 'index' classNames='navbar-brand'}}
+    Home
+  {{/link-to}} -->
+  {{#if session.isAuthenticated}}
+      <p>Signed in as {{session.data.uid}}</p>
+  {{else}}
+    <button onclick={{action 'login'}}>Login</button>
+  {{/if}}
+</nav>
 <div class="jumbotron text-center">
 <img id="new-logo" src="assets/images/logo.png" >
 <p>Select an excercise you want to play</p>

@@ -74884,6 +74884,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
   var Test = _ember['default'].Test;
   var get = _ember['default'].get;
   var isArray = _ember['default'].isArray;
+  var isEmpty = _ember['default'].isEmpty;
   var isNone = _ember['default'].isNone;
   var merge = _ember['default'].merge;
   var run = _ember['default'].run;
@@ -75047,7 +75048,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
 
       var hash = this.options(url, options);
       return new Promise(function (resolve, reject) {
-        _this._makeRequest(url, hash).then(function (_ref) {
+        _this._makeRequest(hash).then(function (_ref) {
           var response = _ref.response;
 
           resolve(response);
@@ -75070,7 +75071,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
      */
     raw: function raw(url, options) {
       var hash = this.options(url, options);
-      return this._makeRequest(url, hash);
+      return this._makeRequest(hash);
     },
 
     /**
@@ -75078,11 +75079,11 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
      *
      * @method _makeRequest
      * @private
-     * @param {string} url The url to make a request to
      * @param {Object} hash The options for the request
+     * @param {string} hash.url The URL to make the request to
      * @return {Promise} The result of the request
      */
-    _makeRequest: function _makeRequest(url, hash) {
+    _makeRequest: function _makeRequest(hash) {
       var _this2 = this;
 
       var requestData = {
@@ -75111,7 +75112,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
 
         hash.error = function (jqXHR, textStatus, errorThrown) {
           runInDebug(function () {
-            var message = 'The server returned an empty string for ' + requestData.type + ' ' + url + ', which cannot be parsed into a valid JSON. Return either null or {}.';
+            var message = 'The server returned an empty string for ' + requestData.type + ' ' + requestData.url + ', which cannot be parsed into a valid JSON. Return either null or {}.';
             var validJSONString = !(textStatus === 'parsererror' && jqXHR.responseText === '');
             warn(message, validJSONString, {
               id: 'ds.adapter.returned-empty-string-as-JSON'
@@ -75268,7 +75269,7 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
       _options.url = this._buildURL(url, _options);
       _options.type = _options.type || 'GET';
       _options.dataType = _options.dataType || 'json';
-      _options.contentType = _options.contentType || get(this, 'contentType');
+      _options.contentType = isEmpty(_options.contentType) ? get(this, 'contentType') : _options.contentType;
 
       if (this._shouldSendHeaders(_options)) {
         _options.headers = this._getFullHeadersHash(_options.headers);
@@ -75307,6 +75308,12 @@ define('ember-ajax/mixins/ajax-request', ['exports', 'ember', 'ember-ajax/errors
       var namespace = options.namespace || get(this, 'namespace');
       if (namespace) {
         namespace = stripSlashes(namespace);
+      }
+
+      // If the URL has already been constructed (presumably, by Ember Data), then we should just leave it alone
+      var hasNamespaceRegex = new RegExp('^(/)?' + namespace);
+      if (hasNamespaceRegex.test(url)) {
+        return url;
       }
 
       var fullUrl = '';
@@ -75738,16 +75745,11 @@ define('ember-ajax/mixins/ajax-support', ['exports', 'ember'], function (exports
      */
     headers: alias('ajaxService.headers'),
 
-    ajax: function ajax(url, type, options) {
-      options = this.ajaxOptions.apply(this, arguments);
-      return this.get('ajaxService').request(url, options);
-    },
-
-    ajaxOptions: function ajaxOptions(url, type) {
+    ajax: function ajax(url, type) {
       var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
       options.type = type;
-      return this.get('ajaxService').options(url, options);
+      return this.get('ajaxService').request(url, options);
     }
   });
 });
@@ -85561,13 +85563,6 @@ define("ember-data/-private/system/model/model", ["exports", "ember", "ember-dat
     */
     rolledBack: _ember["default"].K,
 
-    /**
-      @property data
-      @private
-      @type {Object}
-    */
-    data: _ember["default"].computed.readOnly('_internalModel._data'),
-
     //TODO Do we want to deprecate these?
     /**
       @method send
@@ -85982,6 +85977,17 @@ define("ember-data/-private/system/model/model", ["exports", "ember", "ember-dat
     setId: _ember["default"].observer('id', function () {
       this._internalModel.setId(this.get('id'));
     })
+  });
+
+  /**
+   @property data
+   @private
+   @type {Object}
+   */
+  Object.defineProperty(Model.prototype, 'data', {
+    get: function get() {
+      return this._internalModel._data;
+    }
   });
 
   Model.reopenClass({
@@ -91617,7 +91623,7 @@ define('ember-data/-private/system/store', ['exports', 'ember', 'ember-data/mode
         this._backburner.schedule('normalizeRelationships', this, '_setupRelationships', internalModel, data);
         this.updateId(internalModel, data);
       }
-      (0, _emberDataPrivateDebug.assert)('Your ' + internalModel.type.modelName + ' record was saved but it does not have an id. Please make the server provides an id in the createRecord response or you are setting the on the client side before saving the record.', internalModel.id !== null);
+
       //We first make sure the primary data has been updated
       //TODO try to move notification to the user to the end of the runloop
       internalModel.adapterDidCommit(data);
@@ -95054,25 +95060,17 @@ define('ember-data/adapters/rest', ['exports', 'ember', 'ember-data/adapter', 'e
         var hash = adapter.ajaxOptions(url, type, options);
 
         hash.success = function (payload, textStatus, jqXHR) {
-          try {
-            var response = ajaxSuccess(adapter, jqXHR, payload, requestData);
-            _ember['default'].run.join(null, resolve, response);
-          } catch (error) {
-            _ember['default'].run.join(null, reject, error);
-          }
+          var response = ajaxSuccess(adapter, jqXHR, payload, requestData);
+          _ember['default'].run.join(null, resolve, response);
         };
 
         hash.error = function (jqXHR, textStatus, errorThrown) {
-          try {
-            var responseData = {
-              textStatus: textStatus,
-              errorThrown: errorThrown
-            };
-            var error = ajaxError(adapter, jqXHR, requestData, responseData);
-            _ember['default'].run.join(null, reject, error);
-          } catch (error) {
-            _ember['default'].run.join(null, reject, error);
-          }
+          var responseData = {
+            textStatus: textStatus,
+            errorThrown: errorThrown
+          };
+          var error = ajaxError(adapter, jqXHR, requestData, responseData);
+          _ember['default'].run.join(null, reject, error);
         };
 
         adapter._ajaxRequest(hash);
@@ -95444,25 +95442,17 @@ define('ember-data/adapters/rest', ['exports', 'ember', 'ember-data/adapter', 'e
         return new _ember['default'].RSVP.Promise(function (resolve, reject) {
 
           hash.success = function (payload, textStatus, jqXHR) {
-            try {
-              var response = ajaxSuccess(adapter, jqXHR, payload, requestData);
-              _ember['default'].run.join(null, resolve, response);
-            } catch (error) {
-              _ember['default'].run.join(null, reject, error);
-            }
+            var response = ajaxSuccess(adapter, jqXHR, payload, requestData);
+            _ember['default'].run.join(null, resolve, response);
           };
 
           hash.error = function (jqXHR, textStatus, errorThrown) {
-            try {
-              var responseData = {
-                textStatus: textStatus,
-                errorThrown: errorThrown
-              };
-              var error = ajaxError(adapter, jqXHR, requestData, responseData);
-              _ember['default'].run.join(null, reject, error);
-            } catch (error) {
-              _ember['default'].run.join(null, reject, error);
-            }
+            var responseData = {
+              textStatus: textStatus,
+              errorThrown: errorThrown
+            };
+            var error = ajaxError(adapter, jqXHR, requestData, responseData);
+            _ember['default'].run.join(null, reject, error);
           };
 
           adapter._ajaxRequest(hash);
@@ -95472,7 +95462,12 @@ define('ember-data/adapters/rest', ['exports', 'ember', 'ember-data/adapter', 'e
   }
 
   function ajaxSuccess(adapter, jqXHR, payload, requestData) {
-    var response = adapter.handleResponse(jqXHR.status, (0, _emberDataPrivateUtilsParseResponseHeaders['default'])(jqXHR.getAllResponseHeaders()), payload, requestData);
+    var response = undefined;
+    try {
+      response = adapter.handleResponse(jqXHR.status, (0, _emberDataPrivateUtilsParseResponseHeaders['default'])(jqXHR.getAllResponseHeaders()), payload, requestData);
+    } catch (error) {
+      return Promise.reject(error);
+    }
 
     if (response && response.isAdapterError) {
       return Promise.reject(response);
@@ -95499,7 +95494,11 @@ define('ember-data/adapters/rest', ['exports', 'ember', 'ember-data/adapter', 'e
     } else if (responseData.textStatus === 'abort') {
       error = new _emberDataAdaptersErrors.AbortError();
     } else {
-      error = adapter.handleResponse(jqXHR.status, (0, _emberDataPrivateUtilsParseResponseHeaders['default'])(jqXHR.getAllResponseHeaders()), adapter.parseErrorResponse(jqXHR.responseText) || responseData.errorThrown, requestData);
+      try {
+        error = adapter.handleResponse(jqXHR.status, (0, _emberDataPrivateUtilsParseResponseHeaders['default'])(jqXHR.getAllResponseHeaders()), adapter.parseErrorResponse(jqXHR.responseText) || responseData.errorThrown, requestData);
+      } catch (e) {
+        error = e;
+      }
     }
 
     return error;
@@ -99642,7 +99641,7 @@ define('ember-data/transform', ['exports', 'ember'], function (exports, _ember) 
 define("ember-data/version", ["exports"], function (exports) {
   "use strict";
 
-  exports["default"] = "2.8.0";
+  exports["default"] = "2.8.1";
 });
 define('ember-getowner-polyfill/fake-owner', ['exports', 'ember'], function (exports, _ember) {
   'use strict';
@@ -100956,7 +100955,7 @@ define('ember-notify/components/ember-notify/message', ['exports', 'ember', 'emb
 
   exports['default'] = _ember['default'].Component.extend({
     layout: _emberNotifyTemplatesComponentsEmberNotifyMessage['default'],
-    message: null,
+    message: {},
     closeAfter: null,
 
     classNameBindings: ['message.visible:ember-notify-show:ember-notify-hide', 'radius::', 'themeClassNames'],
@@ -101065,7 +101064,7 @@ define('ember-notify/components/ember-notify/message', ['exports', 'ember', 'emb
     }
   });
 });
-define('ember-notify/index', ['exports', 'ember', 'ember-notify/message'], function (exports, _ember, _emberNotifyMessage) {
+define('ember-notify/index', ['exports', 'ember', 'ember-notify/message', 'ember-string-ishtmlsafe-polyfill'], function (exports, _ember, _emberNotifyMessage, _emberStringIshtmlsafePolyfill) {
   'use strict';
 
   function aliasToShow(type) {
@@ -101090,7 +101089,7 @@ define('ember-notify/index', ['exports', 'ember', 'ember-notify/message'], funct
       var assign = _ember['default'].assign || _ember['default'].merge;
 
       // If the text passed is `SafeString`, convert it
-      if (text instanceof _ember['default'].String.htmlSafe) {
+      if ((0, _emberStringIshtmlsafePolyfill['default'])(text)) {
         text = text.toString();
       }
       if (typeof text === 'object') {
@@ -106180,6 +106179,15 @@ define('ember-simple-auth/utils/objects-are-equal', ['exports'], function (expor
 
     return compare(a, b);
   }
+});
+define('ember-string-ishtmlsafe-polyfill/index', ['exports', 'ember'], function (exports, _ember) {
+  'use strict';
+
+  function isHTMLSafePolyfill(str) {
+    return str && typeof str.toHTML === 'function';
+  }
+
+  exports['default'] = _ember['default'].String.isHTMLSafe || isHTMLSafePolyfill;
 });
 define('ember-tether/components/ember-tether', ['exports', 'ember'], function (exports, _ember) {
   'use strict';

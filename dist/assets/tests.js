@@ -34,6 +34,15 @@ define('game/tests/authenticators/oauth2.jshint', ['exports'], function (exports
     assert.ok(true, 'authenticators/oauth2.js should pass jshint.');
   });
 });
+define('game/tests/authorizers/devise.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | authorizers/devise.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'authorizers/devise.js should pass jshint.');
+  });
+});
 define('game/tests/components/program-details.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -417,6 +426,15 @@ define('game/tests/serializers/application.jshint', ['exports'], function (expor
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'serializers/application.js should pass jshint.');
+  });
+});
+define('game/tests/services/current-user.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | services/current-user.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'services/current-user.js should pass jshint.');
   });
 });
 define('game/tests/test-helper', ['exports', 'game/tests/helpers/resolver', 'ember-qunit'], function (exports, _gameTestsHelpersResolver, _emberQunit) {
