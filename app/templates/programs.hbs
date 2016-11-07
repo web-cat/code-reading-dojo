@@ -1,8 +1,8 @@
 <div class="jumbotron text-center">
 <img id="new-logo" src="assets/images/logo.png" >
-
+{{#if (eq clicked 'false')}}
 <button  id='confirm-button' class="btn btn-primary bt-lg" {{action "getCurrentUrl" "clicked"}}>Ready?</button>
-
+{{/if}}
 </div>
 {{#each model as |program|}}
   {{#if (eq clicked 'true')}}

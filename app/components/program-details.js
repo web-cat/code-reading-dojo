@@ -2,13 +2,15 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   notify: Ember.inject.service('notify'),
-  isImageShowing: false,
   isComplete: false,
   level: '',
+  errorNums: '0',
   returnValue: 'em',
   currentUrl:'s',
   errors: [],
-  names: [],
+  plusCount: 0,
+  minusCount: 0,
+  clicked: 'false',
   actions: {
     setCurrentUrl(){
       this.set('currentUrl', window.location.href.split("/").pop());
@@ -23,6 +25,11 @@ export default Ember.Component.extend({
       this.set('errors', this.get('level').split(" "));
     },
     clickCode(errorindexes){
+      if(this.get('clicked')==='true'){
+        this.set('clicked','false');
+      } else {
+        this.set('clicked','true');
+      }
       var result = errorindexes.split(' ');
       this.set('errors', result);
       var current = this;
@@ -35,7 +42,6 @@ export default Ember.Component.extend({
       var s;
   		Ember.$("span").click(function ()
       {
-
       	Ember.$(this).css("background-color","yellow");
         s = Ember.$(this).text();
         var message = "You clicked "+ s;
@@ -52,27 +58,32 @@ export default Ember.Component.extend({
         var finalMessage;
         if (flag === true)
         {
-          finalMessage = message + "\n" + "you found the error!";
+          finalMessage = message + "\n" + "you found one error!";
           Ember.$('#third-score').attr("class","star-icon full");
           // document.getElementById("third-score").classList.add("full");
           current.get('notify').success(finalMessage);
           Ember.$(this).css("background-color","#00CC66");
-          current.get('names').pushObject(s);
+          //current.get('names').pushObject("YEY");
+          var newCount = current.get('plusCount') + 1;
+          current.set('plusCount',newCount);
         }
         else {
+          if (Ember.$('#third-score').attr("class") === "star-icon full") {
+            Ember.$('#third-score').attr("class","star-icon");
+          }
           finalMessage = message + "\n" + "No error!";
           current.get('notify').alert(finalMessage);
           Ember.$(this).css("background-color","#ff4d4d");
+          var newMinusCount = current.get('minusCount') - 1;
+          current.set('minusCount',newMinusCount);
+        }
+        if (current.get('plusCount') === len ) {
+           if (current.get('minusCount') < len) {
+            current.get('notify').success("You Won!");
+           }
         }
  	    });
       this.set('returnValue',s);
-    },
-
-    done(){
-      this.get('notify').alert('Hello there!', {
-        radius: true
-      });
-      this.set('isComplete', true);
     }
   }
 
