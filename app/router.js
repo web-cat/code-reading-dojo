@@ -13,6 +13,7 @@ Router.map(function() {
   this.route('contact');
   this.route('new');
   this.route('login');
+  this.route('signup');
   this.route('practice');
   this.route('beginner', { path: '/beginner/:beginner_id' });
   this.route('intermediate', { path: '/intermediate/:intermediate_id' });

@@ -2,5 +2,5 @@
 import DeviseAuthorizer from 'ember-simple-auth/authorizers/devise';
 
 export default DeviseAuthorizer.extend({
-  serverTokenEndpoint: 'http://codereadingdojo.cs.vt.edu/token'
+  serverTokenEndpoint: 'http://172.31.7.49:3000/token'
 });

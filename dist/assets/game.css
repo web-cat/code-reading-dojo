@@ -5832,7 +5832,7 @@ p, h4, h3 {
   margin-left: 38%;
   margin-right: 37%; }
 
-#item-notcompleted {
+.item-notcompleted {
   opacity: 0.5;
   width: 25%; }
 

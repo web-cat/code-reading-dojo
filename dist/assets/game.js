@@ -33,7 +33,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
-    serverTokenEndpoint: 'http://codereadingdojo.cs.vt.edu/users/sign_in',
+    serverTokenEndpoint: 'http://172.31.7.49:3000/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
         if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.uid) && !isEmpty(data.client)) {
@@ -80,7 +80,7 @@ define('game/authenticators/oauth2', ['exports', 'ember-simple-auth/authenticato
 });
 define('game/authorizers/devise', ['exports', 'ember-simple-auth/authorizers/devise'], function (exports, _emberSimpleAuthAuthorizersDevise) {
   exports['default'] = _emberSimpleAuthAuthorizersDevise['default'].extend({
-    serverTokenEndpoint: 'http://codereadingdojo.cs.vt.edu/token'
+    serverTokenEndpoint: 'http://172.31.7.49:3000/token'
   });
 });
 // app/authorizers/devise.js
@@ -461,6 +461,18 @@ define('game/components/program-details', ['exports', 'ember'], function (export
 
   });
 });
+define('game/components/signup-form', ['exports', 'ember'], function (exports, _ember) {
+  var service = _ember['default'].inject.service;
+  exports['default'] = _ember['default'].Component.extend({
+    session: service('session'),
+    actions: {
+      submit: function submit() {
+        var user = this.get('user');
+        this.attrs.triggerSave(user);
+      }
+    }
+  });
+});
 define('game/components/torii-iframe-placeholder', ['exports', 'torii/components/torii-iframe-placeholder'], function (exports, _toriiComponentsToriiIframePlaceholder) {
   exports['default'] = _toriiComponentsToriiIframePlaceholder['default'];
 });
@@ -513,7 +525,14 @@ define('game/controllers/login', ['exports', 'ember'], function (exports, _ember
 
     actions: {
       authenticate: function authenticate() {
-        this.get('session').authenticate('authenticator:devise', this.get('email'), this.get('password'));
+        var _this = this;
+
+        this.get('session').authenticate('authenticator:devise', this.get('email'), this.get('password'))['catch'](function (reason) {
+
+          _this.set('errorMessage', reason.error || reason);
+          console.log('######################');
+          console.log(_this.get('errorMessage'));
+        });
         console.log('$$$$$$$$$$$$$');
         this.set('session.data.authenticated.email', this.get('email'));
         console.log(this.get('session.data'));
@@ -563,6 +582,31 @@ define('game/controllers/programs', ['exports', 'ember'], function (exports, _em
         } else {
           this.set('clicked', 'true');
         }
+      }
+    }
+  });
+});
+define('game/controllers/signup', ['exports', 'ember'], function (exports, _ember) {
+  exports['default'] = _ember['default'].Controller.extend({
+    session: _ember['default'].inject.service('session'),
+    actions: {
+      save: function save(user) {
+        var _this = this;
+
+        var newUser = user;
+
+        newUser.save()['catch'](function (error) {
+          console.log('!!!!!!!!!!!!!!!!!!');
+          _this.set('errorMessage', error);
+          console.log(_this.get('errorMessage'));
+        }).then(function () {
+          _this.get('session').authenticate('authenticator:devise', newUser.get('email'), newUser.get('password'), newUser.get('passwordConfirmation'))['catch'](function (reason) {
+
+            _this.set('errorMessage', reason.error || reason);
+            console.log('^^^^^^^^^^^^^^^^^');
+            console.log(_this.get('errorMessage'));
+          });
+        });
       }
     }
   });
@@ -1120,7 +1164,9 @@ define('game/models/user', ['exports', 'ember-data/model', 'ember-data/attr'], f
   // import { belongsTo, hasMany } from 'ember-data/relationships';
 
   exports['default'] = _emberDataModel['default'].extend({
-    username: (0, _emberDataAttr['default'])('string'),
+    email: (0, _emberDataAttr['default'])('string'),
+    password: (0, _emberDataAttr['default'])('string'),
+    passwordConfirmation: (0, _emberDataAttr['default'])('string'),
     levelcompleted: (0, _emberDataAttr['default'])('string')
   });
 });
@@ -1141,6 +1187,7 @@ define('game/router', ['exports', 'ember', 'game/config/environment'], function 
     this.route('contact');
     this.route('new');
     this.route('login');
+    this.route('signup');
     this.route('practice');
     this.route('beginner', { path: '/beginner/:beginner_id' });
     this.route('intermediate', { path: '/intermediate/:intermediate_id' });
@@ -1197,6 +1244,13 @@ define('game/routes/programs', ['exports', 'ember'], function (exports, _ember) 
 });
 define('game/routes/protected', ['exports', 'ember', 'ember-simple-auth/mixins/authenticated-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsAuthenticatedRouteMixin) {
   exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsAuthenticatedRouteMixin['default']);
+});
+define('game/routes/signup', ['exports', 'ember', 'ember-simple-auth/mixins/unauthenticated-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsUnauthenticatedRouteMixin) {
+  exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsUnauthenticatedRouteMixin['default'], {
+    model: function model() {
+      return this.store.createRecord('user');
+    }
+  });
 });
 define('game/routes/users', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Route.extend({});
@@ -5941,6 +5995,147 @@ define("game/templates/components/program-details", ["exports"], function (expor
     };
   })());
 });
+define("game/templates/components/signup-form", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 14,
+              "column": 0
+            },
+            "end": {
+              "line": 16,
+              "column": 0
+            }
+          },
+          "moduleName": "game/templates/components/signup-form.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("  ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          return morphs;
+        },
+        statements: [["content", "errorMessage", ["loc", [null, [15, 2], [15, 18]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["multiple-nodes", "wrong-type"]
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 17,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/components/signup-form.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("form");
+        var el2 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("label");
+        dom.setAttribute(el2, "for", "email");
+        var el3 = dom.createTextNode("Email");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("label");
+        dom.setAttribute(el2, "for", "password");
+        var el3 = dom.createTextNode("password");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("label");
+        dom.setAttribute(el2, "for", "passwordConfirmation");
+        var el3 = dom.createTextNode("passwordConfirmation");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment(" <label for=\"levelcompleted\">levelcompleted</label>\n  {{input value=user.levelcompleted placeholder=\"enter level completed\"}} ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("button");
+        dom.setAttribute(el2, "type", "submit");
+        var el3 = dom.createTextNode("Login");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var element0 = dom.childAt(fragment, [0]);
+        var morphs = new Array(5);
+        morphs[0] = dom.createElementMorph(element0);
+        morphs[1] = dom.createMorphAt(element0, 3, 3);
+        morphs[2] = dom.createMorphAt(element0, 7, 7);
+        morphs[3] = dom.createMorphAt(element0, 11, 11);
+        morphs[4] = dom.createMorphAt(fragment, 2, 2, contextualElement);
+        dom.insertBoundary(fragment, null);
+        return morphs;
+      },
+      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [1, 6], [1, 37]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [4, 16], [4, 26]]]]], [], []], "placeholder", "enter email"], ["loc", [null, [4, 2], [4, 54]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [6, 16], [6, 29]]]]], [], []], "placeholder", "enter password"], ["loc", [null, [6, 2], [6, 60]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [8, 16], [8, 41]]]]], [], []], "placeholder", "enter passwordConfirmation"], ["loc", [null, [8, 2], [8, 84]]]], ["block", "if", [["get", "errorMessage", ["loc", [null, [14, 6], [14, 18]]]]], [], 0, null, ["loc", [null, [14, 0], [16, 7]]]]],
+      locals: [],
+      templates: [child0]
+    };
+  })());
+});
 define("game/templates/components/x-timer", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
@@ -7239,7 +7434,7 @@ define("game/templates/new", ["exports"], function (exports) {
               var el1 = dom.createTextNode("            ");
               dom.appendChild(el0, el1);
               var el1 = dom.createElement("img");
-              dom.setAttribute(el1, "id", "item-notcompleted");
+              dom.setAttribute(el1, "class", "item-notcompleted");
               dom.appendChild(el0, el1);
               var el1 = dom.createTextNode("\n");
               dom.appendChild(el0, el1);
@@ -7251,7 +7446,7 @@ define("game/templates/new", ["exports"], function (exports) {
               morphs[0] = dom.createAttrMorph(element1, 'src');
               return morphs;
             },
-            statements: [["attribute", "src", ["subexpr", "concat", [["subexpr", "concat", ["assets/images/intermediate/", ["get", "p.level", ["loc", [null, [35, 91], [35, 98]]]]], [], ["loc", [null, [35, 53], [35, 99]]]], ".png"], [], ["loc", [null, [35, 44], [35, 108]]]]]],
+            statements: [["attribute", "src", ["subexpr", "concat", [["subexpr", "concat", ["assets/images/intermediate/", ["get", "p.level", ["loc", [null, [35, 94], [35, 101]]]]], [], ["loc", [null, [35, 56], [35, 102]]]], ".png"], [], ["loc", [null, [35, 47], [35, 111]]]]]],
             locals: [],
             templates: []
           };
@@ -7295,7 +7490,7 @@ define("game/templates/new", ["exports"], function (exports) {
             dom.insertBoundary(fragment, 0);
             return morphs;
           },
-          statements: [["block", "link-to", ["programs", ["get", "p.level", ["loc", [null, [34, 32], [34, 39]]]]], ["id", "item-notcompleted"], 0, null, ["loc", [null, [34, 10], [36, 22]]]]],
+          statements: [["block", "link-to", ["programs", ["get", "p.level", ["loc", [null, [34, 32], [34, 39]]]]], ["class", "item-notcompleted"], 0, null, ["loc", [null, [34, 10], [36, 22]]]]],
           locals: [],
           templates: [child0]
         };
@@ -7368,7 +7563,7 @@ define("game/templates/new", ["exports"], function (exports) {
               var el1 = dom.createTextNode("              ");
               dom.appendChild(el0, el1);
               var el1 = dom.createElement("img");
-              dom.setAttribute(el1, "id", "item-notcompleted");
+              dom.setAttribute(el1, "class", "item-notcompleted");
               dom.appendChild(el0, el1);
               var el1 = dom.createTextNode("\n");
               dom.appendChild(el0, el1);
@@ -7380,7 +7575,7 @@ define("game/templates/new", ["exports"], function (exports) {
               morphs[0] = dom.createAttrMorph(element0, 'src');
               return morphs;
             },
-            statements: [["attribute", "src", ["subexpr", "concat", [["subexpr", "concat", ["assets/images/advanced/", ["get", "p.level", ["loc", [null, [47, 89], [47, 96]]]]], [], ["loc", [null, [47, 55], [47, 97]]]], ".png"], [], ["loc", [null, [47, 46], [47, 106]]]]]],
+            statements: [["attribute", "src", ["subexpr", "concat", [["subexpr", "concat", ["assets/images/advanced/", ["get", "p.level", ["loc", [null, [47, 92], [47, 99]]]]], [], ["loc", [null, [47, 58], [47, 100]]]], ".png"], [], ["loc", [null, [47, 49], [47, 109]]]]]],
             locals: [],
             templates: []
           };
@@ -7424,7 +7619,7 @@ define("game/templates/new", ["exports"], function (exports) {
             dom.insertBoundary(fragment, 0);
             return morphs;
           },
-          statements: [["block", "link-to", ["programs", ["get", "p.level", ["loc", [null, [46, 32], [46, 39]]]]], ["id", "item-notcompleted"], 0, null, ["loc", [null, [46, 10], [48, 22]]]]],
+          statements: [["block", "link-to", ["programs", ["get", "p.level", ["loc", [null, [46, 32], [46, 39]]]]], ["class", "item-notcompleted"], 0, null, ["loc", [null, [46, 10], [48, 22]]]]],
           locals: [],
           templates: [child0]
         };
@@ -8149,6 +8344,52 @@ define("game/templates/protected", ["exports"], function (exports) {
         return morphs;
       },
       statements: [["content", "outlet", ["loc", [null, [1, 0], [1, 10]]]]],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("game/templates/signup", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["wrong-type"]
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/signup.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        dom.insertBoundary(fragment, 0);
+        return morphs;
+      },
+      statements: [["inline", "signup-form", [], ["user", ["subexpr", "@mut", [["get", "model", ["loc", [null, [1, 19], [1, 24]]]]], [], []], "triggerSave", ["subexpr", "action", ["save"], [], ["loc", [null, [1, 37], [1, 52]]]], "errorMessage", ["subexpr", "@mut", [["get", "errorMessage", ["loc", [null, [1, 66], [1, 78]]]]], [], []]], ["loc", [null, [1, 0], [1, 80]]]]],
       locals: [],
       templates: []
     };
@@ -8891,7 +9132,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+e4e0c60b"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+d1cdba54"});
 }
 
 /* jshint ignore:end */

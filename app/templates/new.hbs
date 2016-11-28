@@ -31,8 +31,8 @@
 
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'intermediate')}}
-          {{#link-to 'programs' p.level id="item-notcompleted"}}
-            <img id="item-notcompleted" src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
+          {{#link-to 'programs' p.level class="item-notcompleted"}}
+            <img class="item-notcompleted" src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
           {{/link-to}}
           <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
         {{/if}}
@@ -43,8 +43,8 @@
 
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'advanced')}}
-          {{#link-to 'programs' p.level id="item-notcompleted"}}
-              <img id="item-notcompleted" src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
+          {{#link-to 'programs' p.level class="item-notcompleted"}}
+              <img class="item-notcompleted" src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
           {{/link-to}}
           <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
         {{/if}}

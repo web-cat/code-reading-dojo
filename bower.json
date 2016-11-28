@@ -8,6 +8,7 @@
     "bootstrap-sass": "^3.3.6",
     "dom-ruler": "0.1.13",
     "bootstrap": "~3.3.5",
-    "ember-simple-auth": "0.8.0"
+    "ember-simple-auth": "0.8.0",
+    "rails-csrf": "0.0.5"
   }
 }
