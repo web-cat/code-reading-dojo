@@ -106,6 +106,15 @@ define('game/tests/controllers/programs.jshint', ['exports'], function (exports)
     assert.ok(true, 'controllers/programs.js should pass jshint.');
   });
 });
+define('game/tests/controllers/survey.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/survey.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/survey.js should pass jshint.');
+  });
+});
 define('game/tests/flows.jshint', ['exports'], function (exports) {
   'use strict';
 
