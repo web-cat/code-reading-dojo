@@ -6,8 +6,8 @@
 
 /* jshint ignore:end */
 
-define('game/adapters/application', ['exports', 'ember-data/adapters/json-api', 'ember-simple-auth/mixins/data-adapter-mixin', 'game/config/environment'], function (exports, _emberDataAdaptersJsonApi, _emberSimpleAuthMixinsDataAdapterMixin, _gameConfigEnvironment) {
-  exports['default'] = _emberDataAdaptersJsonApi['default'].extend(_emberSimpleAuthMixinsDataAdapterMixin['default'], {
+define('game/adapters/application', ['exports', 'active-model-adapter', 'ember-simple-auth/mixins/data-adapter-mixin', 'game/config/environment'], function (exports, _activeModelAdapter, _emberSimpleAuthMixinsDataAdapterMixin, _gameConfigEnvironment) {
+  exports['default'] = _activeModelAdapter['default'].extend(_emberSimpleAuthMixinsDataAdapterMixin['default'], {
     authorizer: 'authorizer:devise',
     host: _gameConfigEnvironment['default'].host
   });
@@ -33,10 +33,10 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
-    serverTokenEndpoint: 'http://172.31.7.49:3000/users/sign_in',
+    serverTokenEndpoint: 'http://192.168.1.103:3000/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
-        if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.uid) && !isEmpty(data.client)) {
+        if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.email) && !isEmpty(data.client)) {
           resolve(data);
         } else {
           reject();
@@ -62,7 +62,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
             accessToken: xhr.getResponseHeader('access-token'),
             expiry: xhr.getResponseHeader('expiry'),
             tokenType: xhr.getResponseHeader('token-type'),
-            uid: xhr.getResponseHeader('uid'),
+            email: xhr.getResponseHeader('email'),
             client: xhr.getResponseHeader('client')
           };
 
@@ -80,7 +80,7 @@ define('game/authenticators/oauth2', ['exports', 'ember-simple-auth/authenticato
 });
 define('game/authorizers/devise', ['exports', 'ember-simple-auth/authorizers/devise'], function (exports, _emberSimpleAuthAuthorizersDevise) {
   exports['default'] = _emberSimpleAuthAuthorizersDevise['default'].extend({
-    serverTokenEndpoint: 'http://172.31.7.49:3000/token'
+    serverTokenEndpoint: 'http://192.168.1.103:3000/token'
   });
 });
 // app/authorizers/devise.js
@@ -467,6 +467,8 @@ define('game/components/signup-form', ['exports', 'ember'], function (exports, _
     session: service('session'),
     actions: {
       submit: function submit() {
+        console.log('-------------------');
+        console.log(this.get('user.passwordConfirmation'));
         var user = this.get('user');
         this.attrs.triggerSave(user);
       }
@@ -533,6 +535,8 @@ define('game/controllers/login', ['exports', 'ember'], function (exports, _ember
           console.log('######################');
           console.log(_this.get('errorMessage'));
         });
+        console.log('****************');
+        console.log(this.get('email'));
         console.log('$$$$$$$$$$$$$');
         this.set('session.data.authenticated.email', this.get('email'));
         console.log(this.get('session.data'));
@@ -755,6 +759,16 @@ define('game/helpers/pluralize', ['exports', 'ember-inflector/lib/helpers/plural
 });
 define('game/helpers/singularize', ['exports', 'ember-inflector/lib/helpers/singularize'], function (exports, _emberInflectorLibHelpersSingularize) {
   exports['default'] = _emberInflectorLibHelpersSingularize['default'];
+});
+define("game/initializers/active-model-adapter", ["exports", "active-model-adapter", "active-model-adapter/active-model-serializer"], function (exports, _activeModelAdapter, _activeModelAdapterActiveModelSerializer) {
+  exports["default"] = {
+    name: 'active-model-adapter',
+    initialize: function initialize() {
+      var application = arguments[1] || arguments[0];
+      application.register('adapter:-active-model', _activeModelAdapter["default"]);
+      application.register('serializer:-active-model', _activeModelAdapterActiveModelSerializer["default"]);
+    }
+  };
 });
 define('game/initializers/allow-link-action', ['exports', 'ember-link-action/initializers/allow-link-action'], function (exports, _emberLinkActionInitializersAllowLinkAction) {
   Object.defineProperty(exports, 'default', {
@@ -9132,7 +9146,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+d1cdba54"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+b72675f4"});
 }
 
 /* jshint ignore:end */

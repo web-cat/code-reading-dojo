@@ -1,0 +1,36 @@
+{
+  "name": "rails-csrf",
+  "version": "0.0.5",
+  "authors": [
+    "Adolfo Builes <builes.adolfo@gmail.com>"
+  ],
+  "description": "Ember.js add-on to fetch automatically CSRF token.",
+  "main": "lib/main.js",
+  "keywords": [
+    "Ember.js",
+    "Rails",
+    "CSRF"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "ic-ajax": "~1.0.4",
+    "ember": "~1.5.1"
+  },
+  "homepage": "https://github.com/abuiles/rails-csrf",
+  "_release": "0.0.5",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.5",
+    "commit": "25d84a42393e73e06f6b88c716db2599ad1b1efe"
+  },
+  "_source": "https://github.com/abuiles/rails-csrf.git",
+  "_target": "0.0.5",
+  "_originalSource": "rails-csrf"
+}
