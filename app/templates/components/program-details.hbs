@@ -11,14 +11,15 @@
   <span id="first-score" class="star-icon">☆</span>
   <span id="second-score" class="star-icon">☆</span>
   <span id="third-score" class="star-icon">☆</span>
+  <span id="fourth-score" class="star-icon">☆</span>
 </div>
-<pre >
-  <p>
+<pre id="pre-code">
+  <p id="p-code">
     {{program.code}}
   </p>
 </pre>
 
 <!-- {{#link-to 'login' id='index-button' class="btn btn-primary btn-lg" }}login{{/link-to}} -->
 {{#if (eq clicked 'false')}}
-<button {{action "clickCode" program.errorindexes}} class="btn btn-primary btn-lg" id="start-button">Start</button>
+  <button {{action "clickCode" program.errorindexes}} class="btn btn-primary btn-lg" id="start-button">Start</button>
 {{/if}}

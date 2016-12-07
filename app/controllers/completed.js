@@ -6,7 +6,11 @@ export default Ember.Controller.extend({
   clicked: 'false',
   actions: {
     getCurrentUrl: function(){
-      this.set('currentUrl',window.location.href.split("/").pop());
+      console.log(window.location.href);
+      var level = window.location.href.split("/").pop();
+      console.log(level);
+      this.set('currentUrl',level);
+      console.log(this.get('currentUrl'));
       this.set('clicked','true');
     },
     unclicked: function(){

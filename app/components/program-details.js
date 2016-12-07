@@ -30,6 +30,7 @@ export default Ember.Component.extend({
       } else {
         this.set('clicked','true');
       }
+
       var result = errorindexes.split(' ');
       for(var i = result.length-1 ; i--;){
 	        if (result[i] === "")
@@ -50,9 +51,8 @@ export default Ember.Component.extend({
       {
       	Ember.$(this).css("background-color","yellow");
         s = Ember.$(this).text();
-        var message = "You clicked on "+ s;
+        var message = s;
         var k = 0;
-        console.log(current.errors);
         var len = current.errors.length;
         var flag = false;
         for (; k < len; k++)
@@ -65,34 +65,46 @@ export default Ember.Component.extend({
         var finalMessage;
         if (flag === true)
         {
-          finalMessage = message + "\n" + ". You found one error!";
-          //Ember.$('#third-score').attr("class","star-icon full");
+          finalMessage = "You found one error: \"" + message + "\"";
+          // Ember.$('#third-score').attr("class","star-icon full");
           // document.getElementById("third-score").classList.add("full");
-          current.get('notify').success(finalMessage);
+          current.get('notify').success(finalMessage, {closeAfter: 1500 });
           Ember.$(this).css("background-color","#00CC66");
           //current.get('names').pushObject("YEY");
           var newCount = current.get('plusCount') + 1;
-          console.log(len);
           current.set('plusCount',newCount);
         }
         else {
-          if (Ember.$('#third-score').attr("class") === "star-icon full") {
-            Ember.$('#third-score').attr("class","star-icon");
-          }
-          finalMessage = message + "\n" + "No error!";
-          current.get('notify').alert(finalMessage);
+          finalMessage = "No error: \"" + message + "\"";
+          current.get('notify').alert(finalMessage, {closeAfter: 1500 });
           Ember.$(this).css("background-color","#ff4d4d");
           var newMinusCount = current.get('minusCount') + 1;
           current.set('minusCount',newMinusCount);
-          console.log(newMinusCount);
+        }
+        if (current.get('plusCount') === 1 ) {
+          Ember.$('#first-score').attr("class","star-icon full");
+        }
+        if (current.get('plusCount') === 2 ) {
+          Ember.$('#second-score').attr("class","star-icon full");
+        }
+        if (current.get('plusCount') === 3 ) {
+          Ember.$('#third-score').attr("class","star-icon full");
+        }
+        if (current.get('plusCount') === 4 ) {
+          Ember.$('#fourth-score').attr("class","star-icon full");
         }
         if (current.get('plusCount') === (len - 1) ) {
-          console.log('heeeereeee');
            if (current.get('minusCount') < (len - 1) ) {
-             console.log('theeeereee');
-            current.get('notify').success("You Won!");
+            current.get('notify').warning("You Win! Click on the Next Level.", {closeAfter: 10000 });
             current.set('errors','');
-            // window.location.replace("http://localhost:4200/#/new");
+            var arr = window.location.href.split("/");
+            var nextLevel = parseInt(arr.pop()) + 1;
+            arr.splice(-1,1);
+            var newUrl = arr.join("/") + "/completed/" + nextLevel;
+            console.log(newUrl);
+            // var url = (add (window.location.href.split("/").pop()) '1')
+            Ember.$('#next').attr("class","next-level");
+          //  window.location.replace(newUrl);
            }
         }
  	    });

@@ -1,25 +1,27 @@
 <div class="jumbotron text-center">
 <img id="new-logo" src="assets/images/logo.png" >
 {{#if (eq clicked 'false')}}
-<p>
-Click the word that you think is wrong. You need to find at least three errors in the code.
-</p>
-<button  id='confirm-button' class="btn btn-primary bt-lg" {{action "getCurrentUrl" "clicked"}}>Ready?</button>
+  <p>
+  Click the word that you think is wrong. You need to find at least three errors in the code.
+  </p>
+  <button  id='confirm-button' class="btn btn-primary bt-lg" {{action "getCurrentUrl" "clicked"}}>Ready?</button>
 {{/if}}
 </div>
 {{#each model as |program|}}
   {{#if (eq clicked 'true')}}
     {{#if (eq program.difficulty "beginner")}}
       {{#if (eq program.level currentUrl)}}
-      {{x-timer autoStart='true' format='HH:MM:SS' stopRequired=false}}
+          {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button"}}
+            Back to Menu
+          {{/link-to}}
+          {{x-timer autoStart='true' format='HH:MM:SS' stopRequired=false}}
           {{program-details program=program}}
-          {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked')}}
-            NEXT LEVEL
-          {{/link-to}}
-          {{#link-to 'new' tagName="button" invokeAction=(action 'clicked')}}
-            BACK TO MENU
-          {{/link-to}}
-      {{/if}}
+          <span class="next-level-none" id="next">
+            {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked') class="btn btn-primary btn-lg" id="next-button"}}
+              Next Level
+            {{/link-to}}
+          </span>
       {{/if}}
     {{/if}}
-  {{/each}}
+  {{/if}}
+{{/each}}
