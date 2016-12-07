@@ -1,6 +1,9 @@
 <div class="jumbotron text-center">
 <img id="new-logo" src="assets/images/logo.png" >
 {{#if (eq clicked 'false')}}
+<p>
+Click the word that you think is wrong. You need to find at least three errors in the code.
+</p>
 <button  id='confirm-button' class="btn btn-primary bt-lg" {{action "getCurrentUrl" "clicked"}}>Ready?</button>
 {{/if}}
 </div>
@@ -12,6 +15,9 @@
           {{program-details program=program}}
           {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked')}}
             NEXT LEVEL
+          {{/link-to}}
+          {{#link-to 'new' tagName="button" invokeAction=(action 'clicked')}}
+            BACK TO MENU
           {{/link-to}}
       {{/if}}
       {{/if}}

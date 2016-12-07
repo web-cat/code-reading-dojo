@@ -81618,6 +81618,12 @@ define('ember-cordova/mixins/device/splashscreen', ['exports', 'ember'], functio
   exports['default'] = Mixin.create({
     splashscreen: inject.service('device/splashscreen'),
 
+    init: function init() {
+      this._super.apply(this, arguments);
+
+      console.warn('DEPRECATION WARNING (ember-cordova): \n' + 'The Splash Mixin has been deprecated. ' + 'It will be discontinued as of v0.4.0 on Jan 2. \n' + 'You need to ember-install ember-cordova-splash . ' + 'See http://embercordova.com/pages/addons/splash for more info. ');
+    },
+
     afterModel: function afterModel() {
       this.get('splashscreen').hide();
 
@@ -81629,7 +81635,6 @@ define('ember-cordova/mixins/events', ['exports', 'ember'], function (exports, _
   'use strict';
 
   var Mixin = _ember['default'].Mixin;
-  var deprecate = _ember['default'].deprecate;
   var get = _ember['default'].get;
   var inject = _ember['default'].inject;
   var on = _ember['default'].on;
@@ -81642,7 +81647,7 @@ define('ember-cordova/mixins/events', ['exports', 'ember'], function (exports, _
       var cordova = this.get('cordova'),
           onCordova = this.get('onCordova');
 
-      _ember['default'].deprecate('Use of `onCordova` and the CordovaEventsMixin is deprecated. Please ' + 'import `ember-cordova/utils/subscribe` and call w/ ' + '`subscribe(eventName, function() { ... });`', onCordova === undefined, { url: 'https://github.com/isleofcode/ember-cordova/issues/83#issuecomment-236441319' });
+      console.warn('DEPRECATION WARNING (ember-cordova): \n' + 'The Events Mixin has been deprecated. \n ' + 'This service will be deprecated as of v0.4.0 on Jan 2. \n' + 'You need to ember-install ember-cordova-events . ' + 'See http://embercordova.com/pages/addons/events for more info. ');
 
       if (onCordova === undefined) {
         return;
@@ -81692,6 +81697,8 @@ define('ember-cordova/services/cordova', ['exports', 'ember'], function (exports
 
     init: function init() {
       this._super();
+
+      console.warn('DEPRECATION WARNING (ember-cordova): \n' + 'The Events Mixin has been deprecated. \n ' + 'It will be discontinued as of v0.4.0 on Jan 2. \n' + 'You need to ember-install ember-cordova-events . ' + 'See http://embercordova.com/pages/addons/events for more info. ');
 
       this._listeners = [];
       this._ready = RSVP.defer();
@@ -81931,6 +81938,11 @@ define('ember-cordova/services/device/splashscreen', ['exports', 'ember'], funct
   exports['default'] = Service.extend({
     cordova: inject.service('cordova'),
     splashSelector: '#splashcreen',
+
+    init: function init() {
+      this._super.apply(this, arguments);
+      console.warn('DEPRECATION WARNING (ember-cordova): \n' + 'The Splash Mixin has been deprecated. ' + 'It will be discontinued as of v0.4.0 on Jan 2. \n' + 'You need to ember-install ember-cordova-splash . ' + 'See http://embercordova.com/pages/addons/splash for more info. ');
+    },
 
     hide: function hide() {
       this.get('cordova').ready().then(function () {

@@ -21,7 +21,7 @@
   "devDependencies": {
     "active-model-adapter": "2.1.1",
     "broccoli-asset-rev": "^2.4.2",
-    "ember-ajax": "^2.0.1",
+    "ember-ajax": "2.5.2",
     "ember-bootstrap": "0.9.1",
     "ember-bootstrap-4": "0.1.2",
     "ember-clean-tmp": "0.1.4",
@@ -40,7 +40,7 @@
     "ember-cli-sri": "^2.1.0",
     "ember-cli-timer": "0.0.2",
     "ember-cli-uglify": "^1.2.0",
-    "ember-cordova": "0.3.3",
+    "ember-cordova": "0.3.13",
     "ember-data": "^2.6.0",
     "ember-export-application-global": "^1.0.5",
     "ember-link-action": "0.0.34",

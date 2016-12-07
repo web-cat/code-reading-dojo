@@ -52,6 +52,15 @@ define('game/tests/components/program-details.jshint', ['exports'], function (ex
     assert.ok(true, 'components/program-details.js should pass jshint.');
   });
 });
+define('game/tests/components/signup-form.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | components/signup-form.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'components/signup-form.js should pass jshint.');
+  });
+});
 define('game/tests/controllers/application.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -104,6 +113,24 @@ define('game/tests/controllers/programs.jshint', ['exports'], function (exports)
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'controllers/programs.js should pass jshint.');
+  });
+});
+define('game/tests/controllers/signup.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/signup.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/signup.js should pass jshint.');
+  });
+});
+define('game/tests/controllers/survey.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/survey.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/survey.js should pass jshint.');
   });
 });
 define('game/tests/flows.jshint', ['exports'], function (exports) {
@@ -408,6 +435,15 @@ define('game/tests/routes/protected.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/protected.js should pass jshint.');
+  });
+});
+define('game/tests/routes/signup.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/signup.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/signup.js should pass jshint.');
   });
 });
 define('game/tests/routes/users.jshint', ['exports'], function (exports) {

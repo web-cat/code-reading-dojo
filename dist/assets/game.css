@@ -5816,9 +5816,18 @@ button.close {
     display: none !important; } }
 
 /* main container */
-p, h4, h3 {
+h4, h3 {
   color: white;
   max-width: 100%; }
+
+p {
+  color: white;
+  max-width: 100%;
+  margin-left: 5px;
+  margin-right: 5px; }
+
+pre {
+  background-color: #333333; }
 
 #index-title {
   color: #FF6600; }

@@ -31,6 +31,12 @@ export default Ember.Component.extend({
         this.set('clicked','true');
       }
       var result = errorindexes.split(' ');
+      for(var i = result.length-1 ; i--;){
+	        if (result[i] === "")
+          {
+            result.splice(i, 1);
+          }
+      }
       this.set('errors', result);
       var current = this;
       var temp = Ember.$("p:first").text();
@@ -44,8 +50,9 @@ export default Ember.Component.extend({
       {
       	Ember.$(this).css("background-color","yellow");
         s = Ember.$(this).text();
-        var message = "You clicked "+ s;
+        var message = "You clicked on "+ s;
         var k = 0;
+        console.log(current.errors);
         var len = current.errors.length;
         var flag = false;
         for (; k < len; k++)
@@ -58,13 +65,14 @@ export default Ember.Component.extend({
         var finalMessage;
         if (flag === true)
         {
-          finalMessage = message + "\n" + "you found one error!";
-          Ember.$('#third-score').attr("class","star-icon full");
+          finalMessage = message + "\n" + ". You found one error!";
+          //Ember.$('#third-score').attr("class","star-icon full");
           // document.getElementById("third-score").classList.add("full");
           current.get('notify').success(finalMessage);
           Ember.$(this).css("background-color","#00CC66");
           //current.get('names').pushObject("YEY");
           var newCount = current.get('plusCount') + 1;
+          console.log(len);
           current.set('plusCount',newCount);
         }
         else {
@@ -74,12 +82,17 @@ export default Ember.Component.extend({
           finalMessage = message + "\n" + "No error!";
           current.get('notify').alert(finalMessage);
           Ember.$(this).css("background-color","#ff4d4d");
-          var newMinusCount = current.get('minusCount') - 1;
+          var newMinusCount = current.get('minusCount') + 1;
           current.set('minusCount',newMinusCount);
+          console.log(newMinusCount);
         }
-        if (current.get('plusCount') === len ) {
-           if (current.get('minusCount') < len) {
+        if (current.get('plusCount') === (len - 1) ) {
+          console.log('heeeereeee');
+           if (current.get('minusCount') < (len - 1) ) {
+             console.log('theeeereee');
             current.get('notify').success("You Won!");
+            current.set('errors','');
+            // window.location.replace("http://localhost:4200/#/new");
            }
         }
  	    });

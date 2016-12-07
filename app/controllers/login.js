@@ -16,6 +16,8 @@ export default Ember.Controller.extend({
       console.log('****************');
       console.log(this.get('email'));
       console.log('$$$$$$$$$$$$$');
+      this.set('session.data.uid', this.get('email'));
+      this.set('session.data.email', this.get('email'));
       this.set('session.data.authenticated.email', this.get('email'));
       console.log(this.get('session.data'));
     }

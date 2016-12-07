@@ -8,7 +8,7 @@
     },
     "installed_plugins": {
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.codereadingdojo.ideas"
+            "PACKAGE_NAME": "com.embercordova.game"
         }
     },
     "dependent_plugins": {}
