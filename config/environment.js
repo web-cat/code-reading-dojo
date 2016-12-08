@@ -1,7 +1,7 @@
 /* jshint node: true */
 module.exports = function(environment) {
   var ENV = {
-    host: 'http://172.31.4.23:3000',
+    host: 'http://172.30.207.166:3000',
     modulePrefix: 'game',
     environment: environment,
     baseURL: '/#/',
@@ -19,7 +19,7 @@ module.exports = function(environment) {
     }
   };
 
-  ENV.SERVER_URL = 'http://172.31.4.23:3000';
+  ENV.SERVER_URL = 'http://172.30.207.166:3000';
 
 
 

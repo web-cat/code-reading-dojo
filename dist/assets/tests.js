@@ -49,7 +49,7 @@ define('game/tests/components/program-details.jshint', ['exports'], function (ex
   QUnit.module('JSHint | components/program-details.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'components/program-details.js should pass jshint.');
+    assert.ok(false, 'components/program-details.js should pass jshint.\ncomponents/program-details.js: line 103, col 17, \'newUrl\' is defined but never used.\n\n1 error');
   });
 });
 define('game/tests/components/signup-form.jshint', ['exports'], function (exports) {

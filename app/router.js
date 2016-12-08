@@ -19,6 +19,7 @@ Router.map(function() {
   this.route('intermediate', { path: '/intermediate/:intermediate_id' });
   this.route('advanced', { path: '/advanced/:advanced_id' });
   this.route('survey');
+  this.route('info');
   this.route('index', { path: '/' });
 });
 

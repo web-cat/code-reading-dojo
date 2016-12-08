@@ -5,7 +5,9 @@ export default Ember.Controller.extend({
 
   actions: {
     invalidateSession() {
+      window.location.replace(window.location.href);
       this.get('session').invalidate();
+
     }
   }
 });

@@ -1,0 +1,118 @@
+<div class="container">
+  <form id="contact" action="" method="post">
+    {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button"}}
+      Back to Menu
+    {{/link-to}}
+    <h3>Quick Survey</h3>
+    <h4>Tell us a little about your self</h4>
+
+    <label class="statement"> Your Gender</label>
+    <ul class='likertt'>
+        <input type="radio" name="likert0" value="male">
+        <label>Male   </label>
+        <input type="radio" name="likert0" value="female">
+        <label>Female</label>
+
+    </ul>
+      <label class="statement">Year of your birth</label>
+      <ul class='likertt'>
+        <input type="text" >
+      </ul>
+
+    <label class="statement"> How many months/years do you have programming experience</label>
+    <ul class='likert'>
+      <li>
+        <input type="radio" name="likert2" value="strong_agree">
+        <label>Less than a month</label>
+      </li>
+      <li>
+        <input type="radio" name="likert2" value="strong_agree">
+        <label>1-06 months</label>
+      </li>
+      <li>
+        <input type="radio" name="likert2" value="strong_agree">
+        <label>6-12 months</label>
+      </li>
+      <li>
+        <input type="radio" name="likert2" value="disagree">
+        <label>1-2 years</label>
+      </li>
+      <li>
+        <input type="radio" name="likert2" value="strong_agree">
+        <label>2-5 years</label>
+      </li>
+    </ul>
+
+
+    <label class="statement">I enjoy mobile games very much</label>
+    <ul class='likert'>
+      <li>
+        <input type="radio" name="likert4" value="strong_agree">
+        <label>Strongly agree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert4" value="strong_agree">
+        <label>Agree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert4" value="strong_agree">
+        <label>Neutral</label>
+      </li>
+      <li>
+        <input type="radio" name="likert4" value="disagree">
+        <label>Disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="likert4" value="strong_agree">
+        <label>Strongly disagree</label>
+      </li>
+    </ul>
+
+<label class="statement">What are (up to) three programming languages that you know</label>
+<ul class='likertt'>
+
+  <table style="width:100%">
+  <tr>
+    <th>  <input type="checkbox" name="likert3" value="java">
+  <label>Java</label></th>
+    <th>  <input type="checkbox" name="likert3" value="c">
+  <label>C</label></th>
+    <th>  <input type="checkbox" name="likert3" value="c++">
+  <label>C++</label></th>
+  </tr>
+<tr>
+    <th>  <input type="checkbox" name="likert3" value="python">
+  <label>Python</label></th>
+    <th>  <input type="checkbox" name="likert3" value="javascript">
+  <label>JavaScript</label></th>
+    <th>  <input type="checkbox" name="likert3" value="html">
+  <label>HTML</label></th>
+  </tr>
+<tr>
+    <th>  <input type="checkbox" name="likert3" value="python">
+  <label>Other</label><input id="input-other" type="text" style="width: 60px; height:20px;"></th>
+ 
+  </tr>
+
+</table>
+</ul>
+
+    <!-- <fieldset>
+      <input placeholder="Your Age" type="email" tabindex="2" required>
+    </fieldset>
+    <fieldset>
+      <input placeholder="Rate Your " type="tel" tabindex="3" required>
+    </fieldset>
+    <fieldset>
+      <input placeholder="Your Web Site starts with http://" type="url" tabindex="4" required>
+    </fieldset>
+    <fieldset>
+      <textarea placeholder="Type your Message Here...." tabindex="5" required></textarea>
+    </fieldset> -->
+    <fieldset>
+      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+    </fieldset>
+  </form>
+
+
+</div>

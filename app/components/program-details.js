@@ -101,7 +101,7 @@ export default Ember.Component.extend({
             var nextLevel = parseInt(arr.pop()) + 1;
             arr.splice(-1,1);
             var newUrl = arr.join("/") + "/completed/" + nextLevel;
-            console.log(newUrl);
+            //console.log(newUrl);
             // var url = (add (window.location.href.split("/").pop()) '1')
             Ember.$('#next').attr("class","next-level");
           //  window.location.replace(newUrl);

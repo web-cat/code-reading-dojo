@@ -1,14 +1,35 @@
 <div class="jumbotron text-center">
+  <img id="new-logo" src="assets/images/logo.png" >
   <p>Congradulations, you've completed the level!</p>
   <div class="form-horizontal form-group form-group-lg row">
     <div class="col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4">
-      <button {{action "getCurrentUrl"}} class="btn btn-info btn-lg btn-block">Click here to see the errors</button>
-        {{#if (eq clicked 'true')}}
-        here
-        {{currentUrl}}
-        there
-          {{#link-to 'programs' currentUrl class="btn btn-primary btn-lg btn-block" invokeAction=(action 'unclicked')}}Click here for the next level{{/link-to}}
+      <div class="container">
+        {{#if (eq '1' currentUrl)}}
+          {{beginner-one}}
+          <button {{action "getCurrentUrl"}} class="btn btn-info btn-lg">Next Level</button>
         {{/if}}
+        {{currentUrl}}
+        {{#if (eq '2' currentUrl)}}
+          {{beginner-two}}
+          <button {{action "getCurrentUrl"}} class="btn btn-info btn-lg">Next Level</button>
+        {{/if}}
+        {{#if (eq '3' currentUrl)}}
+          {{beginner-three}}
+          <button {{action "getCurrentUrl"}} class="btn btn-info btn-lg">Next Level</button>
+        {{/if}}
+        {{#if (eq '4' currentUrl)}}
+          {{beginner-four}}
+          <button {{action "getCurrentUrl"}} class="btn btn-info btn-lg">Next Level</button>
+        {{/if}}
+        {{#if (eq '5' currentUrl)}}
+          {{beginner-five}}
+          <button {{action "getCurrentUrl"}} class="btn btn-info btn-lg">Next Level</button>
+        {{/if}}
+        {{#if (eq '6' currentUrl)}}
+          {{beginner-six}}
+          <button {{action "survey"}} class="btn btn-info btn-lg">Survey</button>
+        {{/if}}
+    </div>
     </div>
   </div>
 </div>

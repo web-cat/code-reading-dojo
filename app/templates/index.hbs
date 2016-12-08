@@ -5,17 +5,20 @@
 <img id="index-logo" src="assets/images/logo.png" >
 <br/><br/>
 {{#if session.isAuthenticated}}
-{{#link-to 'survey' class="btn btn-primary btn-lg" id="new"}}
-  survey
-{{/link-to}}
-{{#link-to 'new' class="btn btn-primary btn-lg" id="play"}}Play{{/link-to}}
 
+{{#link-to 'new' class="btn btn-primary btn-lg" id="play"}}Play{{/link-to}}
+{{#link-to 'survey' class="btn btn-primary" id="survey"}}
+  Survey
+{{/link-to}}
 {{else}}
 
 <h3>Welcome!</h3>
 <p>
 CodeReadingDojo is an educationally-oriented Android game aimed at promoting code reading skills.
 </p>
+{{#link-to 'signup' class="btn btn-primary" id="signup"}}
+  Sign Up
+{{/link-to}}
 {{/if}}
 <br/><br/>
 </div>

@@ -33,7 +33,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
-    serverTokenEndpoint: 'http://172.31.4.23:3000/users/sign_in',
+    serverTokenEndpoint: 'http://172.30.207.166:3000/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
         if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.email) && !isEmpty(data.client)) {
@@ -81,7 +81,7 @@ define('game/authenticators/oauth2', ['exports', 'ember-simple-auth/authenticato
 });
 define('game/authorizers/devise', ['exports', 'ember-simple-auth/authorizers/devise'], function (exports, _emberSimpleAuthAuthorizersDevise) {
   exports['default'] = _emberSimpleAuthAuthorizersDevise['default'].extend({
-    serverTokenEndpoint: 'http://172.31.4.23:3000/token'
+    serverTokenEndpoint: 'http://172.30.207.166:3000/token'
   });
 });
 // app/authorizers/devise.js
@@ -473,7 +473,7 @@ define('game/components/program-details', ['exports', 'ember'], function (export
               var nextLevel = parseInt(arr.pop()) + 1;
               arr.splice(-1, 1);
               var newUrl = arr.join("/") + "/completed/" + nextLevel;
-              console.log(newUrl);
+              //console.log(newUrl);
               // var url = (add (window.location.href.split("/").pop()) '1')
               _ember['default'].$('#next').attr("class", "next-level");
               //  window.location.replace(newUrl);
@@ -512,6 +512,7 @@ define('game/controllers/application', ['exports', 'ember'], function (exports, 
 
     actions: {
       invalidateSession: function invalidateSession() {
+        window.location.replace(window.location.href);
         this.get('session').invalidate();
       }
     }
@@ -519,16 +520,20 @@ define('game/controllers/application', ['exports', 'ember'], function (exports, 
 });
 define('game/controllers/completed', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Controller.extend({
-    currentUrl: 't',
+    currentUrl: '1',
     clicked: 'false',
     actions: {
       getCurrentUrl: function getCurrentUrl() {
-        console.log(window.location.href);
-        var level = window.location.href.split("/").pop();
-        console.log(level);
-        this.set('currentUrl', level);
-        console.log(this.get('currentUrl'));
+        // console.log(window.location.href);
+        var arr = window.location.href.split("/");
+        var level = parseInt(arr.pop());
+        arr.splice(-1, 1);
+        var newUrl = arr.join("/") + "/programs/" + level;
+        // console.log(level);
+        this.set('currentUrl', level.toString());
+        // console.log(this.get('currentUrl'));
         this.set('clicked', 'true');
+        window.location.replace(newUrl);
       },
       unclicked: function unclicked() {
         this.set('clicked', 'false');
@@ -1242,6 +1247,7 @@ define('game/router', ['exports', 'ember', 'game/config/environment'], function 
     this.route('intermediate', { path: '/intermediate/:intermediate_id' });
     this.route('advanced', { path: '/advanced/:advanced_id' });
     this.route('survey');
+    this.route('info');
     this.route('index', { path: '/' });
   });
 
@@ -1617,7 +1623,7 @@ define("game/templates/application", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("    login\n");
+            var el1 = dom.createTextNode("  Login\n");
             dom.appendChild(el0, el1);
             return el0;
           },
@@ -1663,7 +1669,7 @@ define("game/templates/application", ["exports"], function (exports) {
           dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["block", "link-to", ["login"], ["class", "btn btn-primary btn-lg", "id", "login"], 0, null, ["loc", [null, [6, 2], [8, 14]]]]],
+        statements: [["block", "link-to", ["login"], ["class", "btn btn-primary", "id", "login", "tagName", "button"], 0, null, ["loc", [null, [6, 2], [8, 14]]]]],
         locals: [],
         templates: [child0]
       };
@@ -1718,42 +1724,6 @@ define("game/templates/application", ["exports"], function (exports) {
 define("game/templates/completed", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
     var child0 = (function () {
-      var child0 = (function () {
-        return {
-          meta: {
-            "fragmentReason": false,
-            "revision": "Ember@2.6.2",
-            "loc": {
-              "source": null,
-              "start": {
-                "line": 10,
-                "column": 10
-              },
-              "end": {
-                "line": 10,
-                "column": 148
-              }
-            },
-            "moduleName": "game/templates/completed.hbs"
-          },
-          isEmpty: false,
-          arity: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          buildFragment: function buildFragment(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("Click here for the next level");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          buildRenderNodes: function buildRenderNodes() {
-            return [];
-          },
-          statements: [],
-          locals: [],
-          templates: []
-        };
-      })();
       return {
         meta: {
           "fragmentReason": false,
@@ -1761,11 +1731,11 @@ define("game/templates/completed", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 6,
+              "line": 7,
               "column": 8
             },
             "end": {
-              "line": 11,
+              "line": 10,
               "column": 8
             }
           },
@@ -1777,27 +1747,286 @@ define("game/templates/completed", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("        here\n        ");
+          var el1 = dom.createTextNode("          ");
           dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n        there\n          ");
+          var el1 = dom.createTextNode("\n          ");
           dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+          var el2 = dom.createTextNode("Next Level");
+          dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element5 = dom.childAt(fragment, [3]);
           var morphs = new Array(2);
           morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          morphs[1] = dom.createMorphAt(fragment, 3, 3, contextualElement);
+          morphs[1] = dom.createElementMorph(element5);
           return morphs;
         },
-        statements: [["content", "currentUrl", ["loc", [null, [8, 8], [8, 22]]]], ["block", "link-to", ["programs", ["get", "currentUrl", ["loc", [null, [10, 32], [10, 42]]]]], ["class", "btn btn-primary btn-lg btn-block", "invokeAction", ["subexpr", "action", ["unclicked"], [], ["loc", [null, [10, 97], [10, 117]]]]], 0, null, ["loc", [null, [10, 10], [10, 160]]]]],
+        statements: [["content", "beginner-one", ["loc", [null, [8, 10], [8, 26]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [9, 18], [9, 44]]]]],
         locals: [],
-        templates: [child0]
+        templates: []
+      };
+    })();
+    var child1 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 12,
+              "column": 8
+            },
+            "end": {
+              "line": 15,
+              "column": 8
+            }
+          },
+          "moduleName": "game/templates/completed.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+          var el2 = dom.createTextNode("Next Level");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element4 = dom.childAt(fragment, [3]);
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          morphs[1] = dom.createElementMorph(element4);
+          return morphs;
+        },
+        statements: [["content", "beginner-two", ["loc", [null, [13, 10], [13, 26]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [14, 18], [14, 44]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child2 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 16,
+              "column": 8
+            },
+            "end": {
+              "line": 19,
+              "column": 8
+            }
+          },
+          "moduleName": "game/templates/completed.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+          var el2 = dom.createTextNode("Next Level");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element3 = dom.childAt(fragment, [3]);
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          morphs[1] = dom.createElementMorph(element3);
+          return morphs;
+        },
+        statements: [["content", "beginner-three", ["loc", [null, [17, 10], [17, 28]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [18, 18], [18, 44]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child3 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 20,
+              "column": 8
+            },
+            "end": {
+              "line": 23,
+              "column": 8
+            }
+          },
+          "moduleName": "game/templates/completed.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+          var el2 = dom.createTextNode("Next Level");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element2 = dom.childAt(fragment, [3]);
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          morphs[1] = dom.createElementMorph(element2);
+          return morphs;
+        },
+        statements: [["content", "beginner-four", ["loc", [null, [21, 10], [21, 27]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [22, 18], [22, 44]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child4 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 24,
+              "column": 8
+            },
+            "end": {
+              "line": 27,
+              "column": 8
+            }
+          },
+          "moduleName": "game/templates/completed.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+          var el2 = dom.createTextNode("Next Level");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element1 = dom.childAt(fragment, [3]);
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          morphs[1] = dom.createElementMorph(element1);
+          return morphs;
+        },
+        statements: [["content", "beginner-five", ["loc", [null, [25, 10], [25, 27]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [26, 18], [26, 44]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child5 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 28,
+              "column": 8
+            },
+            "end": {
+              "line": 31,
+              "column": 8
+            }
+          },
+          "moduleName": "game/templates/completed.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n          ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+          var el2 = dom.createTextNode("Survey");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element0 = dom.childAt(fragment, [3]);
+          var morphs = new Array(2);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          morphs[1] = dom.createElementMorph(element0);
+          return morphs;
+        },
+        statements: [["content", "beginner-six", ["loc", [null, [29, 10], [29, 26]]]], ["element", "action", ["survey"], [], ["loc", [null, [30, 18], [30, 37]]]]],
+        locals: [],
+        templates: []
       };
     })();
     return {
@@ -1813,7 +2042,7 @@ define("game/templates/completed", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 15,
+            "line": 36,
             "column": 0
           }
         },
@@ -1827,6 +2056,12 @@ define("game/templates/completed", ["exports"], function (exports) {
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "jumbotron text-center");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("img");
+        dom.setAttribute(el2, "id", "new-logo");
+        dom.setAttribute(el2, "src", "assets/images/logo.png");
+        dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n  ");
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("p");
@@ -1843,16 +2078,32 @@ define("game/templates/completed", ["exports"], function (exports) {
         dom.setAttribute(el3, "class", "col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4");
         var el4 = dom.createTextNode("\n      ");
         dom.appendChild(el3, el4);
-        var el4 = dom.createElement("button");
-        dom.setAttribute(el4, "class", "btn btn-info btn-lg btn-block");
-        var el5 = dom.createTextNode("Click here to see the errors");
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "container");
+        var el5 = dom.createTextNode("\n");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createComment("");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("    ");
         dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createComment("");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("    ");
+        var el4 = dom.createTextNode("\n    ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n  ");
@@ -1866,16 +2117,512 @@ define("game/templates/completed", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 3, 1]);
-        var element1 = dom.childAt(element0, [1]);
-        var morphs = new Array(2);
-        morphs[0] = dom.createElementMorph(element1);
-        morphs[1] = dom.createMorphAt(element0, 3, 3);
+        var element6 = dom.childAt(fragment, [0, 5, 1, 1]);
+        var morphs = new Array(7);
+        morphs[0] = dom.createMorphAt(element6, 1, 1);
+        morphs[1] = dom.createMorphAt(element6, 3, 3);
+        morphs[2] = dom.createMorphAt(element6, 5, 5);
+        morphs[3] = dom.createMorphAt(element6, 6, 6);
+        morphs[4] = dom.createMorphAt(element6, 7, 7);
+        morphs[5] = dom.createMorphAt(element6, 8, 8);
+        morphs[6] = dom.createMorphAt(element6, 9, 9);
         return morphs;
       },
-      statements: [["element", "action", ["getCurrentUrl"], [], ["loc", [null, [5, 14], [5, 40]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [6, 18], [6, 25]]]], "true"], [], ["loc", [null, [6, 14], [6, 33]]]]], [], 0, null, ["loc", [null, [6, 8], [11, 15]]]]],
+      statements: [["block", "if", [["subexpr", "eq", ["1", ["get", "currentUrl", ["loc", [null, [7, 22], [7, 32]]]]], [], ["loc", [null, [7, 14], [7, 33]]]]], [], 0, null, ["loc", [null, [7, 8], [10, 15]]]], ["content", "currentUrl", ["loc", [null, [11, 8], [11, 22]]]], ["block", "if", [["subexpr", "eq", ["2", ["get", "currentUrl", ["loc", [null, [12, 22], [12, 32]]]]], [], ["loc", [null, [12, 14], [12, 33]]]]], [], 1, null, ["loc", [null, [12, 8], [15, 15]]]], ["block", "if", [["subexpr", "eq", ["3", ["get", "currentUrl", ["loc", [null, [16, 22], [16, 32]]]]], [], ["loc", [null, [16, 14], [16, 33]]]]], [], 2, null, ["loc", [null, [16, 8], [19, 15]]]], ["block", "if", [["subexpr", "eq", ["4", ["get", "currentUrl", ["loc", [null, [20, 22], [20, 32]]]]], [], ["loc", [null, [20, 14], [20, 33]]]]], [], 3, null, ["loc", [null, [20, 8], [23, 15]]]], ["block", "if", [["subexpr", "eq", ["5", ["get", "currentUrl", ["loc", [null, [24, 22], [24, 32]]]]], [], ["loc", [null, [24, 14], [24, 33]]]]], [], 4, null, ["loc", [null, [24, 8], [27, 15]]]], ["block", "if", [["subexpr", "eq", ["6", ["get", "currentUrl", ["loc", [null, [28, 22], [28, 32]]]]], [], ["loc", [null, [28, 14], [28, 33]]]]], [], 5, null, ["loc", [null, [28, 8], [31, 15]]]]],
       locals: [],
-      templates: [child0]
+      templates: [child0, child1, child2, child3, child4, child5]
+    };
+  })());
+});
+define("game/templates/components/beginner-five", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["multiple-nodes"]
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 13,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/components/beginner-five.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  A ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("class");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" is a blueprint from which individual objects are created.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("+ ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" is a way for String concatination in Java, not *.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  The ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("String");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" class represents character strings.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("; (Semicolon)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" ends a statement, not function declaration.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("game/templates/components/beginner-four", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["multiple-nodes"]
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 13,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/components/beginner-four.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode(">");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" creates a semantic error in the program.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("-- (Decrement)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" Decreases the value of operand by 1. ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("- (Subtraction)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" Subtracts right-hand operand from left-hand operand..\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  The ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("String");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" class represents character strings.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("; (Semicolon)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" ends a statement, not function declaration.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("game/templates/components/beginner-one", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["multiple-nodes"]
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/components/beginner-one.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  The ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("String");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" class represents character strings.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("; (Semicolon)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" semicolon ends a statement, not function declaration.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("{} Braces");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" are used to group statements and declarations. There must be equal numbers of opening and close braces.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("game/templates/components/beginner-six", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["empty-body"]
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/components/beginner-six.hbs"
+      },
+      isEmpty: true,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("game/templates/components/beginner-three", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["multiple-nodes"]
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 13,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/components/beginner-three.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("{} (Braces)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" are used to group statements and declarations. There must be equal numbers of opening and close braces.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("+ (Addition)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" Adds values on either side of the operator. ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("++ (Increment)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" Increases the value of operand by 1.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  The most commonly used ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("Integer");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" data type in Java is ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("int");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(".\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("; (Semicolon)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" ends a statement, not function declaration.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
+    };
+  })());
+});
+define("game/templates/components/beginner-two", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "missing-wrapper",
+          "problems": ["multiple-nodes"]
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/components/beginner-two.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("+ (Addition)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" Adds values on either side of the operator. ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("++ (Increment)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" Increases the value of operand by 1.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  The most commonly used Integer data type in Java is ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("int");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(".\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "notice notice-info");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("strong");
+        var el3 = dom.createTextNode("; (Semicolon)");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode(" ends a statement, not function declaration.\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes() {
+        return [];
+      },
+      statements: [],
+      locals: [],
+      templates: []
     };
   })());
 });
@@ -6069,12 +6816,12 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
           "loc": {
             "source": null,
             "start": {
-              "line": 14,
-              "column": 0
+              "line": 4,
+              "column": 6
             },
             "end": {
-              "line": 16,
-              "column": 0
+              "line": 6,
+              "column": 6
             }
           },
           "moduleName": "game/templates/components/signup-form.hbs"
@@ -6085,20 +6832,14 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("  ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
+          var el1 = dom.createTextNode("        Back to Menu\n");
           dom.appendChild(el0, el1);
           return el0;
         },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var morphs = new Array(1);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          return morphs;
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
         },
-        statements: [["content", "errorMessage", ["loc", [null, [15, 2], [15, 18]]]]],
+        statements: [],
         locals: [],
         templates: []
       };
@@ -6106,8 +6847,7 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
     return {
       meta: {
         "fragmentReason": {
-          "name": "missing-wrapper",
-          "problems": ["multiple-nodes", "wrong-type"]
+          "name": "triple-curlies"
         },
         "revision": "Ember@2.6.2",
         "loc": {
@@ -6117,7 +6857,7 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
             "column": 0
           },
           "end": {
-            "line": 17,
+            "line": 78,
             "column": 0
           }
         },
@@ -6129,49 +6869,310 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("form");
-        var el2 = dom.createTextNode("\n\n  ");
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "wrapper");
+        var el2 = dom.createTextNode("\n    ");
         dom.appendChild(el1, el2);
-        var el2 = dom.createElement("label");
-        dom.setAttribute(el2, "for", "email");
-        var el3 = dom.createTextNode("Email");
+        var el2 = dom.createComment(" Main Content ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n    ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("div");
+        dom.setAttribute(el2, "id", "signupbox");
+        dom.setAttribute(el2, "style", "margin-top:50px");
+        dom.setAttribute(el2, "class", "mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2");
+        var el3 = dom.createTextNode("\n");
         dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createComment("");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("label");
-        dom.setAttribute(el2, "for", "password");
-        var el3 = dom.createTextNode("password");
+        var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createComment("");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("label");
-        dom.setAttribute(el2, "for", "passwordConfirmation");
-        var el3 = dom.createTextNode("passwordConfirmation");
+        var el3 = dom.createTextNode("        ");
         dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createComment("");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createComment(" <label for=\"levelcompleted\">levelcompleted</label>\n  {{input value=user.levelcompleted placeholder=\"enter level completed\"}} ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("button");
-        dom.setAttribute(el2, "type", "submit");
-        var el3 = dom.createTextNode("Login");
+        var el3 = dom.createElement("div");
+        dom.setAttribute(el3, "class", "panel panel-warning");
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "panel-heading");
+        var el5 = dom.createTextNode("\n                ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("div");
+        dom.setAttribute(el5, "class", "panel-title");
+        var el6 = dom.createTextNode("Sign Up");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n            ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n            ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("div");
+        dom.setAttribute(el4, "class", "panel-body");
+        var el5 = dom.createTextNode("\n              ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("form");
+        dom.setAttribute(el5, "id", "save-user");
+        dom.setAttribute(el5, "class", "form-horizontal");
+        var el6 = dom.createTextNode("\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "id", "signupalert");
+        dom.setAttribute(el6, "style", "display:none");
+        dom.setAttribute(el6, "class", "alert alert-danger");
+        var el7 = dom.createTextNode("\n                                    ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("p");
+        var el8 = dom.createTextNode("Error:");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                                    ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("span");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        dom.setAttribute(el7, "for", "userName");
+        dom.setAttribute(el7, "class", "col-md-3 control-label");
+        var el8 = dom.createTextNode("Full Name");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-9");
+        var el8 = dom.createTextNode("\n                            ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("input");
+        dom.setAttribute(el8, "id", "signUpNameInput");
+        dom.setAttribute(el8, "type", "text");
+        dom.setAttribute(el8, "class", "form-control");
+        dom.setAttribute(el8, "name", "userName");
+        dom.setAttribute(el8, "placeholder", "Firstname Lastname");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                        ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                    ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        dom.setAttribute(el7, "for", "email");
+        dom.setAttribute(el7, "class", "col-md-3 control-label");
+        var el8 = dom.createTextNode("Email/Username");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-9");
+        var el8 = dom.createTextNode("\n                          ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                          ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                    ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        dom.setAttribute(el7, "for", "password");
+        dom.setAttribute(el7, "class", "col-md-3 control-label");
+        var el8 = dom.createTextNode("Password");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-9");
+        var el8 = dom.createTextNode("\n                          ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                        ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                    ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        dom.setAttribute(el7, "for", "passwordConfirmation");
+        dom.setAttribute(el7, "class", "col-md-3 control-label");
+        var el8 = dom.createTextNode("Confirm Password");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-9");
+        var el8 = dom.createTextNode("\n                            ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                        ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                    ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        dom.setAttribute(el7, "for", "age");
+        dom.setAttribute(el7, "class", "col-md-3 control-label");
+        var el8 = dom.createTextNode("Age");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-9");
+        var el8 = dom.createTextNode("\n                            ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("input");
+        dom.setAttribute(el8, "id", "age");
+        dom.setAttribute(el8, "type", "text");
+        dom.setAttribute(el8, "class", "form-control");
+        dom.setAttribute(el8, "name", "age");
+        dom.setAttribute(el8, "placeholder", "Age");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                        ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                    ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                      ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        dom.setAttribute(el7, "class", "col-md-3 control-label");
+        var el8 = dom.createTextNode("Univeristy: ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                      ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-9");
+        var el8 = dom.createTextNode("\n                        ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("select");
+        dom.setAttribute(el8, "class", "selectpicker");
+        dom.setAttribute(el8, "name", "userUniversity");
+        var el9 = dom.createTextNode("\n                          ");
+        dom.appendChild(el8, el9);
+        var el9 = dom.createElement("option");
+        dom.setAttribute(el9, "value", "Virginia Tech");
+        var el10 = dom.createTextNode("Virginia Tech");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode("\n                          ");
+        dom.appendChild(el8, el9);
+        var el9 = dom.createElement("option");
+        dom.setAttribute(el9, "value", "Radford University");
+        var el10 = dom.createTextNode("Radford University");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode("\n                          ");
+        dom.appendChild(el8, el9);
+        var el9 = dom.createElement("option");
+        dom.setAttribute(el9, "value", "New River College");
+        var el10 = dom.createTextNode("New River College");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode("\n                          ");
+        dom.appendChild(el8, el9);
+        var el9 = dom.createElement("option");
+        dom.setAttribute(el9, "value", "Roanoke College");
+        var el10 = dom.createTextNode("Roanoke College");
+        dom.appendChild(el9, el10);
+        dom.appendChild(el8, el9);
+        var el9 = dom.createTextNode("\n                        ");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                    ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                  ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createComment(" Button ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-offset-3 col-md-9");
+        var el8 = dom.createTextNode("\n                          ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("button");
+        dom.setAttribute(el8, "class", "btn btn-info");
+        dom.setAttribute(el8, "type", "submit");
+        var el9 = dom.createTextNode("Sign Up");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                          ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createElement("button");
+        dom.setAttribute(el8, "class", "btn btn-default");
+        dom.setAttribute(el8, "type", "button");
+        dom.setAttribute(el8, "onClick", "changePage('home');");
+        var el9 = dom.createTextNode("Cancel");
+        dom.appendChild(el8, el9);
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                        ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                    ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n                ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n            ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
@@ -6179,22 +7180,20 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
-        var el1 = dom.createComment("");
-        dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0]);
+        var element0 = dom.childAt(fragment, [0, 3]);
+        var element1 = dom.childAt(element0, [3, 3, 1]);
         var morphs = new Array(5);
-        morphs[0] = dom.createElementMorph(element0);
-        morphs[1] = dom.createMorphAt(element0, 3, 3);
-        morphs[2] = dom.createMorphAt(element0, 7, 7);
-        morphs[3] = dom.createMorphAt(element0, 11, 11);
-        morphs[4] = dom.createMorphAt(fragment, 2, 2, contextualElement);
-        dom.insertBoundary(fragment, null);
+        morphs[0] = dom.createMorphAt(element0, 1, 1);
+        morphs[1] = dom.createElementMorph(element1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element1, [5, 3]), 1, 1);
+        morphs[3] = dom.createMorphAt(dom.childAt(element1, [7, 3]), 1, 1);
+        morphs[4] = dom.createMorphAt(dom.childAt(element1, [9, 3]), 1, 1);
         return morphs;
       },
-      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [1, 6], [1, 37]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [4, 16], [4, 26]]]]], [], []], "placeholder", "enter email"], ["loc", [null, [4, 2], [4, 54]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [6, 16], [6, 29]]]]], [], []], "placeholder", "enter password"], ["loc", [null, [6, 2], [6, 60]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [8, 16], [8, 41]]]]], [], []], "placeholder", "enter passwordConfirmation"], ["loc", [null, [8, 2], [8, 84]]]], ["block", "if", [["get", "errorMessage", ["loc", [null, [14, 6], [14, 18]]]]], [], 0, null, ["loc", [null, [14, 0], [16, 7]]]]],
+      statements: [["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [4, 6], [6, 18]]]], ["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [12, 59], [12, 90]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [27, 40], [27, 50]]]]], [], []], "id", "signUpEmailInput", "type", "text", "class", "form-control", "name", "userEmail", "placeholder", "Email/Username"], ["loc", [null, [27, 26], [27, 153]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [35, 40], [35, 53]]]]], [], []], "id", "signUpPasswordInput", "type", "password", "class", "form-control", "name", "userPassword", "placeholder", "Password"], ["loc", [null, [35, 26], [35, 161]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [42, 42], [42, 67]]]]], [], []], "placeholder", "enter passwordConfirmation", "id", "signUpConfirmInput", "type", "text", "class", "form-control", "name", "icode", "placeholder", "Confirm Password"], ["loc", [null, [42, 28], [42, 211]]]]],
       locals: [],
       templates: [child0]
     };
@@ -6563,12 +7562,12 @@ define("game/templates/index", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 8,
+                "line": 9,
                 "column": 0
               },
               "end": {
-                "line": 10,
-                "column": 0
+                "line": 9,
+                "column": 63
               }
             },
             "moduleName": "game/templates/index.hbs"
@@ -6579,7 +7578,7 @@ define("game/templates/index", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("  survey\n");
+            var el1 = dom.createTextNode("Play");
             dom.appendChild(el0, el1);
             return el0;
           },
@@ -6599,12 +7598,12 @@ define("game/templates/index", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 11,
+                "line": 10,
                 "column": 0
               },
               "end": {
-                "line": 11,
-                "column": 63
+                "line": 12,
+                "column": 0
               }
             },
             "moduleName": "game/templates/index.hbs"
@@ -6615,7 +7614,7 @@ define("game/templates/index", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("Play");
+            var el1 = dom.createTextNode("  Survey\n");
             dom.appendChild(el0, el1);
             return el0;
           },
@@ -6650,27 +7649,65 @@ define("game/templates/index", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createComment("");
+          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n\n");
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
           var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-          morphs[1] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          dom.insertBoundary(fragment, 0);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          morphs[1] = dom.createMorphAt(fragment, 3, 3, contextualElement);
+          dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["block", "link-to", ["survey"], ["class", "btn btn-primary btn-lg", "id", "new"], 0, null, ["loc", [null, [8, 0], [10, 12]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary btn-lg", "id", "play"], 1, null, ["loc", [null, [11, 0], [11, 75]]]]],
+        statements: [["block", "link-to", ["new"], ["class", "btn btn-primary btn-lg", "id", "play"], 0, null, ["loc", [null, [9, 0], [9, 75]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary", "id", "survey"], 1, null, ["loc", [null, [10, 0], [12, 12]]]]],
         locals: [],
         templates: [child0, child1]
       };
     })();
     var child1 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "fragmentReason": false,
+            "revision": "Ember@2.6.2",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 19,
+                "column": 0
+              },
+              "end": {
+                "line": 21,
+                "column": 0
+              }
+            },
+            "moduleName": "game/templates/index.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("  Sign Up\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
       return {
         meta: {
           "fragmentReason": false,
@@ -6682,7 +7719,7 @@ define("game/templates/index", ["exports"], function (exports) {
               "column": 0
             },
             "end": {
-              "line": 19,
+              "line": 22,
               "column": 0
             }
           },
@@ -6708,14 +7745,19 @@ define("game/templates/index", ["exports"], function (exports) {
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
           return el0;
         },
-        buildRenderNodes: function buildRenderNodes() {
-          return [];
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 5, 5, contextualElement);
+          dom.insertBoundary(fragment, null);
+          return morphs;
         },
-        statements: [],
+        statements: [["block", "link-to", ["signup"], ["class", "btn btn-primary", "id", "signup"], 0, null, ["loc", [null, [19, 0], [21, 12]]]]],
         locals: [],
-        templates: []
+        templates: [child0]
       };
     })();
     return {
@@ -6731,7 +7773,7 @@ define("game/templates/index", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 22,
+            "line": 25,
             "column": 0
           }
         },
@@ -6790,9 +7832,577 @@ define("game/templates/index", ["exports"], function (exports) {
         morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 10, 10);
         return morphs;
       },
-      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [7, 6], [7, 29]]]]], [], 0, 1, ["loc", [null, [7, 0], [19, 7]]]]],
+      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [7, 6], [7, 29]]]]], [], 0, 1, ["loc", [null, [7, 0], [22, 7]]]]],
       locals: [],
       templates: [child0, child1]
+    };
+  })());
+});
+define("game/templates/info", ["exports"], function (exports) {
+  exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 3,
+              "column": 4
+            },
+            "end": {
+              "line": 5,
+              "column": 4
+            }
+          },
+          "moduleName": "game/templates/info.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      Back to Menu\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    return {
+      meta: {
+        "fragmentReason": {
+          "name": "triple-curlies"
+        },
+        "revision": "Ember@2.6.2",
+        "loc": {
+          "source": null,
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 119,
+            "column": 0
+          }
+        },
+        "moduleName": "game/templates/info.hbs"
+      },
+      isEmpty: false,
+      arity: 0,
+      cachedFragment: null,
+      hasRendered: false,
+      buildFragment: function buildFragment(dom) {
+        var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "container");
+        var el2 = dom.createTextNode("\n  ");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("form");
+        dom.setAttribute(el2, "id", "contact");
+        dom.setAttribute(el2, "action", "");
+        dom.setAttribute(el2, "method", "post");
+        var el3 = dom.createTextNode("\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("h3");
+        var el4 = dom.createTextNode("Quick Survey");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("h4");
+        var el4 = dom.createTextNode("Tell us a little about your self");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("label");
+        dom.setAttribute(el3, "class", "statement");
+        var el4 = dom.createTextNode(" Your Gender");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3, "class", "likertt");
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("input");
+        dom.setAttribute(el4, "type", "radio");
+        dom.setAttribute(el4, "name", "likert0");
+        dom.setAttribute(el4, "value", "male");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("label");
+        var el5 = dom.createTextNode("Male   ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("input");
+        dom.setAttribute(el4, "type", "radio");
+        dom.setAttribute(el4, "name", "likert0");
+        dom.setAttribute(el4, "value", "female");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("label");
+        var el5 = dom.createTextNode("Female");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n      ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("label");
+        dom.setAttribute(el3, "class", "statement");
+        var el4 = dom.createTextNode("Year of your birth");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n      ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3, "class", "likertt");
+        var el4 = dom.createTextNode("\n        ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("input");
+        dom.setAttribute(el4, "type", "text");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("label");
+        dom.setAttribute(el3, "class", "statement");
+        var el4 = dom.createTextNode(" How many months/years do you have programming experience");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3, "class", "likert");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert2");
+        dom.setAttribute(el5, "value", "strong_agree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Less than a month");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert2");
+        dom.setAttribute(el5, "value", "strong_agree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("1-06 months");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert2");
+        dom.setAttribute(el5, "value", "strong_agree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("6-12 months");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert2");
+        dom.setAttribute(el5, "value", "disagree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("1-2 years");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert2");
+        dom.setAttribute(el5, "value", "strong_agree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("2-5 years");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("label");
+        dom.setAttribute(el3, "class", "statement");
+        var el4 = dom.createTextNode("I enjoy mobile games very much");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3, "class", "likert");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert4");
+        dom.setAttribute(el5, "value", "strong_agree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Strongly agree");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert4");
+        dom.setAttribute(el5, "value", "strong_agree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Agree");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert4");
+        dom.setAttribute(el5, "value", "strong_agree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Neutral");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert4");
+        dom.setAttribute(el5, "value", "disagree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Disagree");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("li");
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("input");
+        dom.setAttribute(el5, "type", "radio");
+        dom.setAttribute(el5, "name", "likert4");
+        dom.setAttribute(el5, "value", "strong_agree");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n        ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("label");
+        var el6 = dom.createTextNode("Strongly disagree");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n      ");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("label");
+        dom.setAttribute(el3, "class", "statement");
+        var el4 = dom.createTextNode("What are (up to) three programming languages that you know");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("ul");
+        dom.setAttribute(el3, "class", "likertt");
+        var el4 = dom.createTextNode("\n\n  ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("table");
+        dom.setAttribute(el4, "style", "width:100%");
+        var el5 = dom.createTextNode("\n  ");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("tr");
+        var el6 = dom.createTextNode("\n    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("th");
+        var el7 = dom.createTextNode("  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("input");
+        dom.setAttribute(el7, "type", "checkbox");
+        dom.setAttribute(el7, "name", "likert3");
+        dom.setAttribute(el7, "value", "java");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        var el8 = dom.createTextNode("Java");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("th");
+        var el7 = dom.createTextNode("  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("input");
+        dom.setAttribute(el7, "type", "checkbox");
+        dom.setAttribute(el7, "name", "likert3");
+        dom.setAttribute(el7, "value", "c");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        var el8 = dom.createTextNode("C");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("th");
+        var el7 = dom.createTextNode("  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("input");
+        dom.setAttribute(el7, "type", "checkbox");
+        dom.setAttribute(el7, "name", "likert3");
+        dom.setAttribute(el7, "value", "c++");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        var el8 = dom.createTextNode("C++");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n  ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("tr");
+        var el6 = dom.createTextNode("\n    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("th");
+        var el7 = dom.createTextNode("  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("input");
+        dom.setAttribute(el7, "type", "checkbox");
+        dom.setAttribute(el7, "name", "likert3");
+        dom.setAttribute(el7, "value", "python");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        var el8 = dom.createTextNode("Python");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("th");
+        var el7 = dom.createTextNode("  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("input");
+        dom.setAttribute(el7, "type", "checkbox");
+        dom.setAttribute(el7, "name", "likert3");
+        dom.setAttribute(el7, "value", "javascript");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        var el8 = dom.createTextNode("JavaScript");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("th");
+        var el7 = dom.createTextNode("  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("input");
+        dom.setAttribute(el7, "type", "checkbox");
+        dom.setAttribute(el7, "name", "likert3");
+        dom.setAttribute(el7, "value", "html");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        var el8 = dom.createTextNode("HTML");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n  ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n");
+        dom.appendChild(el4, el5);
+        var el5 = dom.createElement("tr");
+        var el6 = dom.createTextNode("\n    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("th");
+        var el7 = dom.createTextNode("  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("input");
+        dom.setAttribute(el7, "type", "checkbox");
+        dom.setAttribute(el7, "name", "likert3");
+        dom.setAttribute(el7, "value", "python");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n  ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        var el8 = dom.createTextNode("Other");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("input");
+        dom.setAttribute(el7, "id", "input-other");
+        dom.setAttribute(el7, "type", "text");
+        dom.setAttribute(el7, "style", "width: 60px; height:20px;");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n \n  ");
+        dom.appendChild(el5, el6);
+        dom.appendChild(el4, el5);
+        var el5 = dom.createTextNode("\n\n");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createComment(" <fieldset>\n      <input placeholder=\"Your Age\" type=\"email\" tabindex=\"2\" required>\n    </fieldset>\n    <fieldset>\n      <input placeholder=\"Rate Your \" type=\"tel\" tabindex=\"3\" required>\n    </fieldset>\n    <fieldset>\n      <input placeholder=\"Your Web Site starts with http://\" type=\"url\" tabindex=\"4\" required>\n    </fieldset>\n    <fieldset>\n      <textarea placeholder=\"Type your Message Here....\" tabindex=\"5\" required></textarea>\n    </fieldset> ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n    ");
+        dom.appendChild(el2, el3);
+        var el3 = dom.createElement("fieldset");
+        var el4 = dom.createTextNode("\n      ");
+        dom.appendChild(el3, el4);
+        var el4 = dom.createElement("button");
+        dom.setAttribute(el4, "name", "submit");
+        dom.setAttribute(el4, "type", "submit");
+        dom.setAttribute(el4, "id", "contact-submit");
+        dom.setAttribute(el4, "data-submit", "...Sending");
+        var el5 = dom.createTextNode("Submit");
+        dom.appendChild(el4, el5);
+        dom.appendChild(el3, el4);
+        var el4 = dom.createTextNode("\n    ");
+        dom.appendChild(el3, el4);
+        dom.appendChild(el2, el3);
+        var el3 = dom.createTextNode("\n  ");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n\n");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
+        return el0;
+      },
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0, 1]), 1, 1);
+        return morphs;
+      },
+      statements: [["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [3, 4], [5, 16]]]]],
+      locals: [],
+      templates: [child0]
     };
   })());
 });
@@ -8610,11 +10220,47 @@ define("game/templates/survey", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 112,
+              "line": 10,
+              "column": 0
+            },
+            "end": {
+              "line": 12,
+              "column": 0
+            }
+          },
+          "moduleName": "game/templates/survey.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("  Back to Menu\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child3 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 114,
               "column": 6
             },
             "end": {
-              "line": 112,
+              "line": 114,
               "column": 71
             }
           },
@@ -8652,7 +10298,7 @@ define("game/templates/survey", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 116,
+            "line": 118,
             "column": 0
           }
         },
@@ -8680,9 +10326,9 @@ define("game/templates/survey", ["exports"], function (exports) {
         dom.setAttribute(el2, "id", "contact");
         dom.setAttribute(el2, "action", "");
         dom.setAttribute(el2, "method", "post");
-        var el3 = dom.createTextNode("\n");
+        var el3 = dom.createTextNode("\n\n");
         dom.appendChild(el2, el3);
-        var el3 = dom.createComment(" <div class=\"wrap\">\n\n  <form > ");
+        var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
@@ -9163,15 +10809,17 @@ define("game/templates/survey", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(2);
+        var element0 = dom.childAt(fragment, [3, 1]);
+        var morphs = new Array(3);
         morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-        morphs[1] = dom.createMorphAt(dom.childAt(fragment, [3, 1, 23]), 3, 3);
+        morphs[1] = dom.createMorphAt(element0, 1, 1);
+        morphs[2] = dom.createMorphAt(dom.childAt(element0, [23]), 3, 3);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [1, 6], [1, 29]]]]], [], 0, 1, ["loc", [null, [1, 0], [5, 7]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary btn-s submit"], 2, null, ["loc", [null, [112, 6], [112, 83]]]]],
+      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [1, 6], [1, 29]]]]], [], 0, 1, ["loc", [null, [1, 0], [5, 7]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 2, null, ["loc", [null, [10, 0], [12, 12]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary btn-s submit"], 3, null, ["loc", [null, [114, 6], [114, 83]]]]],
       locals: [],
-      templates: [child0, child1, child2]
+      templates: [child0, child1, child2, child3]
     };
   })());
 });
@@ -9253,7 +10901,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+f283eab7"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+f4ea39eb"});
 }
 
 /* jshint ignore:end */
