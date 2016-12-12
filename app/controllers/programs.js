@@ -1,9 +1,12 @@
-
 import Ember from 'ember';
 
-export default Ember.Controller.extend({
-  currentUrl:'y',
-  clicked:'false',
+const { inject: { service }, Controller } = Ember;
+
+export default Controller.extend({
+  session:     service('session'),
+  currentUser: service('current-user'),
+  currentUrl: 'y',
+  clicked: 'false',
   actions: {
     getCurrentUrl: function(){
       this.set('currentUrl',window.location.href.split("/").pop());

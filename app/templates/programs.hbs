@@ -14,7 +14,7 @@
           {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button"}}
             Back to Menu
           {{/link-to}}
-          {{x-timer autoStart='true' format='HH:MM:SS' stopRequired=false}}
+          
           {{program-details program=program}}
           <span class="next-level-none" id="next">
             {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked') class="btn btn-primary btn-lg" id="next-button"}}

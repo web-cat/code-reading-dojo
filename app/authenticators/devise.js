@@ -5,7 +5,7 @@ import Ember from 'ember';
 const { RSVP, isEmpty, run } = Ember;
 
 export default DeviseAuthenticator.extend({
-  serverTokenEndpoint: 'http://172.31.5.152:3000/users/sign_in',
+  serverTokenEndpoint: 'http://192.168.1.103:3000/users/sign_in',
   restore(data){
     return new RSVP.Promise((resolve, reject) => {
       if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) &&

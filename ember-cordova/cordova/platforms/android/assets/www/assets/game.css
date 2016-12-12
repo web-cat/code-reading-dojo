@@ -5981,6 +5981,15 @@ pre {
   padding-bottom: 0px;
   display: block; }
 
+#signup-submit {
+  background-color: #660000;
+  border-color: #660000; }
+
+#survey:hover,
+#survey-submit:hover {
+  background-color: #660000;
+  color: white; }
+
 html, body {
   padding: 0;
   margin: 0; }

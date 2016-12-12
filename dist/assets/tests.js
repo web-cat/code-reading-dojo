@@ -49,7 +49,7 @@ define('game/tests/components/program-details.jshint', ['exports'], function (ex
   QUnit.module('JSHint | components/program-details.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'components/program-details.js should pass jshint.\ncomponents/program-details.js: line 103, col 17, \'newUrl\' is defined but never used.\n\n1 error');
+    assert.ok(true, 'components/program-details.js should pass jshint.');
   });
 });
 define('game/tests/components/signup-form.jshint', ['exports'], function (exports) {
@@ -149,6 +149,15 @@ define('game/tests/flows.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'flows.js should pass jshint.');
+  });
+});
+define('game/tests/game/templates/components/programs.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | game/templates/components/programs.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'game/templates/components/programs.js should pass jshint.');
   });
 });
 define('game/tests/helpers/add.jshint', ['exports'], function (exports) {
@@ -372,6 +381,15 @@ define('game/tests/models/survey.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'models/survey.js should pass jshint.');
+  });
+});
+define('game/tests/models/tap.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/tap.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/tap.js should pass jshint.');
   });
 });
 define('game/tests/models/user.jshint', ['exports'], function (exports) {
