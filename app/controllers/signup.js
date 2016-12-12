@@ -6,13 +6,15 @@ export default Ember.Controller.extend({
       let newUser = user;
       console.log('+_+_+_+_+_+_+_+_');
       console.log(newUser.get('email'));
-      newUser.save();
-
-      // .catch((error) => {
-      //   console.log('!!!!!!!!!!!!!!!!!!');
-      //   this.set('errorMessage', error);
-      //   console.log(this.get('errorMessage'));
-      // })
+      newUser.save()
+      .catch((error) => {
+        var arr = window.location.href.split("/");
+        var newUrl = arr.join("/") + "/info";
+        window.location.replace(newUrl);
+        console.log('!!!!!!!!!!!!!!!!!!');
+        this.set('errorMessage', error);
+        console.log(this.get('errorMessage'));
+      });
       // .then(()=>{
       //   this.get('session')
       //   .authenticate('authenticator:devise',

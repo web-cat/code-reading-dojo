@@ -61,6 +61,15 @@ define('game/tests/components/signup-form.jshint', ['exports'], function (export
     assert.ok(true, 'components/signup-form.js should pass jshint.');
   });
 });
+define('game/tests/components/survey-form.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | components/survey-form.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'components/survey-form.js should pass jshint.');
+  });
+});
 define('game/tests/controllers/application.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -356,6 +365,15 @@ define('game/tests/models/program.jshint', ['exports'], function (exports) {
     assert.ok(true, 'models/program.js should pass jshint.');
   });
 });
+define('game/tests/models/survey.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/survey.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/survey.js should pass jshint.');
+  });
+});
 define('game/tests/models/user.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -444,6 +462,15 @@ define('game/tests/routes/signup.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/signup.js should pass jshint.');
+  });
+});
+define('game/tests/routes/survey.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/survey.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/survey.js should pass jshint.');
   });
 });
 define('game/tests/routes/users.jshint', ['exports'], function (exports) {

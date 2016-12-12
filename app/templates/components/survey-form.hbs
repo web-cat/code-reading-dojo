@@ -1,0 +1,118 @@
+{{#if session.isAuthenticated}}
+  <p>Signed in as {{session.data.email}}</p>
+<!-- {{else}}
+  <button onclick={{action 'login'}}>Login</button> -->
+{{/if}}
+
+
+<img id="new-logo" src="assets/images/logo.png" />
+<div class="container">
+  <form id="contact" {{action "submit" on="submit"}}>
+{{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button"}}
+  Back to Menu
+{{/link-to}}
+
+    <label class="beginner-statement">
+      Please indicate how strongly you agree or disagree with all the following statements.
+    </label>
+
+    <label class="statement">1. Using CodeReadingDojo improves my code reading skills in Java.</label>
+    <ul class='likert'>
+      <li>
+        <input type="radio" name="s1" value="1">
+        <label>Strongly agree</label>
+      </li>
+      <li>
+        <input type="radio" name="s1" value="2">
+        <label>Agree</label>
+      </li>
+      <li>
+        <input type="radio" name="s1" value="3">
+        <label>Neutral</label>
+      </li>
+      <li>
+        <input type="radio" name="s1" value="4">
+        <label>Disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="s1" value="5">
+        <label>Strongly disagree</label>
+      </li>
+    </ul>
+    <label class="statement">2. Using CodeReadingDojo improves my code writing skills in Java.</label>
+    <ul class='likert'>
+      <li>
+        <input type="radio" name="s2" value="1">
+        <label>Strongly agree</label>
+      </li>
+      <li>
+        <input type="radio" name="s2" value="2">
+        <label>Agree</label>
+      </li>
+      <li>
+        <input type="radio" name="s2" value="3">
+        <label>Neutral</label>
+      </li>
+      <li>
+        <input type="radio" name="s2" value="4">
+        <label>Disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="s2" value="5">
+        <label>Strongly disagree</label>
+      </li>
+    </ul>
+    <label class="statement">3. Using CodeReadingDojo improves my abbility to find errors in my own program.</label>
+    <ul class='likert'>
+      <li>
+        <input type="radio" name="s3" value="1">
+        <label>Strongly agree</label>
+      </li>
+      <li>
+        <input type="radio" name="s3" value="2">
+        <label>Agree</label>
+      </li>
+      <li>
+        <input type="radio" name="s3" value="3">
+        <label>Neutral</label>
+      </li>
+      <li>
+        <input type="radio" name="s3" value="4">
+        <label>Disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="s3" value="5">
+        <label>Strongly disagree</label>
+      </li>
+    </ul>
+    <label class="statement">4. CodeReadingDojo improves my overall programming ability.</label>
+    <ul class='likert'>
+      <li>
+        <input type="radio" name="s4" value="1">
+        <label>Strongly agree</label>
+      </li>
+      <li>
+        <input type="radio" name="s4" value="2">
+        <label>Agree</label>
+      </li>
+      <li>
+        <input type="radio" name="s4" value="3">
+        <label>Neutral</label>
+      </li>
+      <li>
+        <input type="radio" name="s4" value="4">
+        <label>Disagree</label>
+      </li>
+      <li>
+        <input type="radio" name="s4" value="strong_agree">
+        <label>Strongly disagree</label>
+      </li>
+    </ul>
+    <label class="beginner-statement">We're asking these questions to make this game a better experiece. By answering to this questions you're giving permission to use your answers for research purposes.
+  </label>
+    <div class="buttons">
+        <button class="btn btn-info" type="submit" id="signup-submit">Submit Survey</button>
+      <!-- {{#link-to 'new' class="btn btn-primary btn-s submit" type="submit" id="survey-submit"}}Submit{{/link-to}} -->
+    </div>
+  </form>
+</div>
