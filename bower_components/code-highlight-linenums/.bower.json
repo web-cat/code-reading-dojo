@@ -1,0 +1,27 @@
+{
+  "name": "code-highlight-linenums",
+  "main": "code-highlight-linenums.js",
+  "version": "0.2.1",
+  "authors": [
+    "Phil DeJarnett <phil@overzealous.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "homepage": "https://github.com/OverZealous/code-highlight-linenums",
+  "_release": "0.2.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.2.1",
+    "commit": "4fc16e5917e761a033e5abcd4583bb3f5605477c"
+  },
+  "_source": "https://github.com/OverZealous/code-highlight-linenums.git",
+  "_target": "^0.2.0",
+  "_originalSource": "code-highlight-linenums",
+  "_direct": true
+}

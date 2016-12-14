@@ -1,0 +1,82 @@
+//colors
+$color: rgba(0, 0, 0, 0.3);
+$color-light: rgba(255, 255, 255, 0.75);
+$background: none;
+$border-radius-base: 1em;
+$pre-padding: 0;
+$border-grey: rgba(0, 0, 0, 0.1);
+
+pre > code.dark .line {
+  &:before {
+    color: $color-light;
+  }
+}
+
+pre > code .line {
+	display: inline-block;
+	position: relative;
+	padding-left: calc(2ch + 18px );
+	&:before {
+		box-sizing: content-box;
+		display: inline-block;
+		text-align: right;
+		width: 2ch;
+		content: attr(start);
+		padding-right: 9px;
+		padding-left: 9px;
+		margin-left: calc(-2ch + -27px );
+		margin-right: 9px;
+		color: $color;
+		background-color: $background;
+    border-right: 1px solid $border-grey;
+	}
+  &:first-child:before {
+    padding-top: $pre-padding;
+    margin-top: -$pre-padding;
+    border-top-left-radius: $border-radius-base;
+  }
+  &:last-child:before {
+    padding-bottom: $pre-padding;
+    margin-bottom: -$pre-padding;
+    border-bottom-left-radius: $border-radius-base;
+  }
+	&.width-3 {
+		padding-left: calc(3ch + 18px );
+		&:before {
+			width: 3ch;
+			margin-left: calc(-3ch + -27px );
+		}
+	}
+	&.width-4 {
+		padding-left: calc(4ch + 18px );
+		&:before {
+			width: 4ch;
+			margin-left: calc(-4ch + -27px );
+		}
+	}
+	&.width-5 {
+		padding-left: calc(5ch + 18px );
+		&:before {
+			width: 5ch;
+			margin-left: calc(-5ch + -27px );
+		}
+	}
+	&.width-6 {
+		padding-left: calc(6ch + 18px );
+		&:before {
+			width: 6ch;
+			margin-left: calc(-6ch + -27px );
+		}
+	}
+	&:first-child:before {
+		padding-top: 9px;
+		margin-top: -9px;
+    margin-left: calc(-4ch + -27px );
+		border-top-left-radius: 1em;
+	}
+	&:last-child:before {
+		padding-bottom: 9px;
+		margin-bottom: -9px;
+		border-bottom-left-radius: 1em;
+	}
+}

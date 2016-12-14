@@ -1,0 +1,130 @@
+.hybrid {
+  background: #282c34;
+}
+.hybrid.transparent {
+  background: none;
+}
+.hybrid .hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #282c34;
+  color: #c5c8c6;
+}
+.hybrid .hljs span::selection {
+  background: #373b41;
+}
+.hybrid .hljs span::-moz-selection {
+  background: #373b41;
+}
+.hybrid .hljs::selection {
+  background: #373b41;
+}
+.hybrid .hljs::-moz-selection {
+  background: #373b41;
+}
+.hybrid .hljs-title {
+  color: #f0c674;
+}
+.hybrid .hljs-name {
+  color: #f0c674;
+}
+.hybrid .hljs-comment {
+  color: #707880;
+}
+.hybrid .hljs-meta {
+  color: #707880;
+}
+.hybrid .hljs-meta .hljs-keyword {
+  color: #707880;
+}
+.hybrid .hljs-number {
+  color: #cc6666;
+}
+.hybrid .hljs-symbol {
+  color: #cc6666;
+}
+.hybrid .hljs-literal {
+  color: #cc6666;
+}
+.hybrid .hljs-deletion {
+  color: #cc6666;
+}
+.hybrid .hljs-link {
+  color: #cc6666;
+}
+.hybrid .hljs-string {
+  color: #b5bd68;
+}
+.hybrid .hljs-doctag {
+  color: #b5bd68;
+}
+.hybrid .hljs-addition {
+  color: #b5bd68;
+}
+.hybrid .hljs-regexp {
+  color: #b5bd68;
+}
+.hybrid .hljs-selector-attr {
+  color: #b5bd68;
+}
+.hybrid .hljs-selector-pseudo {
+  color: #b5bd68;
+}
+.hybrid .hljs-attribute {
+  color: #b294bb;
+}
+.hybrid .hljs-code {
+  color: #b294bb;
+}
+.hybrid .hljs-selector-id {
+  color: #b294bb;
+}
+.hybrid .hljs-keyword {
+  color: #81a2be;
+}
+.hybrid .hljs-selector-tag {
+  color: #81a2be;
+}
+.hybrid .hljs-bullet {
+  color: #81a2be;
+}
+.hybrid .hljs-tag {
+  color: #81a2be;
+}
+.hybrid .hljs-subst {
+  color: #8abeb7;
+}
+.hybrid .hljs-variable {
+  color: #8abeb7;
+}
+.hybrid .hljs-template-tag {
+  color: #8abeb7;
+}
+.hybrid .hljs-template-variable {
+  color: #8abeb7;
+}
+.hybrid .hljs-type {
+  color: #de935f;
+}
+.hybrid .hljs-built_in {
+  color: #de935f;
+}
+.hybrid .hljs-builtin-name {
+  color: #de935f;
+}
+.hybrid .hljs-quote {
+  color: #de935f;
+}
+.hybrid .hljs-section {
+  color: #de935f;
+}
+.hybrid .hljs-selector-class {
+  color: #de935f;
+}
+.hybrid .hljs-emphasis {
+  font-style: italic;
+}
+.hybrid .hljs-strong {
+  font-weight: bold;
+}

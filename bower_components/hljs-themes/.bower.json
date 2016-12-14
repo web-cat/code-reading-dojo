@@ -1,0 +1,30 @@
+{
+  "name": "hljs-themes",
+  "authors": [
+    "Carlos Rodriguez <crodriguez1a@gmail.com>"
+  ],
+  "description": "Scoped themes for highlightjs",
+  "main": "src/github-gist.css",
+  "moduleType": [],
+  "ignore": [],
+  "keywords": [
+    "highlightjs",
+    "css",
+    "line numbers",
+    "ember themed syntax",
+    "ember addon"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/crodriguez1a/hljs-themes",
+  "version": "0.0.7",
+  "_release": "0.0.7",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.0.7",
+    "commit": "54c407847e2f41d804bb4c4cfe445e092af3914f"
+  },
+  "_source": "https://github.com/crodriguez1a/hljs-themes.git",
+  "_target": "^0.0.7",
+  "_originalSource": "hljs-themes",
+  "_direct": true
+}
