@@ -33,7 +33,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
-    serverTokenEndpoint: 'http://172.30.202.18:3000/users/sign_in',
+    serverTokenEndpoint: 'http://192.168.0.15:3000/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
         if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.email) && !isEmpty(data.client)) {
@@ -750,13 +750,30 @@ define('game/controllers/signup', ['exports', 'ember'], function (exports, _embe
         var newUser = user;
         console.log('+_+_+_+_+_+_+_+_');
         console.log(newUser.get('email'));
+        console.log(newUser.get('password'));
         newUser.save()['catch'](function (error) {
-          var arr = window.location.href.split("/");
-          var newUrl = arr.join("/") + "/info";
-          window.location.replace(newUrl);
-          console.log('!!!!!!!!!!!!!!!!!!');
-          _this.set('errorMessage', error);
-          console.log(_this.get('errorMessage'));
+          _this.get('session').authenticate('authenticator:devise', newUser.get('email'), newUser.get('password'))['catch'](function (reason) {
+
+            _this.set('errorMessage', reason.error || reason);
+            // console.log('######################');
+            // console.log(this.get('errorMessage'));
+          });
+          // console.log('****************');
+          // console.log(this.get('email'));
+          // console.log('$$$$$$$$$$$$$');
+          _this.set('session.data.uid', newUser.get('email'));
+          _this.set('session.data.email', newUser.get('email'));
+          _this.set('session.data.authenticated.email', newUser.get('email'));
+          // console.log('^^^^^^^^^^^^^^^');
+          // console.log(this.get('session.data.uid'));
+          // var arr = window.location.href.split("/");
+          // arr.splice(-1,1);
+          // console.log(arr);
+          // var newUrl = arr.join("/") + "/info";
+          // window.location.replace(newUrl);
+          // console.log('!!!!!!!!!!!!!!!!!!');
+          // this.set('errorMessage', error);
+          // console.log(this.get('errorMessage'));
         });
         // .then(()=>{
         //   this.get('session')
@@ -1491,14 +1508,6 @@ define('game/services/ajax', ['exports', 'ember-ajax/services/ajax'], function (
     }
   });
 });
-define('game/services/cordova', ['exports', 'ember-cordova/services/cordova'], function (exports, _emberCordovaServicesCordova) {
-  Object.defineProperty(exports, 'default', {
-    enumerable: true,
-    get: function get() {
-      return _emberCordovaServicesCordova['default'];
-    }
-  });
-});
 define('game/services/current-user', ['exports', 'ember'], function (exports, _ember) {
   var service = _ember['default'].inject.service;
   var isEmpty = _ember['default'].isEmpty;
@@ -1530,14 +1539,6 @@ define('game/services/device/platform', ['exports', 'ember-cordova/services/devi
     enumerable: true,
     get: function get() {
       return _emberCordovaServicesDevicePlatform['default'];
-    }
-  });
-});
-define('game/services/device/splashscreen', ['exports', 'ember-cordova/services/device/splashscreen'], function (exports, _emberCordovaServicesDeviceSplashscreen) {
-  Object.defineProperty(exports, 'default', {
-    enumerable: true,
-    get: function get() {
-      return _emberCordovaServicesDeviceSplashscreen['default'];
     }
   });
 });
@@ -8431,11 +8432,47 @@ define("game/templates/index", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 9,
+                "line": 8,
                 "column": 0
               },
               "end": {
-                "line": 9,
+                "line": 10,
+                "column": 0
+              }
+            },
+            "moduleName": "game/templates/index.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("  Complete your Profile\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
+      var child1 = (function () {
+        return {
+          meta: {
+            "fragmentReason": false,
+            "revision": "Ember@2.6.2",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 11,
+                "column": 0
+              },
+              "end": {
+                "line": 11,
                 "column": 63
               }
             },
@@ -8459,42 +8496,6 @@ define("game/templates/index", ["exports"], function (exports) {
           templates: []
         };
       })();
-      var child1 = (function () {
-        return {
-          meta: {
-            "fragmentReason": false,
-            "revision": "Ember@2.6.2",
-            "loc": {
-              "source": null,
-              "start": {
-                "line": 10,
-                "column": 0
-              },
-              "end": {
-                "line": 12,
-                "column": 0
-              }
-            },
-            "moduleName": "game/templates/index.hbs"
-          },
-          isEmpty: false,
-          arity: 0,
-          cachedFragment: null,
-          hasRendered: false,
-          buildFragment: function buildFragment(dom) {
-            var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("  Survey\n");
-            dom.appendChild(el0, el1);
-            return el0;
-          },
-          buildRenderNodes: function buildRenderNodes() {
-            return [];
-          },
-          statements: [],
-          locals: [],
-          templates: []
-        };
-      })();
       return {
         meta: {
           "fragmentReason": false,
@@ -8506,7 +8507,7 @@ define("game/templates/index", ["exports"], function (exports) {
               "column": 0
             },
             "end": {
-              "line": 13,
+              "line": 15,
               "column": 0
             }
           },
@@ -8518,24 +8519,26 @@ define("game/templates/index", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("\n");
+          var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
+          var el1 = dom.createComment(" {{#link-to 'survey' class=\"btn btn-primary\" id=\"survey\"}}\n  Survey\n{{/link-to}} ");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
           var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          morphs[1] = dom.createMorphAt(fragment, 3, 3, contextualElement);
-          dom.insertBoundary(fragment, null);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          morphs[1] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          dom.insertBoundary(fragment, 0);
           return morphs;
         },
-        statements: [["block", "link-to", ["new"], ["class", "btn btn-primary btn-lg", "id", "play"], 0, null, ["loc", [null, [9, 0], [9, 75]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary", "id", "survey"], 1, null, ["loc", [null, [10, 0], [12, 12]]]]],
+        statements: [["block", "link-to", ["info"], ["class", "btn btn-primary", "id", "survey"], 0, null, ["loc", [null, [8, 0], [10, 12]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary btn-lg", "id", "play"], 1, null, ["loc", [null, [11, 0], [11, 75]]]]],
         locals: [],
         templates: [child0, child1]
       };
@@ -8549,11 +8552,11 @@ define("game/templates/index", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 19,
+                "line": 21,
                 "column": 0
               },
               "end": {
-                "line": 21,
+                "line": 23,
                 "column": 0
               }
             },
@@ -8584,11 +8587,11 @@ define("game/templates/index", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 13,
+              "line": 15,
               "column": 0
             },
             "end": {
-              "line": 22,
+              "line": 24,
               "column": 0
             }
           },
@@ -8624,7 +8627,7 @@ define("game/templates/index", ["exports"], function (exports) {
           dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["block", "link-to", ["signup"], ["class", "btn btn-primary", "id", "signup"], 0, null, ["loc", [null, [19, 0], [21, 12]]]]],
+        statements: [["block", "link-to", ["signup"], ["class", "btn btn-primary", "id", "signup"], 0, null, ["loc", [null, [21, 0], [23, 12]]]]],
         locals: [],
         templates: [child0]
       };
@@ -8642,7 +8645,7 @@ define("game/templates/index", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 25,
+            "line": 27,
             "column": 0
           }
         },
@@ -8701,7 +8704,7 @@ define("game/templates/index", ["exports"], function (exports) {
         morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 10, 10);
         return morphs;
       },
-      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [7, 6], [7, 29]]]]], [], 0, 1, ["loc", [null, [7, 0], [22, 7]]]]],
+      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [7, 6], [7, 29]]]]], [], 0, 1, ["loc", [null, [7, 0], [24, 7]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -10203,6 +10206,42 @@ define("game/templates/new", ["exports"], function (exports) {
         templates: []
       };
     })();
+    var child6 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 56,
+              "column": 4
+            },
+            "end": {
+              "line": 58,
+              "column": 4
+            }
+          },
+          "moduleName": "game/templates/new.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("      Info\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
     return {
       meta: {
         "fragmentReason": {
@@ -10217,7 +10256,7 @@ define("game/templates/new", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 72,
+            "line": 75,
             "column": 0
           }
         },
@@ -10306,6 +10345,8 @@ define("game/templates/new", ["exports"], function (exports) {
         dom.appendChild(el2, el3);
         var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
+        var el3 = dom.createComment("");
+        dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("          ");
         dom.appendChild(el2, el3);
         var el3 = dom.createComment(" {{#link-to 'programs' 1 class=\"btn btn-primary btn-lg btn-block\" invokeAction=(action 'clickedAdvanced')}}Intermediates{{/link-to}}\n{{#if (eq intermediateClicked 'true')}}\n            {{#each programs as |program|}}\n              Test\n            {{/each}}\n          {{/if}}\n          {{#link-to 'programs' 1 class=\"btn btn-primary btn-lg btn-block\" }}Advancedes{{/link-to}}\n{{#if (eq advancedClicked 'true')}}\n          {{#each programs as |program|}}\n            Test3\n          {{/each}}\n          {{/if}} ");
@@ -10327,17 +10368,18 @@ define("game/templates/new", ["exports"], function (exports) {
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element4 = dom.childAt(fragment, [2, 5]);
         var element5 = dom.childAt(element4, [5]);
-        var morphs = new Array(5);
+        var morphs = new Array(6);
         morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 3, 3);
         morphs[1] = dom.createMorphAt(element5, 1, 1);
         morphs[2] = dom.createMorphAt(element5, 7, 7);
         morphs[3] = dom.createMorphAt(element5, 13, 13);
         morphs[4] = dom.createMorphAt(element4, 7, 7);
+        morphs[5] = dom.createMorphAt(element4, 8, 8);
         return morphs;
       },
-      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [5, 8], [5, 31]]]]], [], 0, 1, ["loc", [null, [5, 2], [9, 9]]]], ["block", "each", [["get", "model", ["loc", [null, [20, 14], [20, 19]]]]], [], 2, null, ["loc", [null, [20, 6], [27, 15]]]], ["block", "each", [["get", "model", ["loc", [null, [32, 14], [32, 19]]]]], [], 3, null, ["loc", [null, [32, 6], [39, 15]]]], ["block", "each", [["get", "model", ["loc", [null, [44, 14], [44, 19]]]]], [], 4, null, ["loc", [null, [44, 6], [51, 15]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary", "id", "survey"], 5, null, ["loc", [null, [53, 4], [55, 16]]]]],
+      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [5, 8], [5, 31]]]]], [], 0, 1, ["loc", [null, [5, 2], [9, 9]]]], ["block", "each", [["get", "model", ["loc", [null, [20, 14], [20, 19]]]]], [], 2, null, ["loc", [null, [20, 6], [27, 15]]]], ["block", "each", [["get", "model", ["loc", [null, [32, 14], [32, 19]]]]], [], 3, null, ["loc", [null, [32, 6], [39, 15]]]], ["block", "each", [["get", "model", ["loc", [null, [44, 14], [44, 19]]]]], [], 4, null, ["loc", [null, [44, 6], [51, 15]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary", "id", "survey"], 5, null, ["loc", [null, [53, 4], [55, 16]]]], ["block", "link-to", ["info"], ["class", "btn btn-primary"], 6, null, ["loc", [null, [56, 4], [58, 16]]]]],
       locals: [],
-      templates: [child0, child1, child2, child3, child4, child5]
+      templates: [child0, child1, child2, child3, child4, child5, child6]
     };
   })());
 });
@@ -10687,7 +10729,7 @@ define("game/templates/programs", ["exports"], function (exports) {
                 var el0 = dom.createDocumentFragment();
                 var el1 = dom.createComment("");
                 dom.appendChild(el0, el1);
-                var el1 = dom.createTextNode("          \n          ");
+                var el1 = dom.createTextNode("\n          ");
                 dom.appendChild(el0, el1);
                 var el1 = dom.createComment("");
                 dom.appendChild(el0, el1);
@@ -11117,7 +11159,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+3f01d6fa"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+0e2d2c03"});
 }
 
 /* jshint ignore:end */

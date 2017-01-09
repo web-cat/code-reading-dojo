@@ -130,7 +130,7 @@ define('game/tests/controllers/signup.jshint', ['exports'], function (exports) {
   QUnit.module('JSHint | controllers/signup.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'controllers/signup.js should pass jshint.');
+    assert.ok(false, 'controllers/signup.js should pass jshint.\ncontrollers/signup.js: line 11, col 15, \'error\' is defined but never used.\n\n1 error');
   });
 });
 define('game/tests/controllers/survey.jshint', ['exports'], function (exports) {
