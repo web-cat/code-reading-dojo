@@ -5,8 +5,6 @@ export default Ember.Component.extend({
   actions: {
     submit(){
       let info = this.get('info');
-      console.log('@@@@@@@@@@@@@@');
-      console.log(info);
       this.attrs.triggerSave(info);
     }
  }

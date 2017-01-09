@@ -28,3 +28,6 @@
 {{#if (eq clicked 'false')}}
   <button {{action "clickCode" program.errorindexes}} class="btn btn-primary btn-lg" id="start-button">Start</button>
 {{/if}}
+{{#if (eq clicked 'true')}}
+<button {{action "clickCode" program.errorindexes}} class="btn btn-primary btn-lg next-level-none" id="retry-button">Retry</button>
+{{/if}}

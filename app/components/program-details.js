@@ -13,6 +13,7 @@ export default Component.extend({
   returnValue: 'em',
   currentUrl:'s',
   errors: [],
+  founded: [],
   plusCount: 0,
   minusCount: 0,
   startTime: '0',
@@ -47,15 +48,18 @@ export default Component.extend({
           }
       }
       this.set('errors', result);
+      this.set('founded', []);
       var current = this;
       var temp = Ember.$("pre:first").text();
       // var temp2 = temp.replace(/<\/?span( class=\"(\w+)\")>/g, '');
-      console.log(temp);
+      // console.log(temp);
     	var words = temp.split(" ");
  	 	  var text = words.join("</span> <span>");
-      console.log(temp);
+      // console.log(temp);
   		Ember.$("p:first").html("<span>" + text + "</span>");
       var s;
+      //console.log('^^^^^^^^^^^^');
+      //console.log(this.get('errors'));
   		Ember.$("span").click(function ()
       {
         var timer = Ember.$("#timer div h4").html();
@@ -70,7 +74,7 @@ export default Component.extend({
         var tap = store.createRecord('tap');
         var email = current.get('session.data.email');
         var level = window.location.href.split("/").pop();
-        console.log(level);
+        //console.log(level);
         tap.set('email', email);
         tap.set('word', s);
         tap.set('time', duration);
@@ -79,17 +83,37 @@ export default Component.extend({
       	Ember.$(this).css("background-color","yellow");
         var message = s;
         var k = 0;
+        var f = 0;
         var len = current.errors.length;
-        var flag = false;
+        var flen = current.founded.length;
+        var flag = -1;
+        var redundant = false;
         for (; k < len; k++)
         {
           if(current.errors[k] === s)
           {
-           flag = true;
+            for (; f<flen; f++)
+            {
+              if(current.founded[f] === s)
+              {
+                redundant = true;
+              }
+            }
+            if(redundant===false)
+            {
+              flag = 1;
+              current.founded.push(s);
+              //console.log(current.founded);
+            }
+            else {
+              flag = 0;
+            }
+            redundant = false;
+
           }
         }
         var finalMessage;
-        if (flag === true)
+        if (flag === 1)
         {
           finalMessage = "You found one error: \"" + message + "\"";
           // Ember.$('#third-score').attr("class","star-icon full");
@@ -101,6 +125,19 @@ export default Component.extend({
           //current.get('names').pushObject("YEY");
           var newCount = current.get('plusCount') + 1;
           current.set('plusCount',newCount);
+        }
+        else if (flag === 0)
+          {
+            finalMessage = "You have already clicled on \"" + message + "\"";
+            // Ember.$('#third-score').attr("class","star-icon full");
+            // document.getElementById("third-score").classList.add("full");
+            current.get('notify').warning(finalMessage, {closeAfter: 1500 });
+            tap.set('success', 'redundant');
+            tap.save();
+            Ember.$(this).css("background-color","#00CC66");
+            //current.get('names').pushObject("YEY");
+          //  var newCount = current.get('plusCount') + 1;
+        //    current.set('plusCount',newCount);
         }
         else {
           finalMessage = "No error: \"" + message + "\"";
@@ -126,7 +163,7 @@ export default Component.extend({
         if (current.get('plusCount') === (len - 1) ) {
            if (current.get('minusCount') < (len - 1) ) {
             current.get('notify').warning("You Win! Click on the Next Level.", {closeAfter: 10000 });
-            current.set('errors','');
+            current.set('founded',[]);
             var arr = window.location.href.split("/");
             arr.splice(-1,1);
             // var newUrl = arr.join("/") + "/completed/" + nextLevel;
@@ -135,6 +172,22 @@ export default Component.extend({
             Ember.$('#next').attr("class","next-level");
             // window.location.replace(newUrl);
            }
+        }
+        if (current.get('minusCount') > (len - 1) ) {
+          //console.log('**************');
+          //(current.get('minusCount'));
+          //console.log(len);
+         current.get('notify').alert("You lost! You can retry this level. Click on Retry.", {closeAfter: 5000 });
+         current.set('founded',[]);
+         current.set('plusCount',0);
+         current.set('minusCount',0);
+        // var url = window.location.href;
+        // arr.splice(-1,1);
+         // var newUrl = arr.join("/") + "/completed/" + nextLevel;
+         // console.log(newUrl);
+         // var url = (add (window.location.href.split("/").pop()) '1')
+         Ember.$('#retry-button').attr("class","btn btn-primary btn-lg next-level");
+        // window.location.replace(url);
         }
  	    });
       this.set('returnValue',s);

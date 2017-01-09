@@ -441,8 +441,6 @@ define('game/components/info-form', ['exports', 'ember'], function (exports, _em
     actions: {
       submit: function submit() {
         var info = this.get('info');
-        console.log('@@@@@@@@@@@@@@');
-        console.log(info);
         this.attrs.triggerSave(info);
       }
     }
@@ -473,6 +471,7 @@ define('game/components/program-details', ['exports', 'ember'], function (export
     returnValue: 'em',
     currentUrl: 's',
     errors: [],
+    founded: [],
     plusCount: 0,
     minusCount: 0,
     startTime: '0',
@@ -505,15 +504,18 @@ define('game/components/program-details', ['exports', 'ember'], function (export
           }
         }
         this.set('errors', result);
+        this.set('founded', []);
         var current = this;
         var temp = _ember['default'].$("pre:first").text();
         // var temp2 = temp.replace(/<\/?span( class=\"(\w+)\")>/g, '');
-        console.log(temp);
+        // console.log(temp);
         var words = temp.split(" ");
         var text = words.join("</span> <span>");
-        console.log(temp);
+        // console.log(temp);
         _ember['default'].$("p:first").html("<span>" + text + "</span>");
         var s;
+        //console.log('^^^^^^^^^^^^');
+        //console.log(this.get('errors'));
         _ember['default'].$("span").click(function () {
           var timer = _ember['default'].$("#timer div h4").html();
           var a = timer.split(':'); // split it at the colons
@@ -527,7 +529,7 @@ define('game/components/program-details', ['exports', 'ember'], function (export
           var tap = store.createRecord('tap');
           var email = current.get('session.data.email');
           var level = window.location.href.split("/").pop();
-          console.log(level);
+          //console.log(level);
           tap.set('email', email);
           tap.set('word', s);
           tap.set('time', duration);
@@ -536,15 +538,30 @@ define('game/components/program-details', ['exports', 'ember'], function (export
           _ember['default'].$(this).css("background-color", "yellow");
           var message = s;
           var k = 0;
+          var f = 0;
           var len = current.errors.length;
-          var flag = false;
+          var flen = current.founded.length;
+          var flag = -1;
+          var redundant = false;
           for (; k < len; k++) {
             if (current.errors[k] === s) {
-              flag = true;
+              for (; f < flen; f++) {
+                if (current.founded[f] === s) {
+                  redundant = true;
+                }
+              }
+              if (redundant === false) {
+                flag = 1;
+                current.founded.push(s);
+                //console.log(current.founded);
+              } else {
+                  flag = 0;
+                }
+              redundant = false;
             }
           }
           var finalMessage;
-          if (flag === true) {
+          if (flag === 1) {
             finalMessage = "You found one error: \"" + message + "\"";
             // Ember.$('#third-score').attr("class","star-icon full");
             // document.getElementById("third-score").classList.add("full");
@@ -555,15 +572,26 @@ define('game/components/program-details', ['exports', 'ember'], function (export
             //current.get('names').pushObject("YEY");
             var newCount = current.get('plusCount') + 1;
             current.set('plusCount', newCount);
-          } else {
-            finalMessage = "No error: \"" + message + "\"";
-            current.get('notify').alert(finalMessage, { closeAfter: 1500 });
-            tap.set('success', 'no');
+          } else if (flag === 0) {
+            finalMessage = "You have already clicled on \"" + message + "\"";
+            // Ember.$('#third-score').attr("class","star-icon full");
+            // document.getElementById("third-score").classList.add("full");
+            current.get('notify').warning(finalMessage, { closeAfter: 1500 });
+            tap.set('success', 'redundant');
             tap.save();
-            _ember['default'].$(this).css("background-color", "#ff4d4d");
-            var newMinusCount = current.get('minusCount') + 1;
-            current.set('minusCount', newMinusCount);
-          }
+            _ember['default'].$(this).css("background-color", "#00CC66");
+            //current.get('names').pushObject("YEY");
+            //  var newCount = current.get('plusCount') + 1;
+            //    current.set('plusCount',newCount);
+          } else {
+              finalMessage = "No error: \"" + message + "\"";
+              current.get('notify').alert(finalMessage, { closeAfter: 1500 });
+              tap.set('success', 'no');
+              tap.save();
+              _ember['default'].$(this).css("background-color", "#ff4d4d");
+              var newMinusCount = current.get('minusCount') + 1;
+              current.set('minusCount', newMinusCount);
+            }
           if (current.get('plusCount') === 1) {
             _ember['default'].$('#first-score').attr("class", "star-icon full");
           }
@@ -579,7 +607,7 @@ define('game/components/program-details', ['exports', 'ember'], function (export
           if (current.get('plusCount') === len - 1) {
             if (current.get('minusCount') < len - 1) {
               current.get('notify').warning("You Win! Click on the Next Level.", { closeAfter: 10000 });
-              current.set('errors', '');
+              current.set('founded', []);
               var arr = window.location.href.split("/");
               arr.splice(-1, 1);
               // var newUrl = arr.join("/") + "/completed/" + nextLevel;
@@ -588,6 +616,22 @@ define('game/components/program-details', ['exports', 'ember'], function (export
               _ember['default'].$('#next').attr("class", "next-level");
               // window.location.replace(newUrl);
             }
+          }
+          if (current.get('minusCount') > len - 1) {
+            //console.log('**************');
+            //(current.get('minusCount'));
+            //console.log(len);
+            current.get('notify').alert("You lost! You can retry this level. Click on Retry.", { closeAfter: 5000 });
+            current.set('founded', []);
+            current.set('plusCount', 0);
+            current.set('minusCount', 0);
+            // var url = window.location.href;
+            // arr.splice(-1,1);
+            // var newUrl = arr.join("/") + "/completed/" + nextLevel;
+            // console.log(newUrl);
+            // var url = (add (window.location.href.split("/").pop()) '1')
+            _ember['default'].$('#retry-button').attr("class", "btn btn-primary btn-lg next-level");
+            // window.location.replace(url);
           }
         });
         this.set('returnValue', s);
@@ -7633,12 +7677,57 @@ define("game/templates/components/program-details", ["exports"], function (expor
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element0 = dom.childAt(fragment, [1]);
+          var element1 = dom.childAt(fragment, [1]);
+          var morphs = new Array(1);
+          morphs[0] = dom.createElementMorph(element1);
+          return morphs;
+        },
+        statements: [["element", "action", ["clickCode", ["get", "program.errorindexes", ["loc", [null, [29, 31], [29, 51]]]]], [], ["loc", [null, [29, 10], [29, 53]]]]],
+        locals: [],
+        templates: []
+      };
+    })();
+    var child2 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 31,
+              "column": 0
+            },
+            "end": {
+              "line": 33,
+              "column": 0
+            }
+          },
+          "moduleName": "game/templates/components/program-details.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createElement("button");
+          dom.setAttribute(el1, "class", "btn btn-primary btn-lg next-level-none");
+          dom.setAttribute(el1, "id", "retry-button");
+          var el2 = dom.createTextNode("Retry");
+          dom.appendChild(el1, el2);
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+          var element0 = dom.childAt(fragment, [0]);
           var morphs = new Array(1);
           morphs[0] = dom.createElementMorph(element0);
           return morphs;
         },
-        statements: [["element", "action", ["clickCode", ["get", "program.errorindexes", ["loc", [null, [29, 31], [29, 51]]]]], [], ["loc", [null, [29, 10], [29, 53]]]]],
+        statements: [["element", "action", ["clickCode", ["get", "program.errorindexes", ["loc", [null, [32, 29], [32, 49]]]]], [], ["loc", [null, [32, 8], [32, 51]]]]],
         locals: [],
         templates: []
       };
@@ -7657,7 +7746,7 @@ define("game/templates/components/program-details", ["exports"], function (expor
             "column": 0
           },
           "end": {
-            "line": 31,
+            "line": 34,
             "column": 0
           }
         },
@@ -7705,21 +7794,24 @@ define("game/templates/components/program-details", ["exports"], function (expor
         dom.appendChild(el0, el1);
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var morphs = new Array(4);
+        var morphs = new Array(5);
         morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
         morphs[1] = dom.createMorphAt(fragment, 2, 2, contextualElement);
         morphs[2] = dom.createMorphAt(dom.childAt(fragment, [4, 1]), 1, 1);
         morphs[3] = dom.createMorphAt(fragment, 10, 10, contextualElement);
+        morphs[4] = dom.createMorphAt(fragment, 11, 11, contextualElement);
         dom.insertBoundary(fragment, 0);
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [4, 10], [4, 17]]]], "true"], [], ["loc", [null, [4, 6], [4, 25]]]]], [], 0, null, ["loc", [null, [4, 0], [14, 7]]]], ["content", "program.code", ["loc", [null, [19, 4], [19, 20]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [28, 10], [28, 17]]]], "false"], [], ["loc", [null, [28, 6], [28, 26]]]]], [], 1, null, ["loc", [null, [28, 0], [30, 7]]]]],
+      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [4, 10], [4, 17]]]], "true"], [], ["loc", [null, [4, 6], [4, 25]]]]], [], 0, null, ["loc", [null, [4, 0], [14, 7]]]], ["content", "program.code", ["loc", [null, [19, 4], [19, 20]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [28, 10], [28, 17]]]], "false"], [], ["loc", [null, [28, 6], [28, 26]]]]], [], 1, null, ["loc", [null, [28, 0], [30, 7]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [31, 10], [31, 17]]]], "true"], [], ["loc", [null, [31, 6], [31, 25]]]]], [], 2, null, ["loc", [null, [31, 0], [33, 7]]]]],
       locals: [],
-      templates: [child0, child1]
+      templates: [child0, child1, child2]
     };
   })());
 });
@@ -11293,7 +11385,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+f4818937"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+be30d500"});
 }
 
 /* jshint ignore:end */
