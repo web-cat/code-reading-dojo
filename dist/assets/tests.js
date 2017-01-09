@@ -43,6 +43,15 @@ define('game/tests/authorizers/devise.jshint', ['exports'], function (exports) {
     assert.ok(true, 'authorizers/devise.js should pass jshint.');
   });
 });
+define('game/tests/components/info-form.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | components/info-form.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'components/info-form.js should pass jshint.');
+  });
+});
 define('game/tests/components/program-details.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -95,6 +104,15 @@ define('game/tests/controllers/index.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'controllers/index.js should pass jshint.');
+  });
+});
+define('game/tests/controllers/info.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/info.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/info.js should pass jshint.');
   });
 });
 define('game/tests/controllers/login.jshint', ['exports'], function (exports) {
@@ -356,6 +374,15 @@ define('game/tests/models/advanced.jshint', ['exports'], function (exports) {
     assert.ok(true, 'models/advanced.js should pass jshint.');
   });
 });
+define('game/tests/models/info.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/info.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/info.js should pass jshint.');
+  });
+});
 define('game/tests/models/new.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -435,6 +462,15 @@ define('game/tests/routes/index.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/index.js should pass jshint.');
+  });
+});
+define('game/tests/routes/info.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/info.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/info.js should pass jshint.');
   });
 });
 define('game/tests/routes/login.jshint', ['exports'], function (exports) {
