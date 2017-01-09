@@ -71,6 +71,7 @@ pre {
     top: 40%;
     right: 20%;
     left: 20%;
+    z-index: 1;
 }
 /* message box */
 .custom-notify .callout {
@@ -160,6 +161,11 @@ pre {
   margin-bottom: 0px;
 }
 
+#signup:hover {
+  background-color: #FF6600;
+  color: black;
+}
+
 #logout {
   float: right;
   margin-right: 10px;
@@ -174,12 +180,16 @@ pre {
 #login {
   float: right;
   margin-right: 10px;
-
   background-color: #660000;
   border-color: #660000;
   padding-top: 1px;
   padding-bottom: 0px;
   display: block;
+}
+
+#login:hover {
+  background-color: #FF6600;
+  color: black;
 }
 
 #start-button{
@@ -200,9 +210,19 @@ pre {
   display: block;
 }
 
+#back-button:hover {
+  background-color: #FF6600;
+  color: black;
+}
+
 #signup-submit {
   background-color: #660000;
   border-color: #660000;
+}
+
+#signup-submit:hover {
+  background-color: #FF6600;
+  color: black;
 }
 
 #survey:hover,

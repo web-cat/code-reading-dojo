@@ -1,20 +1,21 @@
 import Ember from 'ember';
 export default Ember.Controller.extend({
   session: Ember.inject.service('session'),
+  notify: Ember.inject.service('notify'),
   actions: {
     save(user){
       let newUser = user;
-      console.log('+_+_+_+_+_+_+_+_');
-      console.log(newUser.get('email'));
-      console.log(newUser.get('password'));
+      // console.log('+_+_+_+_+_+_+_+_');
+      // console.log(newUser.get('email'));
+      // console.log(newUser.get('password'));
       newUser.save()
       .catch((error) => {
         this.get('session').authenticate('authenticator:devise', newUser.get('email'), newUser.get('password'))
         .catch((reason) => {
-
           this.set('errorMessage', reason.error ||reason);
           // console.log('######################');
-          // console.log(this.get('errorMessage'));
+          console.log(this.get('errorMessage'));
+          this.get('notify').alert(JSON.stringify(this.get('errorMessage')['errors']));
         });
         // console.log('****************');
         // console.log(this.get('email'));

@@ -602,8 +602,6 @@ define('game/components/signup-form', ['exports', 'ember'], function (exports, _
     session: service('session'),
     actions: {
       submit: function submit() {
-        console.log('-------------------');
-        console.log(this.get('user.passwordConfirmation'));
         var user = this.get('user');
         this.attrs.triggerSave(user);
       }
@@ -724,16 +722,16 @@ define('game/controllers/info', ['exports', 'ember'], function (exports, _ember)
 define('game/controllers/login', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Controller.extend({
     session: _ember['default'].inject.service('session'),
-
+    notify: _ember['default'].inject.service('notify'),
     actions: {
       authenticate: function authenticate() {
         var _this = this;
 
         this.get('session').authenticate('authenticator:devise', this.get('email'), this.get('password'))['catch'](function (reason) {
-
           _this.set('errorMessage', reason.error || reason);
-          // console.log('######################');
-          // console.log(this.get('errorMessage'));
+          _this.get('notify').alert(JSON.stringify(_this.get('errorMessage')['errors']));
+          console.log('######################');
+          console.log(_this.get('errorMessage'));
         });
         // console.log('****************');
         // console.log(this.get('email'));
@@ -801,20 +799,21 @@ define('game/controllers/programs', ['exports', 'ember'], function (exports, _em
 define('game/controllers/signup', ['exports', 'ember'], function (exports, _ember) {
   exports['default'] = _ember['default'].Controller.extend({
     session: _ember['default'].inject.service('session'),
+    notify: _ember['default'].inject.service('notify'),
     actions: {
       save: function save(user) {
         var _this = this;
 
         var newUser = user;
-        console.log('+_+_+_+_+_+_+_+_');
-        console.log(newUser.get('email'));
-        console.log(newUser.get('password'));
+        // console.log('+_+_+_+_+_+_+_+_');
+        // console.log(newUser.get('email'));
+        // console.log(newUser.get('password'));
         newUser.save()['catch'](function (error) {
           _this.get('session').authenticate('authenticator:devise', newUser.get('email'), newUser.get('password'))['catch'](function (reason) {
-
             _this.set('errorMessage', reason.error || reason);
             // console.log('######################');
-            // console.log(this.get('errorMessage'));
+            console.log(_this.get('errorMessage'));
+            _this.get('notify').alert(JSON.stringify(_this.get('errorMessage')['errors']));
           });
           // console.log('****************');
           // console.log(this.get('email'));
@@ -1920,7 +1919,7 @@ define("game/templates/application", ["exports"], function (exports) {
           dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["block", "link-to", ["login"], ["class", "btn btn-primary", "id", "login", "tagName", "button"], 0, null, ["loc", [null, [6, 2], [8, 14]]]]],
+        statements: [["block", "link-to", ["login"], ["class", "btn btn-primary btn-lg", "id", "login", "tagName", "button"], 0, null, ["loc", [null, [6, 2], [8, 14]]]]],
         locals: [],
         templates: [child0]
       };
@@ -7741,11 +7740,11 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
           "loc": {
             "source": null,
             "start": {
-              "line": 4,
+              "line": 6,
               "column": 6
             },
             "end": {
-              "line": 6,
+              "line": 8,
               "column": 6
             }
           },
@@ -7772,7 +7771,8 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
     return {
       meta: {
         "fragmentReason": {
-          "name": "triple-curlies"
+          "name": "missing-wrapper",
+          "problems": ["wrong-type", "multiple-nodes"]
         },
         "revision": "Ember@2.6.2",
         "loc": {
@@ -7782,7 +7782,7 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
             "column": 0
           },
           "end": {
-            "line": 59,
+            "line": 61,
             "column": 0
           }
         },
@@ -7794,6 +7794,10 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "wrapper");
         var el2 = dom.createTextNode("\n    ");
@@ -7869,7 +7873,7 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
         var el7 = dom.createElement("label");
         dom.setAttribute(el7, "for", "email");
         dom.setAttribute(el7, "class", "col-md-3 control-label");
-        var el8 = dom.createTextNode("Email/Username");
+        var el8 = dom.createTextNode("Email (username)");
         dom.appendChild(el7, el8);
         dom.appendChild(el6, el7);
         var el7 = dom.createTextNode("\n                        ");
@@ -7994,17 +7998,19 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 3]);
+        var element0 = dom.childAt(fragment, [2, 3]);
         var element1 = dom.childAt(element0, [3, 3, 1]);
-        var morphs = new Array(5);
-        morphs[0] = dom.createMorphAt(element0, 1, 1);
-        morphs[1] = dom.createElementMorph(element1);
-        morphs[2] = dom.createMorphAt(dom.childAt(element1, [5, 3]), 1, 1);
-        morphs[3] = dom.createMorphAt(dom.childAt(element1, [7, 3]), 1, 1);
-        morphs[4] = dom.createMorphAt(dom.childAt(element1, [9, 3]), 1, 1);
+        var morphs = new Array(6);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        morphs[1] = dom.createMorphAt(element0, 1, 1);
+        morphs[2] = dom.createElementMorph(element1);
+        morphs[3] = dom.createMorphAt(dom.childAt(element1, [5, 3]), 1, 1);
+        morphs[4] = dom.createMorphAt(dom.childAt(element1, [7, 3]), 1, 1);
+        morphs[5] = dom.createMorphAt(dom.childAt(element1, [9, 3]), 1, 1);
+        dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [4, 6], [6, 18]]]], ["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [12, 59], [12, 90]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [27, 40], [27, 50]]]]], [], []], "id", "signUpEmailInput", "type", "text", "class", "form-control", "name", "userEmail", "placeholder", "Email/Username"], ["loc", [null, [27, 26], [27, 153]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [35, 40], [35, 53]]]]], [], []], "id", "signUpPasswordInput", "type", "password", "class", "form-control", "name", "userPassword", "placeholder", "Password"], ["loc", [null, [35, 26], [35, 161]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [42, 42], [42, 67]]]]], [], []], "id", "signUpConfirmInput", "type", "password", "class", "form-control", "name", "icode", "placeholder", "Confirm Password"], ["loc", [null, [42, 28], [42, 174]]]]],
+      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 6], [8, 18]]]], ["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [14, 59], [14, 90]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [29, 40], [29, 50]]]]], [], []], "id", "signUpEmailInput", "type", "text", "class", "form-control", "name", "userEmail", "placeholder", "Email (username)"], ["loc", [null, [29, 26], [29, 155]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [37, 40], [37, 53]]]]], [], []], "id", "signUpPasswordInput", "type", "password", "class", "form-control", "name", "userPassword", "placeholder", "Password"], ["loc", [null, [37, 26], [37, 161]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [44, 42], [44, 67]]]]], [], []], "id", "signUpConfirmInput", "type", "password", "class", "form-control", "name", "icode", "placeholder", "Confirm Password"], ["loc", [null, [44, 28], [44, 174]]]]],
       locals: [],
       templates: [child0]
     };
@@ -9365,7 +9371,8 @@ define("game/templates/login", ["exports"], function (exports) {
     return {
       meta: {
         "fragmentReason": {
-          "name": "triple-curlies"
+          "name": "missing-wrapper",
+          "problems": ["wrong-type", "multiple-nodes"]
         },
         "revision": "Ember@2.6.2",
         "loc": {
@@ -9375,7 +9382,7 @@ define("game/templates/login", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 21,
+            "line": 23,
             "column": 0
           }
         },
@@ -9387,6 +9394,10 @@ define("game/templates/login", ["exports"], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
+        var el1 = dom.createComment("");
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n\n");
+        dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "jumbotron text-center");
         var el2 = dom.createTextNode("\n  ");
@@ -9454,7 +9465,7 @@ define("game/templates/login", ["exports"], function (exports) {
         var el5 = dom.createTextNode("\n            ");
         dom.appendChild(el4, el5);
         dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n          \n        ");
+        var el4 = dom.createTextNode("\n\n        ");
         dom.appendChild(el3, el4);
         dom.appendChild(el2, el3);
         var el3 = dom.createTextNode("\n    ");
@@ -9468,14 +9479,16 @@ define("game/templates/login", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element0 = dom.childAt(fragment, [0, 7, 1, 1]);
-        var morphs = new Array(3);
-        morphs[0] = dom.createElementMorph(element0);
-        morphs[1] = dom.createMorphAt(element0, 3, 3);
-        morphs[2] = dom.createMorphAt(element0, 7, 7);
+        var element0 = dom.childAt(fragment, [2, 7, 1, 1]);
+        var morphs = new Array(4);
+        morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+        morphs[1] = dom.createElementMorph(element0);
+        morphs[2] = dom.createMorphAt(element0, 3, 3);
+        morphs[3] = dom.createMorphAt(element0, 7, 7);
+        dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["element", "action", ["authenticate"], ["on", "submit"], ["loc", [null, [7, 18], [7, 55]]]], ["inline", "input", [], ["type", "email", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [9, 41], [9, 46]]]]], [], []], "class", "form-control", "placeholder", "Email", "autofocus", "autofocus"], ["loc", [null, [9, 14], [9, 111]]]], ["inline", "input", [], ["type", "password", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [12, 44], [12, 52]]]]], [], []], "class", "form-control", "placeholder", "Password", "autofocus", "autofocus"], ["loc", [null, [12, 14], [12, 120]]]]],
+      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["element", "action", ["authenticate"], ["on", "submit"], ["loc", [null, [9, 18], [9, 55]]]], ["inline", "input", [], ["type", "email", "value", ["subexpr", "@mut", [["get", "email", ["loc", [null, [11, 41], [11, 46]]]]], [], []], "class", "form-control", "placeholder", "Email", "autofocus", "autofocus"], ["loc", [null, [11, 14], [11, 111]]]], ["inline", "input", [], ["type", "password", "value", ["subexpr", "@mut", [["get", "password", ["loc", [null, [14, 44], [14, 52]]]]], [], []], "class", "form-control", "placeholder", "Password", "autofocus", "autofocus"], ["loc", [null, [14, 14], [14, 120]]]]],
       locals: [],
       templates: []
     };
@@ -11280,7 +11293,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+d403ca80"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+f4818937"});
 }
 
 /* jshint ignore:end */
