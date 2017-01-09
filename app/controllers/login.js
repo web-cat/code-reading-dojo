@@ -9,7 +9,7 @@ export default Ember.Controller.extend({
       .catch((reason) => {
         this.set('errorMessage', reason.error ||reason);
         this.get('notify').alert(JSON.stringify(this.get('errorMessage')['errors']));
-        console.log('######################');
+    //    console.log('######################');
         console.log(this.get('errorMessage'));
       });
       // console.log('****************');

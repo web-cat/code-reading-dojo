@@ -4,7 +4,7 @@ module.exports = function(environment) {
     host: 'http://192.168.0.15:3000',
     modulePrefix: 'game',
     environment: environment,
-    baseURL: '/#/',
+    baseURL: '',
     locationType: 'hash',
     EmberENV: {
       FEATURES: {
@@ -40,7 +40,7 @@ module.exports = function(environment) {
 
   if (environment === 'test') {
     // Testem prefers this...
-    ENV.baseURL = '/';
+    ENV.baseURL = '';
     ENV.locationType = 'none';
 
     // keep test console output quieter

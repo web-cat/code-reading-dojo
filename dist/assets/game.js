@@ -461,6 +461,7 @@ define('game/components/program-details', ['exports', 'ember'], function (export
   var service = _ember['default'].inject.service;
   var Component = _ember['default'].Component;
   exports['default'] = Component.extend({
+    store: _ember['default'].inject.service(),
     session: service('session'),
     currentUser: service('current-user'),
     notify: _ember['default'].inject.service('notify'),
@@ -490,7 +491,12 @@ define('game/components/program-details', ['exports', 'ember'], function (export
         this.set('errors', this.get('level').split(" "));
       },
       clickCode: function clickCode(errorindexes) {
-
+        console.log('$$$$$$$$$$$$$$$$$$');
+        //  var e = this.session.data.email;
+        //  console.log(e);
+        var store = this.get('store');
+        console.log(store.query('user', { email: '7@test.com' }));
+        //console.log( this.store.query('user', { email: e }));
         if (this.get('clicked') === 'true') {
           this.set('clicked', 'false');
         } else {
@@ -774,7 +780,7 @@ define('game/controllers/login', ['exports', 'ember'], function (exports, _ember
         this.get('session').authenticate('authenticator:devise', this.get('email'), this.get('password'))['catch'](function (reason) {
           _this.set('errorMessage', reason.error || reason);
           _this.get('notify').alert(JSON.stringify(_this.get('errorMessage')['errors']));
-          console.log('######################');
+          //    console.log('######################');
           console.log(_this.get('errorMessage'));
         });
         // console.log('****************');
@@ -825,9 +831,15 @@ define('game/controllers/programs', ['exports', 'ember'], function (exports, _em
     clicked: 'false',
     actions: {
       getCurrentUrl: function getCurrentUrl() {
+        console.log('HEEEEREEEEEe');
         this.set('currentUrl', window.location.href.split("/").pop());
         console.log(this.get('currentUrl'));
-        this.set('clicked', 'true');
+        // this.set('clicked','true');
+        if (this.get('clicked') === 'true') {
+          this.set('clicked', 'false');
+        } else {
+          this.set('clicked', 'true');
+        }
       },
       clicked: function clicked() {
         if (this.get('clicked') === 'true') {
@@ -7562,11 +7574,11 @@ define("game/templates/components/program-details", ["exports"], function (expor
           "loc": {
             "source": null,
             "start": {
-              "line": 4,
+              "line": 3,
               "column": 0
             },
             "end": {
-              "line": 14,
+              "line": 13,
               "column": 0
             }
           },
@@ -7635,7 +7647,7 @@ define("game/templates/components/program-details", ["exports"], function (expor
           morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 1, 1);
           return morphs;
         },
-        statements: [["inline", "x-timer", [], ["autoStart", "true", "format", "HH:MM:SS", "stopRequired", false], ["loc", [null, [6, 0], [6, 65]]]]],
+        statements: [["inline", "x-timer", [], ["autoStart", "true", "format", "HH:MM:SS", "stopRequired", false], ["loc", [null, [5, 0], [5, 65]]]]],
         locals: [],
         templates: []
       };
@@ -7648,11 +7660,11 @@ define("game/templates/components/program-details", ["exports"], function (expor
           "loc": {
             "source": null,
             "start": {
-              "line": 28,
+              "line": 25,
               "column": 0
             },
             "end": {
-              "line": 30,
+              "line": 27,
               "column": 0
             }
           },
@@ -7682,7 +7694,7 @@ define("game/templates/components/program-details", ["exports"], function (expor
           morphs[0] = dom.createElementMorph(element1);
           return morphs;
         },
-        statements: [["element", "action", ["clickCode", ["get", "program.errorindexes", ["loc", [null, [29, 31], [29, 51]]]]], [], ["loc", [null, [29, 10], [29, 53]]]]],
+        statements: [["element", "action", ["clickCode", ["get", "program.errorindexes", ["loc", [null, [26, 31], [26, 51]]]]], [], ["loc", [null, [26, 10], [26, 53]]]]],
         locals: [],
         templates: []
       };
@@ -7695,11 +7707,11 @@ define("game/templates/components/program-details", ["exports"], function (expor
           "loc": {
             "source": null,
             "start": {
-              "line": 31,
+              "line": 28,
               "column": 0
             },
             "end": {
-              "line": 33,
+              "line": 30,
               "column": 0
             }
           },
@@ -7727,7 +7739,7 @@ define("game/templates/components/program-details", ["exports"], function (expor
           morphs[0] = dom.createElementMorph(element0);
           return morphs;
         },
-        statements: [["element", "action", ["clickCode", ["get", "program.errorindexes", ["loc", [null, [32, 29], [32, 49]]]]], [], ["loc", [null, [32, 8], [32, 51]]]]],
+        statements: [["element", "action", ["clickCode", ["get", "program.errorindexes", ["loc", [null, [29, 29], [29, 49]]]]], [], ["loc", [null, [29, 8], [29, 51]]]]],
         locals: [],
         templates: []
       };
@@ -7746,7 +7758,7 @@ define("game/templates/components/program-details", ["exports"], function (expor
             "column": 0
           },
           "end": {
-            "line": 34,
+            "line": 31,
             "column": 0
           }
         },
@@ -7760,7 +7772,7 @@ define("game/templates/components/program-details", ["exports"], function (expor
         var el0 = dom.createDocumentFragment();
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
-        var el1 = dom.createTextNode("\n\n\n");
+        var el1 = dom.createTextNode("\n\n");
         dom.appendChild(el0, el1);
         var el1 = dom.createComment("");
         dom.appendChild(el0, el1);
@@ -7772,11 +7784,11 @@ define("game/templates/components/program-details", ["exports"], function (expor
         dom.appendChild(el1, el2);
         var el2 = dom.createElement("p");
         dom.setAttribute(el2, "id", "p-code");
-        var el3 = dom.createTextNode("\n\n    ");
+        var el3 = dom.createTextNode("\n    ");
         dom.appendChild(el2, el3);
         var el3 = dom.createComment("");
         dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n\n  ");
+        var el3 = dom.createTextNode("\n  ");
         dom.appendChild(el2, el3);
         dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
@@ -7809,18 +7821,11 @@ define("game/templates/components/program-details", ["exports"], function (expor
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [4, 10], [4, 17]]]], "true"], [], ["loc", [null, [4, 6], [4, 25]]]]], [], 0, null, ["loc", [null, [4, 0], [14, 7]]]], ["content", "program.code", ["loc", [null, [19, 4], [19, 20]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [28, 10], [28, 17]]]], "false"], [], ["loc", [null, [28, 6], [28, 26]]]]], [], 1, null, ["loc", [null, [28, 0], [30, 7]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [31, 10], [31, 17]]]], "true"], [], ["loc", [null, [31, 6], [31, 25]]]]], [], 2, null, ["loc", [null, [31, 0], [33, 7]]]]],
+      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [3, 10], [3, 17]]]], "true"], [], ["loc", [null, [3, 6], [3, 25]]]]], [], 0, null, ["loc", [null, [3, 0], [13, 7]]]], ["content", "program.code", ["loc", [null, [17, 4], [17, 20]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [25, 10], [25, 17]]]], "false"], [], ["loc", [null, [25, 6], [25, 26]]]]], [], 1, null, ["loc", [null, [25, 0], [27, 7]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [28, 10], [28, 17]]]], "true"], [], ["loc", [null, [28, 6], [28, 25]]]]], [], 2, null, ["loc", [null, [28, 0], [30, 7]]]]],
       locals: [],
       templates: [child0, child1, child2]
     };
   })());
-});
-define('game/templates/components/programs', ['exports', 'ember', 'ember-simple-auth/mixins/authenticated-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsAuthenticatedRouteMixin) {
-  exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsAuthenticatedRouteMixin['default'], {
-    model: function model() {
-      return this.store.findAll('program');
-    }
-  });
 });
 define("game/templates/components/signup-form", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
@@ -10983,7 +10988,7 @@ define("game/templates/programs", ["exports"], function (exports) {
                 dom.insertBoundary(fragment, 0);
                 return morphs;
               },
-              statements: [["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [14, 10], [16, 22]]]], ["inline", "program-details", [], ["program", ["subexpr", "@mut", [["get", "program", ["loc", [null, [18, 36], [18, 43]]]]], [], []]], ["loc", [null, [18, 10], [18, 45]]]], ["block", "link-to", ["completed", ["subexpr", "add", [["get", "currentUrl", ["loc", [null, [20, 40], [20, 50]]]], "1"], [], ["loc", [null, [20, 35], [20, 55]]]]], ["tagName", "button", "invokeAction", ["subexpr", "action", ["clicked"], [], ["loc", [null, [20, 86], [20, 104]]]], "class", "btn btn-primary btn-lg", "id", "next-button"], 1, null, ["loc", [null, [20, 12], [22, 24]]]]],
+              statements: [["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button", "invokeAction", ["subexpr", "action", ["clicked"], [], ["loc", [null, [14, 98], [14, 116]]]]], 0, null, ["loc", [null, [14, 10], [16, 22]]]], ["inline", "program-details", [], ["program", ["subexpr", "@mut", [["get", "program", ["loc", [null, [18, 36], [18, 43]]]]], [], []]], ["loc", [null, [18, 10], [18, 45]]]], ["block", "link-to", ["completed", ["subexpr", "add", [["get", "currentUrl", ["loc", [null, [20, 40], [20, 50]]]], "1"], [], ["loc", [null, [20, 35], [20, 55]]]]], ["tagName", "button", "invokeAction", ["subexpr", "action", ["clicked"], [], ["loc", [null, [20, 86], [20, 104]]]], "class", "btn btn-primary btn-lg", "id", "next-button"], 1, null, ["loc", [null, [20, 12], [22, 24]]]]],
               locals: [],
               templates: [child0, child1]
             };
@@ -11385,7 +11390,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+be30d500"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+bb7b25a9"});
 }
 
 /* jshint ignore:end */

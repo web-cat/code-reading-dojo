@@ -5874,7 +5874,8 @@ pre {
   position: fixed;
   top: 40%;
   right: 20%;
-  left: 20%; }
+  left: 20%;
+  z-index: 1; }
 
 /* message box */
 .custom-notify .callout {
@@ -5947,6 +5948,10 @@ pre {
   display: block;
   margin-bottom: 0px; }
 
+#signup:hover {
+  background-color: #FF6600;
+  color: black; }
+
 #logout {
   float: right;
   margin-right: 10px;
@@ -5966,6 +5971,10 @@ pre {
   padding-bottom: 0px;
   display: block; }
 
+#login:hover {
+  background-color: #FF6600;
+  color: black; }
+
 #start-button {
   background-color: #FF6600;
   border-color: #660000;
@@ -5974,6 +5983,13 @@ pre {
   display: block;
   color: #660000; }
 
+#retry-button {
+  background-color: #660000;
+  border-color: #660000;
+  padding-top: 1px;
+  padding-bottom: 0px;
+  color: white; }
+
 #back-button {
   background-color: #660000;
   border-color: #660000;
@@ -5981,9 +5997,17 @@ pre {
   padding-bottom: 0px;
   display: block; }
 
+#back-button:hover {
+  background-color: #FF6600;
+  color: black; }
+
 #signup-submit {
   background-color: #660000;
   border-color: #660000; }
+
+#signup-submit:hover {
+  background-color: #FF6600;
+  color: black; }
 
 #survey:hover,
 #survey-submit:hover {

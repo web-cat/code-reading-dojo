@@ -3,6 +3,7 @@ import Ember from 'ember';
 const { inject: { service }, Component } = Ember;
 
 export default Component.extend({
+  store: Ember.inject.service(),
   session:     service('session'),
   currentUser: service('current-user'),
   notify: Ember.inject.service('notify'),
@@ -31,9 +32,13 @@ export default Component.extend({
     findErrors(){
       this.set('errors', this.get('level').split(" "));
     },
-    clickCode(errorindexes){
-
-
+    clickCode(errorindexes) {
+      console.log('$$$$$$$$$$$$$$$$$$');
+    //  var e = this.session.data.email;
+    //  console.log(e);
+      var store = this.get('store');
+      console.log(store.query('user', { email: '7@test.com' }));
+      //console.log( this.store.query('user', { email: e }));
       if(this.get('clicked')==='true'){
         this.set('clicked','false');
       } else {

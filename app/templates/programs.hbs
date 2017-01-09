@@ -11,7 +11,7 @@
   {{#if (eq clicked 'true')}}
     {{#if (eq program.difficulty "beginner")}}
       {{#if (eq program.level currentUrl)}}
-          {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button"}}
+          {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button" invokeAction=(action 'clicked')}}
             Back to Menu
           {{/link-to}}
 

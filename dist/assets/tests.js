@@ -58,7 +58,7 @@ define('game/tests/components/program-details.jshint', ['exports'], function (ex
   QUnit.module('JSHint | components/program-details.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'components/program-details.js should pass jshint.');
+    assert.ok(false, 'components/program-details.js should pass jshint.\ncomponents/program-details.js: line 10, col 8, Duplicate key \'store\'.\n\n1 error');
   });
 });
 define('game/tests/components/signup-form.jshint', ['exports'], function (exports) {
@@ -167,15 +167,6 @@ define('game/tests/flows.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'flows.js should pass jshint.');
-  });
-});
-define('game/tests/game/templates/components/programs.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | game/templates/components/programs.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'game/templates/components/programs.js should pass jshint.');
   });
 });
 define('game/tests/helpers/add.jshint', ['exports'], function (exports) {
