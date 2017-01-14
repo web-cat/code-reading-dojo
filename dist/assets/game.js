@@ -33,7 +33,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
-    serverTokenEndpoint: 'http://192.168.0.15:3000/users/sign_in',
+    serverTokenEndpoint: 'http://192.168.1.6:3000/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
         if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.email) && !isEmpty(data.client)) {
@@ -461,7 +461,7 @@ define('game/components/program-details', ['exports', 'ember'], function (export
   var service = _ember['default'].inject.service;
   var Component = _ember['default'].Component;
   exports['default'] = Component.extend({
-    store: _ember['default'].inject.service(),
+    //store: Ember.inject.service(),
     session: service('session'),
     currentUser: service('current-user'),
     notify: _ember['default'].inject.service('notify'),
@@ -494,8 +494,10 @@ define('game/components/program-details', ['exports', 'ember'], function (export
         console.log('$$$$$$$$$$$$$$$$$$');
         //  var e = this.session.data.email;
         //  console.log(e);
-        var store = this.get('store');
-        console.log(store.query('user', { email: '7@test.com' }));
+        // var store = this.get('store');
+        // var email = store.findAll('program');
+        // //store.query('user', { email: '7@test.com' });
+        // console.log(JSON.stringify(email));
         //console.log( this.store.query('user', { email: e }));
         if (this.get('clicked') === 'true') {
           this.set('clicked', 'false');
@@ -689,11 +691,15 @@ define('game/controllers/application', ['exports', 'ember'], function (exports, 
   });
 });
 define('game/controllers/completed', ['exports', 'ember'], function (exports, _ember) {
+  var service = _ember['default'].inject.service;
+  var Controller = _ember['default'].Controller;
   exports['default'] = _ember['default'].Controller.extend({
+    session: service('session'),
+    currentUser: service('current-user'),
     currentUrl: '1',
     clicked: 'false',
     actions: {
-      getCurrentUrl: function getCurrentUrl() {
+      getCurrentUrl: function getCurrentUrl(user) {
         // console.log(window.location.href);
         var arr = window.location.href.split("/");
         var level = parseInt(arr.pop());
@@ -703,6 +709,12 @@ define('game/controllers/completed', ['exports', 'ember'], function (exports, _e
         this.set('currentUrl', level.toString());
         // console.log(this.get('currentUrl'));
         this.set('clicked', 'true');
+
+        console.log('*********************');
+        console.log(JSON.stringify(user));
+        user.set('levelcompleted', 'DOLAKI');
+        console.log(JSON.stringify(user));
+        user.save();
         window.location.replace(newUrl);
       },
       unclicked: function unclicked() {
@@ -1465,6 +1477,16 @@ define('game/models/advanced', ['exports', 'ember-data'], function (exports, _em
     lastaccessed: _emberData['default'].attr('string')
   });
 });
+define('game/models/completed', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
+  // import { belongsTo, hasMany } from 'ember-data/relationships';
+
+  exports['default'] = _emberDataModel['default'].extend({
+    email: (0, _emberDataAttr['default'])('string'),
+    password: (0, _emberDataAttr['default'])('string'),
+    passwordConfirmation: (0, _emberDataAttr['default'])('string'),
+    levelcompleted: (0, _emberDataAttr['default'])('string')
+  });
+});
 define('game/models/info', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
   // import { belongsTo, hasMany } from 'ember-data/relationships';
 
@@ -1582,6 +1604,13 @@ define('game/routes/application', ['exports', 'ember', 'ember-simple-auth/mixins
   });
 });
 // app/routes/application.js
+define('game/routes/completed', ['exports', 'ember', 'ember-simple-auth/mixins/authenticated-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsAuthenticatedRouteMixin) {
+  exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsAuthenticatedRouteMixin['default'], {
+    model: function model() {
+      return this.store.findAll('user');
+    }
+  });
+});
 define('game/routes/index', ['exports', 'ember', 'ember-simple-auth/mixins/application-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsApplicationRouteMixin) {
   exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsApplicationRouteMixin['default']);
 });
@@ -2037,12 +2066,12 @@ define("game/templates/completed", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 7,
-              "column": 8
+              "line": 2,
+              "column": 2
             },
             "end": {
-              "line": 10,
-              "column": 8
+              "line": 4,
+              "column": 2
             }
           },
           "moduleName": "game/templates/completed.hbs"
@@ -2053,15 +2082,12 @@ define("game/templates/completed", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("          ");
+          var el1 = dom.createTextNode("    ");
           dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("button");
-          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-          var el2 = dom.createTextNode("Next Level");
+          var el1 = dom.createElement("p");
+          var el2 = dom.createTextNode("Signed in as ");
+          dom.appendChild(el1, el2);
+          var el2 = dom.createComment("");
           dom.appendChild(el1, el2);
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
@@ -2069,18 +2095,419 @@ define("game/templates/completed", ["exports"], function (exports) {
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element5 = dom.childAt(fragment, [3]);
-          var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          morphs[1] = dom.createElementMorph(element5);
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 1, 1);
           return morphs;
         },
-        statements: [["content", "beginner-one", ["loc", [null, [8, 10], [8, 26]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [9, 18], [9, 44]]]]],
+        statements: [["content", "session.data.email", ["loc", [null, [3, 20], [3, 42]]]]],
         locals: [],
         templates: []
       };
     })();
     var child1 = (function () {
+      var child0 = (function () {
+        var child0 = (function () {
+          return {
+            meta: {
+              "fragmentReason": false,
+              "revision": "Ember@2.6.2",
+              "loc": {
+                "source": null,
+                "start": {
+                  "line": 14,
+                  "column": 8
+                },
+                "end": {
+                  "line": 17,
+                  "column": 8
+                }
+              },
+              "moduleName": "game/templates/completed.hbs"
+            },
+            isEmpty: false,
+            arity: 0,
+            cachedFragment: null,
+            hasRendered: false,
+            buildFragment: function buildFragment(dom) {
+              var el0 = dom.createDocumentFragment();
+              var el1 = dom.createTextNode("          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createComment("");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("button");
+              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+              var el2 = dom.createTextNode("Next Level");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n");
+              dom.appendChild(el0, el1);
+              return el0;
+            },
+            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+              var element5 = dom.childAt(fragment, [3]);
+              var morphs = new Array(2);
+              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+              morphs[1] = dom.createElementMorph(element5);
+              return morphs;
+            },
+            statements: [["content", "beginner-one", ["loc", [null, [15, 10], [15, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [16, 43], [16, 47]]]]], [], ["loc", [null, [16, 18], [16, 49]]]]],
+            locals: [],
+            templates: []
+          };
+        })();
+        var child1 = (function () {
+          return {
+            meta: {
+              "fragmentReason": false,
+              "revision": "Ember@2.6.2",
+              "loc": {
+                "source": null,
+                "start": {
+                  "line": 19,
+                  "column": 8
+                },
+                "end": {
+                  "line": 22,
+                  "column": 8
+                }
+              },
+              "moduleName": "game/templates/completed.hbs"
+            },
+            isEmpty: false,
+            arity: 0,
+            cachedFragment: null,
+            hasRendered: false,
+            buildFragment: function buildFragment(dom) {
+              var el0 = dom.createDocumentFragment();
+              var el1 = dom.createTextNode("          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createComment("");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("button");
+              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+              var el2 = dom.createTextNode("Next Level");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n");
+              dom.appendChild(el0, el1);
+              return el0;
+            },
+            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+              var element4 = dom.childAt(fragment, [3]);
+              var morphs = new Array(2);
+              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+              morphs[1] = dom.createElementMorph(element4);
+              return morphs;
+            },
+            statements: [["content", "beginner-two", ["loc", [null, [20, 10], [20, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [21, 43], [21, 47]]]]], [], ["loc", [null, [21, 18], [21, 49]]]]],
+            locals: [],
+            templates: []
+          };
+        })();
+        var child2 = (function () {
+          return {
+            meta: {
+              "fragmentReason": false,
+              "revision": "Ember@2.6.2",
+              "loc": {
+                "source": null,
+                "start": {
+                  "line": 23,
+                  "column": 8
+                },
+                "end": {
+                  "line": 26,
+                  "column": 8
+                }
+              },
+              "moduleName": "game/templates/completed.hbs"
+            },
+            isEmpty: false,
+            arity: 0,
+            cachedFragment: null,
+            hasRendered: false,
+            buildFragment: function buildFragment(dom) {
+              var el0 = dom.createDocumentFragment();
+              var el1 = dom.createTextNode("          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createComment("");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("button");
+              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+              var el2 = dom.createTextNode("Next Level");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n");
+              dom.appendChild(el0, el1);
+              return el0;
+            },
+            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+              var element3 = dom.childAt(fragment, [3]);
+              var morphs = new Array(2);
+              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+              morphs[1] = dom.createElementMorph(element3);
+              return morphs;
+            },
+            statements: [["content", "beginner-three", ["loc", [null, [24, 10], [24, 28]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [25, 43], [25, 47]]]]], [], ["loc", [null, [25, 18], [25, 49]]]]],
+            locals: [],
+            templates: []
+          };
+        })();
+        var child3 = (function () {
+          return {
+            meta: {
+              "fragmentReason": false,
+              "revision": "Ember@2.6.2",
+              "loc": {
+                "source": null,
+                "start": {
+                  "line": 27,
+                  "column": 8
+                },
+                "end": {
+                  "line": 30,
+                  "column": 8
+                }
+              },
+              "moduleName": "game/templates/completed.hbs"
+            },
+            isEmpty: false,
+            arity: 0,
+            cachedFragment: null,
+            hasRendered: false,
+            buildFragment: function buildFragment(dom) {
+              var el0 = dom.createDocumentFragment();
+              var el1 = dom.createTextNode("          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createComment("");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("button");
+              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+              var el2 = dom.createTextNode("Next Level");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n");
+              dom.appendChild(el0, el1);
+              return el0;
+            },
+            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+              var element2 = dom.childAt(fragment, [3]);
+              var morphs = new Array(2);
+              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+              morphs[1] = dom.createElementMorph(element2);
+              return morphs;
+            },
+            statements: [["content", "beginner-four", ["loc", [null, [28, 10], [28, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [29, 43], [29, 47]]]]], [], ["loc", [null, [29, 18], [29, 49]]]]],
+            locals: [],
+            templates: []
+          };
+        })();
+        var child4 = (function () {
+          return {
+            meta: {
+              "fragmentReason": false,
+              "revision": "Ember@2.6.2",
+              "loc": {
+                "source": null,
+                "start": {
+                  "line": 31,
+                  "column": 8
+                },
+                "end": {
+                  "line": 34,
+                  "column": 8
+                }
+              },
+              "moduleName": "game/templates/completed.hbs"
+            },
+            isEmpty: false,
+            arity: 0,
+            cachedFragment: null,
+            hasRendered: false,
+            buildFragment: function buildFragment(dom) {
+              var el0 = dom.createDocumentFragment();
+              var el1 = dom.createTextNode("          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createComment("");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("button");
+              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+              var el2 = dom.createTextNode("Next Level");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n");
+              dom.appendChild(el0, el1);
+              return el0;
+            },
+            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+              var element1 = dom.childAt(fragment, [3]);
+              var morphs = new Array(2);
+              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+              morphs[1] = dom.createElementMorph(element1);
+              return morphs;
+            },
+            statements: [["content", "beginner-five", ["loc", [null, [32, 10], [32, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [33, 43], [33, 47]]]]], [], ["loc", [null, [33, 18], [33, 49]]]]],
+            locals: [],
+            templates: []
+          };
+        })();
+        var child5 = (function () {
+          return {
+            meta: {
+              "fragmentReason": false,
+              "revision": "Ember@2.6.2",
+              "loc": {
+                "source": null,
+                "start": {
+                  "line": 35,
+                  "column": 8
+                },
+                "end": {
+                  "line": 38,
+                  "column": 8
+                }
+              },
+              "moduleName": "game/templates/completed.hbs"
+            },
+            isEmpty: false,
+            arity: 0,
+            cachedFragment: null,
+            hasRendered: false,
+            buildFragment: function buildFragment(dom) {
+              var el0 = dom.createDocumentFragment();
+              var el1 = dom.createTextNode("          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createComment("");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n          ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("button");
+              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+              var el2 = dom.createTextNode("Survey");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n");
+              dom.appendChild(el0, el1);
+              return el0;
+            },
+            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+              var element0 = dom.childAt(fragment, [3]);
+              var morphs = new Array(2);
+              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+              morphs[1] = dom.createElementMorph(element0);
+              return morphs;
+            },
+            statements: [["content", "beginner-six", ["loc", [null, [36, 10], [36, 26]]]], ["element", "action", ["survey", ["get", "user", ["loc", [null, [37, 36], [37, 40]]]]], [], ["loc", [null, [37, 18], [37, 42]]]]],
+            locals: [],
+            templates: []
+          };
+        })();
+        return {
+          meta: {
+            "fragmentReason": false,
+            "revision": "Ember@2.6.2",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 9,
+                "column": 4
+              },
+              "end": {
+                "line": 42,
+                "column": 2
+              }
+            },
+            "moduleName": "game/templates/completed.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("      ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createElement("p");
+            var el2 = dom.createTextNode("Congradulations ");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createComment("");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createTextNode(", you've completed the level!");
+            dom.appendChild(el1, el2);
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n  ");
+            dom.appendChild(el0, el1);
+            var el1 = dom.createElement("div");
+            dom.setAttribute(el1, "class", "form-horizontal form-group form-group-lg row");
+            var el2 = dom.createTextNode("\n    ");
+            dom.appendChild(el1, el2);
+            var el2 = dom.createElement("div");
+            dom.setAttribute(el2, "class", "col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4");
+            var el3 = dom.createTextNode("\n      ");
+            dom.appendChild(el2, el3);
+            var el3 = dom.createElement("div");
+            dom.setAttribute(el3, "class", "container");
+            var el4 = dom.createTextNode("\n");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createComment("");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createTextNode("        ");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createComment("");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createTextNode("\n");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createComment("");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createComment("");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createComment("");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createComment("");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createComment("");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createTextNode("    ");
+            dom.appendChild(el3, el4);
+            dom.appendChild(el2, el3);
+            var el3 = dom.createTextNode("\n    ");
+            dom.appendChild(el2, el3);
+            dom.appendChild(el1, el2);
+            var el2 = dom.createTextNode("\n  ");
+            dom.appendChild(el1, el2);
+            dom.appendChild(el0, el1);
+            var el1 = dom.createTextNode("\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+            var element6 = dom.childAt(fragment, [3, 1, 1]);
+            var morphs = new Array(8);
+            morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 1, 1);
+            morphs[1] = dom.createMorphAt(element6, 1, 1);
+            morphs[2] = dom.createMorphAt(element6, 3, 3);
+            morphs[3] = dom.createMorphAt(element6, 5, 5);
+            morphs[4] = dom.createMorphAt(element6, 6, 6);
+            morphs[5] = dom.createMorphAt(element6, 7, 7);
+            morphs[6] = dom.createMorphAt(element6, 8, 8);
+            morphs[7] = dom.createMorphAt(element6, 9, 9);
+            return morphs;
+          },
+          statements: [["content", "user.email", ["loc", [null, [10, 25], [10, 39]]]], ["block", "if", [["subexpr", "eq", ["1", ["get", "currentUrl", ["loc", [null, [14, 22], [14, 32]]]]], [], ["loc", [null, [14, 14], [14, 33]]]]], [], 0, null, ["loc", [null, [14, 8], [17, 15]]]], ["content", "currentUrl", ["loc", [null, [18, 8], [18, 22]]]], ["block", "if", [["subexpr", "eq", ["2", ["get", "currentUrl", ["loc", [null, [19, 22], [19, 32]]]]], [], ["loc", [null, [19, 14], [19, 33]]]]], [], 1, null, ["loc", [null, [19, 8], [22, 15]]]], ["block", "if", [["subexpr", "eq", ["3", ["get", "currentUrl", ["loc", [null, [23, 22], [23, 32]]]]], [], ["loc", [null, [23, 14], [23, 33]]]]], [], 2, null, ["loc", [null, [23, 8], [26, 15]]]], ["block", "if", [["subexpr", "eq", ["4", ["get", "currentUrl", ["loc", [null, [27, 22], [27, 32]]]]], [], ["loc", [null, [27, 14], [27, 33]]]]], [], 3, null, ["loc", [null, [27, 8], [30, 15]]]], ["block", "if", [["subexpr", "eq", ["5", ["get", "currentUrl", ["loc", [null, [31, 22], [31, 32]]]]], [], ["loc", [null, [31, 14], [31, 33]]]]], [], 4, null, ["loc", [null, [31, 8], [34, 15]]]], ["block", "if", [["subexpr", "eq", ["6", ["get", "currentUrl", ["loc", [null, [35, 22], [35, 32]]]]], [], ["loc", [null, [35, 14], [35, 33]]]]], [], 5, null, ["loc", [null, [35, 8], [38, 15]]]]],
+          locals: [],
+          templates: [child0, child1, child2, child3, child4, child5]
+        };
+      })();
       return {
         meta: {
           "fragmentReason": false,
@@ -2088,257 +2515,43 @@ define("game/templates/completed", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 12,
-              "column": 8
+              "line": 8,
+              "column": 2
             },
             "end": {
-              "line": 15,
-              "column": 8
+              "line": 43,
+              "column": 0
             }
           },
           "moduleName": "game/templates/completed.hbs"
         },
         isEmpty: false,
-        arity: 0,
+        arity: 1,
         cachedFragment: null,
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("          ");
-          dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("button");
-          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-          var el2 = dom.createTextNode("Next Level");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element4 = dom.childAt(fragment, [3]);
-          var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          morphs[1] = dom.createElementMorph(element4);
+          var morphs = new Array(1);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
+          dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["content", "beginner-two", ["loc", [null, [13, 10], [13, 26]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [14, 18], [14, 44]]]]],
-        locals: [],
-        templates: []
-      };
-    })();
-    var child2 = (function () {
-      return {
-        meta: {
-          "fragmentReason": false,
-          "revision": "Ember@2.6.2",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 16,
-              "column": 8
-            },
-            "end": {
-              "line": 19,
-              "column": 8
-            }
-          },
-          "moduleName": "game/templates/completed.hbs"
-        },
-        isEmpty: false,
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("button");
-          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-          var el2 = dom.createTextNode("Next Level");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element3 = dom.childAt(fragment, [3]);
-          var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          morphs[1] = dom.createElementMorph(element3);
-          return morphs;
-        },
-        statements: [["content", "beginner-three", ["loc", [null, [17, 10], [17, 28]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [18, 18], [18, 44]]]]],
-        locals: [],
-        templates: []
-      };
-    })();
-    var child3 = (function () {
-      return {
-        meta: {
-          "fragmentReason": false,
-          "revision": "Ember@2.6.2",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 20,
-              "column": 8
-            },
-            "end": {
-              "line": 23,
-              "column": 8
-            }
-          },
-          "moduleName": "game/templates/completed.hbs"
-        },
-        isEmpty: false,
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("button");
-          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-          var el2 = dom.createTextNode("Next Level");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element2 = dom.childAt(fragment, [3]);
-          var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          morphs[1] = dom.createElementMorph(element2);
-          return morphs;
-        },
-        statements: [["content", "beginner-four", ["loc", [null, [21, 10], [21, 27]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [22, 18], [22, 44]]]]],
-        locals: [],
-        templates: []
-      };
-    })();
-    var child4 = (function () {
-      return {
-        meta: {
-          "fragmentReason": false,
-          "revision": "Ember@2.6.2",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 24,
-              "column": 8
-            },
-            "end": {
-              "line": 27,
-              "column": 8
-            }
-          },
-          "moduleName": "game/templates/completed.hbs"
-        },
-        isEmpty: false,
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("button");
-          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-          var el2 = dom.createTextNode("Next Level");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element1 = dom.childAt(fragment, [3]);
-          var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          morphs[1] = dom.createElementMorph(element1);
-          return morphs;
-        },
-        statements: [["content", "beginner-five", ["loc", [null, [25, 10], [25, 27]]]], ["element", "action", ["getCurrentUrl"], [], ["loc", [null, [26, 18], [26, 44]]]]],
-        locals: [],
-        templates: []
-      };
-    })();
-    var child5 = (function () {
-      return {
-        meta: {
-          "fragmentReason": false,
-          "revision": "Ember@2.6.2",
-          "loc": {
-            "source": null,
-            "start": {
-              "line": 28,
-              "column": 8
-            },
-            "end": {
-              "line": 31,
-              "column": 8
-            }
-          },
-          "moduleName": "game/templates/completed.hbs"
-        },
-        isEmpty: false,
-        arity: 0,
-        cachedFragment: null,
-        hasRendered: false,
-        buildFragment: function buildFragment(dom) {
-          var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createComment("");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n          ");
-          dom.appendChild(el0, el1);
-          var el1 = dom.createElement("button");
-          dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-          var el2 = dom.createTextNode("Survey");
-          dom.appendChild(el1, el2);
-          dom.appendChild(el0, el1);
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
-          return el0;
-        },
-        buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-          var element0 = dom.childAt(fragment, [3]);
-          var morphs = new Array(2);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          morphs[1] = dom.createElementMorph(element0);
-          return morphs;
-        },
-        statements: [["content", "beginner-six", ["loc", [null, [29, 10], [29, 26]]]], ["element", "action", ["survey"], [], ["loc", [null, [30, 18], [30, 37]]]]],
-        locals: [],
-        templates: []
+        statements: [["block", "if", [["subexpr", "eq", [["get", "session.data.email", ["loc", [null, [9, 14], [9, 32]]]], ["get", "user.email", ["loc", [null, [9, 33], [9, 43]]]]], [], ["loc", [null, [9, 10], [9, 44]]]]], [], 0, null, ["loc", [null, [9, 4], [42, 9]]]]],
+        locals: ["user"],
+        templates: [child0]
       };
     })();
     return {
       meta: {
         "fragmentReason": {
-          "name": "triple-curlies"
+          "name": "missing-wrapper",
+          "problems": ["multiple-nodes"]
         },
         "revision": "Ember@2.6.2",
         "loc": {
@@ -2348,7 +2561,7 @@ define("game/templates/completed", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 36,
+            "line": 45,
             "column": 0
           }
         },
@@ -2360,6 +2573,14 @@ define("game/templates/completed", ["exports"], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
+        var el1 = dom.createElement("nav");
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        dom.appendChild(el0, el1);
+        var el1 = dom.createTextNode("\n");
+        dom.appendChild(el0, el1);
         var el1 = dom.createElement("div");
         dom.setAttribute(el1, "class", "jumbotron text-center");
         var el2 = dom.createTextNode("\n  ");
@@ -2368,54 +2589,9 @@ define("game/templates/completed", ["exports"], function (exports) {
         dom.setAttribute(el2, "id", "new-logo");
         dom.setAttribute(el2, "src", "assets/images/logo.png");
         dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("p");
-        var el3 = dom.createTextNode("Congradulations, you've completed the level!");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
-        var el2 = dom.createTextNode("\n  ");
-        dom.appendChild(el1, el2);
-        var el2 = dom.createElement("div");
-        dom.setAttribute(el2, "class", "form-horizontal form-group form-group-lg row");
-        var el3 = dom.createTextNode("\n    ");
-        dom.appendChild(el2, el3);
-        var el3 = dom.createElement("div");
-        dom.setAttribute(el3, "class", "col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4");
-        var el4 = dom.createTextNode("\n      ");
-        dom.appendChild(el3, el4);
-        var el4 = dom.createElement("div");
-        dom.setAttribute(el4, "class", "container");
-        var el5 = dom.createTextNode("\n");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createComment("");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("        ");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createComment("");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("\n");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createComment("");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createComment("");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createComment("");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createComment("");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createComment("");
-        dom.appendChild(el4, el5);
-        var el5 = dom.createTextNode("    ");
-        dom.appendChild(el4, el5);
-        dom.appendChild(el3, el4);
-        var el4 = dom.createTextNode("\n    ");
-        dom.appendChild(el3, el4);
-        dom.appendChild(el2, el3);
-        var el3 = dom.createTextNode("\n  ");
-        dom.appendChild(el2, el3);
-        dom.appendChild(el1, el2);
         var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
@@ -2423,20 +2599,14 @@ define("game/templates/completed", ["exports"], function (exports) {
         return el0;
       },
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-        var element6 = dom.childAt(fragment, [0, 5, 1, 1]);
-        var morphs = new Array(7);
-        morphs[0] = dom.createMorphAt(element6, 1, 1);
-        morphs[1] = dom.createMorphAt(element6, 3, 3);
-        morphs[2] = dom.createMorphAt(element6, 5, 5);
-        morphs[3] = dom.createMorphAt(element6, 6, 6);
-        morphs[4] = dom.createMorphAt(element6, 7, 7);
-        morphs[5] = dom.createMorphAt(element6, 8, 8);
-        morphs[6] = dom.createMorphAt(element6, 9, 9);
+        var morphs = new Array(2);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 1, 1);
+        morphs[1] = dom.createMorphAt(dom.childAt(fragment, [2]), 3, 3);
         return morphs;
       },
-      statements: [["block", "if", [["subexpr", "eq", ["1", ["get", "currentUrl", ["loc", [null, [7, 22], [7, 32]]]]], [], ["loc", [null, [7, 14], [7, 33]]]]], [], 0, null, ["loc", [null, [7, 8], [10, 15]]]], ["content", "currentUrl", ["loc", [null, [11, 8], [11, 22]]]], ["block", "if", [["subexpr", "eq", ["2", ["get", "currentUrl", ["loc", [null, [12, 22], [12, 32]]]]], [], ["loc", [null, [12, 14], [12, 33]]]]], [], 1, null, ["loc", [null, [12, 8], [15, 15]]]], ["block", "if", [["subexpr", "eq", ["3", ["get", "currentUrl", ["loc", [null, [16, 22], [16, 32]]]]], [], ["loc", [null, [16, 14], [16, 33]]]]], [], 2, null, ["loc", [null, [16, 8], [19, 15]]]], ["block", "if", [["subexpr", "eq", ["4", ["get", "currentUrl", ["loc", [null, [20, 22], [20, 32]]]]], [], ["loc", [null, [20, 14], [20, 33]]]]], [], 3, null, ["loc", [null, [20, 8], [23, 15]]]], ["block", "if", [["subexpr", "eq", ["5", ["get", "currentUrl", ["loc", [null, [24, 22], [24, 32]]]]], [], ["loc", [null, [24, 14], [24, 33]]]]], [], 4, null, ["loc", [null, [24, 8], [27, 15]]]], ["block", "if", [["subexpr", "eq", ["6", ["get", "currentUrl", ["loc", [null, [28, 22], [28, 32]]]]], [], ["loc", [null, [28, 14], [28, 33]]]]], [], 5, null, ["loc", [null, [28, 8], [31, 15]]]]],
+      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [2, 8], [2, 31]]]]], [], 0, null, ["loc", [null, [2, 2], [4, 9]]]], ["block", "each", [["get", "model", ["loc", [null, [8, 10], [8, 15]]]]], [], 1, null, ["loc", [null, [8, 2], [43, 9]]]]],
       locals: [],
-      templates: [child0, child1, child2, child3, child4, child5]
+      templates: [child0, child1]
     };
   })());
 });
@@ -11390,7 +11560,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+bb7b25a9"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+1077069a"});
 }
 
 /* jshint ignore:end */
