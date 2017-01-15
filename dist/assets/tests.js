@@ -94,7 +94,7 @@ define('game/tests/controllers/completed.jshint', ['exports'], function (exports
   QUnit.module('JSHint | controllers/completed.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/completed.js should pass jshint.\ncontrollers/completed.js: line 3, col 30, \'Controller\' is defined but never used.\n\n1 error');
+    assert.ok(true, 'controllers/completed.js should pass jshint.');
   });
 });
 define('game/tests/controllers/index.jshint', ['exports'], function (exports) {

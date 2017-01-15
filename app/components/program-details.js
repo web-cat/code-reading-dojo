@@ -33,9 +33,9 @@ export default Component.extend({
       this.set('errors', this.get('level').split(" "));
     },
     clickCode(errorindexes) {
-      console.log('$$$$$$$$$$$$$$$$$$');
-    //  var e = this.session.data.email;
-    //  console.log(e);
+      //console.log('$$$$$$$$$$$$$$$$$$');
+      //var e = this.session.data.email;
+      // console.log(e);
       // var store = this.get('store');
       // var email = store.findAll('program');
       // //store.query('user', { email: '7@test.com' });

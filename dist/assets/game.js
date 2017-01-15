@@ -491,9 +491,9 @@ define('game/components/program-details', ['exports', 'ember'], function (export
         this.set('errors', this.get('level').split(" "));
       },
       clickCode: function clickCode(errorindexes) {
-        console.log('$$$$$$$$$$$$$$$$$$');
-        //  var e = this.session.data.email;
-        //  console.log(e);
+        //console.log('$$$$$$$$$$$$$$$$$$');
+        //var e = this.session.data.email;
+        // console.log(e);
         // var store = this.get('store');
         // var email = store.findAll('program');
         // //store.query('user', { email: '7@test.com' });
@@ -692,7 +692,6 @@ define('game/controllers/application', ['exports', 'ember'], function (exports, 
 });
 define('game/controllers/completed', ['exports', 'ember'], function (exports, _ember) {
   var service = _ember['default'].inject.service;
-  var Controller = _ember['default'].Controller;
   exports['default'] = _ember['default'].Controller.extend({
     session: service('session'),
     currentUser: service('current-user'),
@@ -710,11 +709,19 @@ define('game/controllers/completed', ['exports', 'ember'], function (exports, _e
         // console.log(this.get('currentUrl'));
         this.set('clicked', 'true');
 
-        console.log('*********************');
-        console.log(JSON.stringify(user));
-        user.set('levelcompleted', 'DOLAKI');
-        console.log(JSON.stringify(user));
-        user.save();
+        // console.log('*********************');
+        // console.log(JSON.stringify(user));
+        var currentLevel = user.get('levelcompleted');
+        var thisLevel = this.get('currentUrl') - 1;
+        // console.log('*********************');
+        // console.log(currentLevel);
+        // console.log(thisLevel);
+        if (currentLevel < thisLevel) {
+          user.set('levelcompleted', thisLevel);
+          user.save();
+        }
+
+        //console.log(JSON.stringify(user));
         window.location.replace(newUrl);
       },
       unclicked: function unclicked() {
@@ -11560,7 +11567,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+1077069a"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+01a01405"});
 }
 
 /* jshint ignore:end */

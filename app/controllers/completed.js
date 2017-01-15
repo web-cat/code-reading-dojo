@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { inject: { service }, Controller } = Ember;
+const { inject: { service } } = Ember;
 
 export default Ember.Controller.extend({
   session:     service('session'),
@@ -19,11 +19,19 @@ export default Ember.Controller.extend({
       // console.log(this.get('currentUrl'));
       this.set('clicked','true');
 
-      console.log('*********************');
-      console.log(JSON.stringify(user));
-      user.set('levelcompleted', 'DOLAKI');
-      console.log(JSON.stringify(user));
-      user.save();
+      // console.log('*********************');
+      // console.log(JSON.stringify(user));
+      var currentLevel = user.get('levelcompleted');
+      var thisLevel = this.get('currentUrl') - 1;
+      // console.log('*********************');
+      // console.log(currentLevel);
+      // console.log(thisLevel);
+      if (currentLevel < thisLevel) {
+        user.set('levelcompleted', thisLevel);
+        user.save();
+      }
+
+      //console.log(JSON.stringify(user));
       window.location.replace(newUrl);
     },
     unclicked: function(){
