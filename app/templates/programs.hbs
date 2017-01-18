@@ -9,7 +9,7 @@
 </div>
 {{#each model as |program|}}
   {{#if (eq clicked 'true')}}
-    {{#if (eq program.difficulty "beginner")}}
+
       {{#if (eq program.level currentUrl)}}
           {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button" invokeAction=(action 'clicked')}}
             Back to Menu
@@ -21,7 +21,7 @@
               Next Level
             {{/link-to}}
           </span>
-      {{/if}}
+      
     {{/if}}
   {{/if}}
 {{/each}}

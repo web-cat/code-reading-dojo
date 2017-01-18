@@ -22,12 +22,8 @@
           {{#link-to 'programs' p.level class="item-completed"}}
             <img class="item-completed" src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
           {{/link-to}}
-          <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
         {{/if}}
       {{/each}}
-
-      <br>
-      <br>
 
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'intermediate')}}
@@ -38,9 +34,6 @@
         {{/if}}
       {{/each}}
 
-      <br>
-      <br>
-
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'advanced')}}
           {{#link-to 'programs' p.level class="item-notcompleted"}}
@@ -49,6 +42,9 @@
           <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
         {{/if}}
       {{/each}}
+
+
+
     </div>
     {{#link-to 'survey' class="btn btn-primary" id="survey"}}
       Survey
