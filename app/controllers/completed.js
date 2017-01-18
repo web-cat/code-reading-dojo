@@ -28,9 +28,11 @@ export default Ember.Controller.extend({
       // console.log(thisLevel);
       if (currentLevel < thisLevel) {
         user.set('levelcompleted', thisLevel);
+        this.set('session.data.level',thisLevel);
         user.save();
       }
-
+      console.log("^%^%^%^%^%^%^%^%^%^%^");
+      console.log(this.get('session.data.level'));
       //console.log(JSON.stringify(user));
       window.location.replace(newUrl);
     },

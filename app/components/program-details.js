@@ -87,6 +87,17 @@ export default Component.extend({
         tap.set('time', duration);
         tap.set('level', level);
 
+        if (parseInt(level) > 6 && parseInt(level) < 13) {
+          Ember.$('#fourth-score').attr("class","star-icon");
+        }
+
+        if (parseInt(level) > 12) {
+          if ( current.get('plusCount') < 4) {
+          Ember.$('#fourth-score').attr("class","star-icon");
+        }
+          Ember.$('#fifth-score').attr("class","star-icon");
+        }
+
       	Ember.$(this).css("background-color","yellow");
         var message = s;
         var k = 0;
@@ -167,6 +178,10 @@ export default Component.extend({
         if (current.get('plusCount') === 4 ) {
           Ember.$('#fourth-score').attr("class","star-icon full");
         }
+        if (current.get('plusCount') === 5 ) {
+          Ember.$('#fifth-score').attr("class","star-icon full");
+        }
+
         if (current.get('plusCount') === (len - 1) ) {
            if (current.get('minusCount') < (len - 1) ) {
             current.get('notify').warning("You Win! Click on the Next Level.", {closeAfter: 10000 });

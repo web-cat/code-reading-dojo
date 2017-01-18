@@ -14,57 +14,56 @@
 <img id="new-logo" src="assets/images/logo.png" >
 <p>Select an excercise you want to play</p>
   <div class="form-horizontal form-group form-group-lg row">
-  <!-- <div class="col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4"> -->
-  <!-- <button {{action "clickedBeginner"}} class="btn btn-info btn-lg btn-block">Beginners</button> -->
+
     <div class="levels">
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'beginner')}}
-          {{#link-to 'programs' p.level class="item-completed"}}
-            <img class="item-completed" src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
+        {{#if (gt session.data.level p.level)}}
+          {{#link-to 'programs' p.level}}
+            <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
           {{/link-to}}
+          {{else}}
+          {{#link-to 'programs' p.level}}
+            <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
+          {{/link-to}}
+        {{/if}}
         {{/if}}
       {{/each}}
 
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'intermediate')}}
-          {{#link-to 'programs' p.level class="item-notcompleted"}}
-            <img class="item-notcompleted" src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
-          {{/link-to}}
-          <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
+          {{#if (gt session.data.level p.level)}}
+            {{#link-to 'programs' p.level}}
+              <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
+            {{/link-to}}
+          {{else}}
+            {{#link-to 'programs' p.level}}
+              <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
+            {{/link-to}}
+          {{/if}}
         {{/if}}
       {{/each}}
 
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'advanced')}}
-          {{#link-to 'programs' p.level class="item-notcompleted"}}
-              <img class="item-notcompleted" src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
-          {{/link-to}}
-          <!-- {{#link-to 'programs' p.level class="btn btn-primary btn-lg" id='beginner-item'}}Level {{p.level}}{{/link-to}} -->
+          {{#if (gt session.data.level p.level)}}
+            {{#link-to 'programs' p.level}}
+                <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
+            {{/link-to}}
+          {{else}}
+            {{#link-to 'programs' p.level}}
+                <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
+            {{/link-to}}
+          {{/if}}
         {{/if}}
       {{/each}}
-
-
-
     </div>
+
     {{#link-to 'survey' class="btn btn-primary" id="survey"}}
       Survey
     {{/link-to}}
     {{#link-to 'info' class="btn btn-primary" }}
       Info
     {{/link-to}}
-          <!-- {{#link-to 'programs' 1 class="btn btn-primary btn-lg btn-block" invokeAction=(action 'clickedAdvanced')}}Intermediates{{/link-to}}
-          {{#if (eq intermediateClicked 'true')}}
-            {{#each programs as |program|}}
-              Test
-            {{/each}}
-          {{/if}}
-
-          {{#link-to 'programs' 1 class="btn btn-primary btn-lg btn-block" }}Advancedes{{/link-to}}
-          {{#if (eq advancedClicked 'true')}}
-          {{#each programs as |program|}}
-            Test3
-          {{/each}}
-          {{/if}} -->
-      <!-- </div> -->
     </div>
 </div>

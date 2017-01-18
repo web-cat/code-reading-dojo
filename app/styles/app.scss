@@ -192,6 +192,11 @@ pre {
   color: black;
 }
 
+#signup-login {
+  float: left;
+  color: #FF6600;
+}
+
 #start-button{
   background-color: #FF6600;
   border-color: #660000;
@@ -493,6 +498,16 @@ fieldset {
 }
 
 /*Make yellow stars for the score*/
+.star-icon {
+  color: #ddd;
+  font-size: 5vmin;
+  position: relative;
+}
+
+.hide-star-icon {
+  display: none;
+}
+
 .star-icon {
   color: #ddd;
   font-size: 5vmin;

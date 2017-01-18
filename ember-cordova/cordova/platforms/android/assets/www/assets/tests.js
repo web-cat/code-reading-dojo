@@ -169,15 +169,6 @@ define('game/tests/flows.jshint', ['exports'], function (exports) {
     assert.ok(true, 'flows.js should pass jshint.');
   });
 });
-define('game/tests/game/templates/components/programs.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | game/templates/components/programs.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'game/templates/components/programs.js should pass jshint.');
-  });
-});
 define('game/tests/helpers/add.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -374,6 +365,15 @@ define('game/tests/models/advanced.jshint', ['exports'], function (exports) {
     assert.ok(true, 'models/advanced.js should pass jshint.');
   });
 });
+define('game/tests/models/completed.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/completed.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/completed.js should pass jshint.');
+  });
+});
 define('game/tests/models/info.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -453,6 +453,15 @@ define('game/tests/routes/application.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/application.js should pass jshint.');
+  });
+});
+define('game/tests/routes/completed.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/completed.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/completed.js should pass jshint.');
   });
 });
 define('game/tests/routes/index.jshint', ['exports'], function (exports) {
