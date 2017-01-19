@@ -9,7 +9,7 @@ export default Ember.Controller.extend({
       // console.log(newUser.get('email'));
       // console.log(newUser.get('password'));
       newUser.save()
-      .catch((error) => {
+      .catch(() => {
         this.get('session').authenticate('authenticator:devise', newUser.get('email'), newUser.get('password'))
         .catch((reason) => {
           this.set('errorMessage', reason.error ||reason);

@@ -121,7 +121,7 @@ define('game/tests/controllers/login.jshint', ['exports'], function (exports) {
   QUnit.module('JSHint | controllers/login.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(true, 'controllers/login.js should pass jshint.');
+    assert.ok(false, 'controllers/login.js should pass jshint.\ncontrollers/login.js: line 30, col 52, Missing semicolon.\ncontrollers/login.js: line 34, col 16, \'completed\' used out of scope.\ncontrollers/login.js: line 27, col 11, \'users\' is defined but never used.\n\n3 errors');
   });
 });
 define('game/tests/controllers/new.jshint', ['exports'], function (exports) {
@@ -253,6 +253,15 @@ define('game/tests/helpers/eq.jshint', ['exports'], function (exports) {
     assert.ok(true, 'helpers/eq.js should pass jshint.');
   });
 });
+define('game/tests/helpers/gt.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | helpers/gt.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'helpers/gt.js should pass jshint.');
+  });
+});
 define('game/tests/helpers/module-for-acceptance', ['exports', 'qunit', 'ember', 'game/tests/helpers/start-app', 'game/tests/helpers/destroy-app'], function (exports, _qunit, _ember, _gameTestsHelpersStartApp, _gameTestsHelpersDestroyApp) {
   var Promise = _ember['default'].RSVP.Promise;
 
@@ -381,6 +390,15 @@ define('game/tests/models/info.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'models/info.js should pass jshint.');
+  });
+});
+define('game/tests/models/login.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/login.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/login.js should pass jshint.');
   });
 });
 define('game/tests/models/new.jshint', ['exports'], function (exports) {

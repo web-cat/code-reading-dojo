@@ -37,7 +37,7 @@
               <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
             {{/link-to}}
           {{else}}
-            {{#link-to 'programs' p.level}}
+            {{#link-to 'programs' p.level class="item-notcompleted"}}
               <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
             {{/link-to}}
           {{/if}}

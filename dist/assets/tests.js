@@ -121,7 +121,7 @@ define('game/tests/controllers/login.jshint', ['exports'], function (exports) {
   QUnit.module('JSHint | controllers/login.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/login.js should pass jshint.\ncontrollers/login.js: line 30, col 52, Missing semicolon.\ncontrollers/login.js: line 34, col 16, \'completed\' used out of scope.\ncontrollers/login.js: line 27, col 11, \'users\' is defined but never used.\n\n3 errors');
+    assert.ok(true, 'controllers/login.js should pass jshint.');
   });
 });
 define('game/tests/controllers/new.jshint', ['exports'], function (exports) {
@@ -148,7 +148,7 @@ define('game/tests/controllers/signup.jshint', ['exports'], function (exports) {
   QUnit.module('JSHint | controllers/signup.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/signup.js should pass jshint.\ncontrollers/signup.js: line 12, col 15, \'error\' is defined but never used.\n\n1 error');
+    assert.ok(true, 'controllers/signup.js should pass jshint.');
   });
 });
 define('game/tests/controllers/survey.jshint', ['exports'], function (exports) {

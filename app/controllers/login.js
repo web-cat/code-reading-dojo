@@ -24,14 +24,13 @@ export default Ember.Controller.extend({
       var useremail = this.get('email');
       // console.log("LOGGGGIIIIIN");
       var m = this.get('model');
-      var users = m.map(function(model) {
+      m.map(function(model) {
       var email = model.get('email');
       if (email===useremail) {
-        var completed = model.get('levelcompleted')
+        var completed = model.get('levelcompleted');
         // console.log("YEEEEEY");
         current.set('session.data.level', completed);
       }
-        return completed;
       });
       // this.set('session.data.level',users[0]);
       // console.log(this.get('session.data.level'));

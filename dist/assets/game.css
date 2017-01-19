@@ -5853,7 +5853,9 @@ pre {
 
 .item-notcompleted {
   opacity: 0.5;
-  width: 25%; }
+  width: 25%;
+  pointer-events: none;
+  cursor: default; }
 
 .item-completed {
   width: 25%; }
@@ -5926,7 +5928,8 @@ pre {
   background-color: #FF6600;
   border-color: #660000;
   color: #660000;
-  margin-top: 10px; }
+  margin-top: 10px;
+  margin-bottom: 10px; }
 
 #play {
   text-align: center;
@@ -5949,6 +5952,14 @@ pre {
   margin-bottom: 0px; }
 
 #signup:hover {
+  background-color: #FF6600;
+  color: black; }
+
+#confirm-button {
+  background-color: #660000;
+  border-color: #660000; }
+
+#confirm-button:hover {
   background-color: #FF6600;
   color: black; }
 
@@ -6154,12 +6165,6 @@ fieldset {
   margin: 0 0 5px;
   padding: 10px; }
 
-#contact input[type="text"]:hover, #contact input[type="email"]:hover, #contact input[type="tel"]:hover, #contact input[type="url"]:hover, #contact textarea:hover {
-  -webkit-transition: border-color 0.3s ease-in-out;
-  -moz-transition: border-color 0.3s ease-in-out;
-  transition: border-color 0.3s ease-in-out;
-  border: 1px solid #AAA; }
-
 #contact textarea {
   height: 100px;
   max-width: 100%;
@@ -6176,17 +6181,13 @@ fieldset {
   font-size: 15px; }
 
 #contact button[type="submit"]:hover {
-  background: #09C;
+  background: #FF6600;
   -webkit-transition: background 0.3s ease-in-out;
   -moz-transition: background 0.3s ease-in-out;
   transition: background-color 0.3s ease-in-out; }
 
 #contact button[type="submit"]:active {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); }
-
-#contact input:focus, #contact textarea:focus {
-  outline: 0;
-  border: 1px solid #999; }
 
 ::-webkit-input-placeholder {
   color: #888; }
@@ -6331,5 +6332,54 @@ fieldset {
 
 .notice-danger > strong {
   color: #d73814; }
+
+#footer {
+  width: 100%;
+  /*Put content to the center*/
+  text-align: center;
+  color: white;
+  height: 60px;
+  overflow: auto; }
+
+#footer-content {
+  display: block;
+  margin: 0 auto;
+  overflow: auto; }
+
+#footer label {
+  display: inline;
+  /*font-size: 15px;*/
+  color: white;
+  margin-top: 5px;
+  margin-bottom: 5px; }
+
+#footer button {
+  border: none;
+  background: transparent;
+  text-decoration: underline;
+  padding-left: 10px;
+  color: white;
+  margin-top: 10px;
+  cursor: pointer;
+  margin-bottom: 5px; }
+
+/*Change button text color on hover*/
+#footer button:hover {
+  color: red; }
+
+/*No selection color around the button when button is clicked*/
+#footer button:focus {
+  outline: 0; }
+
+#footer label {
+  margin-left: 15px; }
+
+@media all and (max-width: 400px) {
+  #footer {
+    height: 70px; }
+  #footer button {
+    margin: 0; }
+  #footer label {
+    padding-bottom: 5px; } }
 
 /*# sourceMappingURL=game.css.map */
