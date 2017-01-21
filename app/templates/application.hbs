@@ -1,7 +1,9 @@
 {{!-- app/templates/application.hbs --}}
 {{#if session.isAuthenticated}}
   <button {{action 'invalidateSession'}} class="btn btn-primary btn-lg" id="logout">logout</button>
-
+  {{#link-to 'profile' class="btn btn-primary btn-lg" id="profile" tagName="button"}}
+  Profile
+  {{/link-to}}
 {{else}}
   {{#link-to 'login' class="btn btn-primary btn-lg" id="login" tagName="button"}}
   Login

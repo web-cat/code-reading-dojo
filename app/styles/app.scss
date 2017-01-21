@@ -181,12 +181,17 @@ pre {
 #logout {
   float: right;
   margin-right: 10px;
-  margin-top: 10px;
+  //margin-top: 10px;
   background-color: #660000;
   border-color: #660000;
   padding-top: 1px;
   padding-bottom: 0px;
   display: block;
+}
+
+#logout:hover {
+  background-color: #FF6600;
+  color: black;
 }
 
 #login {
@@ -203,6 +208,21 @@ pre {
   background-color: #FF6600;
   color: black;
 }
+
+#profile {
+  margin-top: 10px;
+  background-color: #660000;
+  border-color: #660000;
+  padding-top: 1px;
+  padding-bottom: 0px;
+  display: block;
+}
+
+#profile:hover {
+  background-color: #FF6600;
+  color: black;
+}
+
 
 #signup-login {
   float: left;

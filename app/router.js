@@ -20,6 +20,8 @@ Router.map(function() {
   this.route('advanced', { path: '/advanced/:advanced_id' });
   this.route('survey');
   this.route('info');
+  this.route('profile');
+  this.route('consent');
   this.route('index', { path: '/' });
 });
 

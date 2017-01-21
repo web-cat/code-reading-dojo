@@ -11,7 +11,9 @@
 
 
 <div class="jumbotron text-center">
-<img id="new-logo" src="assets/images/logo.png" >
+  {{#link-to 'new'}}
+    <img id="new-logo" src="assets/images/logo.png">
+  {{/link-to}}
 <p>Select an excercise you want to play</p>
   <div class="form-horizontal form-group form-group-lg row">
 
@@ -19,11 +21,11 @@
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'beginner')}}
         {{#if (gt session.data.level p.level)}}
-          {{#link-to 'programs' p.level}}
+          {{#link-to 'programs' p.level class="item-completed"}}
             <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
           {{/link-to}}
           {{else}}
-          {{#link-to 'programs' p.level}}
+          {{#link-to 'programs' p.level class="item-notcompleted"}}
             <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
           {{/link-to}}
         {{/if}}
@@ -33,7 +35,7 @@
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'intermediate')}}
           {{#if (gt session.data.level p.level)}}
-            {{#link-to 'programs' p.level}}
+            {{#link-to 'programs' p.level class="item-completed"}}
               <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
             {{/link-to}}
           {{else}}
@@ -47,11 +49,11 @@
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'advanced')}}
           {{#if (gt session.data.level p.level)}}
-            {{#link-to 'programs' p.level}}
+            {{#link-to 'programs' p.level class="item-completed"}}
                 <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
             {{/link-to}}
           {{else}}
-            {{#link-to 'programs' p.level}}
+            {{#link-to 'programs' p.level class="item-notcompleted"}}
                 <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
             {{/link-to}}
           {{/if}}

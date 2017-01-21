@@ -1,5 +1,7 @@
 <div class="jumbotron text-center">
-<img id="new-logo" src="assets/images/logo.png" >
+  {{#link-to 'new'}}
+    <img id="new-logo" src="assets/images/logo.png">
+  {{/link-to}}
 {{#if (eq clicked 'false')}}
   <p>
   Click the word that you think is wrong. You need to find at least three errors in the code.
@@ -21,7 +23,7 @@
               Next Level
             {{/link-to}}
           </span>
-      
+
     {{/if}}
   {{/if}}
 {{/each}}
