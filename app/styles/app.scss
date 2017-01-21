@@ -277,6 +277,19 @@ pre {
   color: white;
 }
 
+#consent-box {
+  overflow-y: scroll;
+  height: 400px;
+  resize: none;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+#consent-title {
+  color: #FF6600;
+  text-align: center;
+}
+
 html,body {padding:0;margin:0;}
 .wrap {
   font:12px Arial, san-serif;
@@ -363,7 +376,7 @@ form .buttons .submit:hover {background-color: #14892c;}
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600);
 
 .container {
-	max-width:400px;
+	max-width:340px;
 	width:100%;
 	margin:0 auto;
 	position:relative;

@@ -121,7 +121,7 @@ define('game/tests/controllers/login.jshint', ['exports'], function (exports) {
   QUnit.module('JSHint | controllers/login.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/login.js should pass jshint.\ncontrollers/login.js: line 30, col 52, Missing semicolon.\ncontrollers/login.js: line 34, col 16, \'completed\' used out of scope.\ncontrollers/login.js: line 27, col 11, \'users\' is defined but never used.\n\n3 errors');
+    assert.ok(true, 'controllers/login.js should pass jshint.');
   });
 });
 define('game/tests/controllers/new.jshint', ['exports'], function (exports) {
@@ -131,6 +131,15 @@ define('game/tests/controllers/new.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'controllers/new.js should pass jshint.');
+  });
+});
+define('game/tests/controllers/profile.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/profile.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'controllers/profile.js should pass jshint.');
   });
 });
 define('game/tests/controllers/programs.jshint', ['exports'], function (exports) {
@@ -148,7 +157,7 @@ define('game/tests/controllers/signup.jshint', ['exports'], function (exports) {
   QUnit.module('JSHint | controllers/signup.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/signup.js should pass jshint.\ncontrollers/signup.js: line 12, col 15, \'error\' is defined but never used.\n\n1 error');
+    assert.ok(true, 'controllers/signup.js should pass jshint.');
   });
 });
 define('game/tests/controllers/survey.jshint', ['exports'], function (exports) {
@@ -365,15 +374,6 @@ define('game/tests/initializers/simple-auth-config.jshint', ['exports'], functio
     assert.ok(true, 'initializers/simple-auth-config.js should pass jshint.');
   });
 });
-define('game/tests/models/advanced.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | models/advanced.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'models/advanced.js should pass jshint.');
-  });
-});
 define('game/tests/models/completed.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -408,6 +408,15 @@ define('game/tests/models/new.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'models/new.js should pass jshint.');
+  });
+});
+define('game/tests/models/profile.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/profile.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/profile.js should pass jshint.');
   });
 });
 define('game/tests/models/program.jshint', ['exports'], function (exports) {
@@ -516,6 +525,15 @@ define('game/tests/routes/new.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/new.js should pass jshint.');
+  });
+});
+define('game/tests/routes/profile.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/profile.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/profile.js should pass jshint.');
   });
 });
 define('game/tests/routes/programs.jshint', ['exports'], function (exports) {

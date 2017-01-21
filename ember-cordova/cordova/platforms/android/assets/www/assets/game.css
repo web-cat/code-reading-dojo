@@ -5966,12 +5966,15 @@ pre {
 #logout {
   float: right;
   margin-right: 10px;
-  margin-top: 10px;
   background-color: #660000;
   border-color: #660000;
   padding-top: 1px;
   padding-bottom: 0px;
   display: block; }
+
+#logout:hover {
+  background-color: #FF6600;
+  color: black; }
 
 #login {
   float: right;
@@ -5983,6 +5986,18 @@ pre {
   display: block; }
 
 #login:hover {
+  background-color: #FF6600;
+  color: black; }
+
+#profile {
+  margin-top: 10px;
+  background-color: #660000;
+  border-color: #660000;
+  padding-top: 1px;
+  padding-bottom: 0px;
+  display: block; }
+
+#profile:hover {
   background-color: #FF6600;
   color: black; }
 
@@ -6028,6 +6043,17 @@ pre {
 #survey-submit:hover {
   background-color: #660000;
   color: white; }
+
+#consent-box {
+  overflow-y: scroll;
+  height: 400px;
+  resize: none;
+  text-align: justify;
+  text-justify: inter-word; }
+
+#consent-title {
+  color: #FF6600;
+  text-align: center; }
 
 html, body {
   padding: 0;
@@ -6126,7 +6152,7 @@ form .buttons .submit:hover {
   background-color: #14892c; }
 
 .container {
-  max-width: 400px;
+  max-width: 340px;
   width: 100%;
   margin: 0 auto;
   position: relative; }
@@ -6165,13 +6191,6 @@ fieldset {
   margin: 0 0 5px;
   padding: 10px; }
 
-#contact input[type="text"]:hover, #contact input[type="email"]:hover, #contact input[type="tel"]:hover, #contact input[type="url"]:hover, #contact textarea:hover {
-  -webkit-transition: border-color 0.3s ease-in-out;
-  -moz-transition: border-color 0.3s ease-in-out;
-  transition: border-color 0.3s ease-in-out;
-  border: 1px solid #AAA;
-  background-color: #FF6600; }
-
 #contact textarea {
   height: 100px;
   max-width: 100%;
@@ -6195,10 +6214,6 @@ fieldset {
 
 #contact button[type="submit"]:active {
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5); }
-
-#contact input:focus, #contact textarea:focus {
-  outline: 0;
-  border: 1px solid #999; }
 
 ::-webkit-input-placeholder {
   color: #888; }

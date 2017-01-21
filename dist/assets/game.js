@@ -10044,9 +10044,47 @@ define("game/templates/components/x-timer", ["exports"], function (exports) {
 });
 define("game/templates/consent", ["exports"], function (exports) {
   exports["default"] = Ember.HTMLBars.template((function () {
+    var child0 = (function () {
+      return {
+        meta: {
+          "fragmentReason": false,
+          "revision": "Ember@2.6.2",
+          "loc": {
+            "source": null,
+            "start": {
+              "line": 2,
+              "column": 2
+            },
+            "end": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          "moduleName": "game/templates/consent.hbs"
+        },
+        isEmpty: false,
+        arity: 0,
+        cachedFragment: null,
+        hasRendered: false,
+        buildFragment: function buildFragment(dom) {
+          var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("    Back to Menu\n");
+          dom.appendChild(el0, el1);
+          return el0;
+        },
+        buildRenderNodes: function buildRenderNodes() {
+          return [];
+        },
+        statements: [],
+        locals: [],
+        templates: []
+      };
+    })();
     return {
       meta: {
-        "fragmentReason": false,
+        "fragmentReason": {
+          "name": "triple-curlies"
+        },
         "revision": "Ember@2.6.2",
         "loc": {
           "source": null,
@@ -10055,7 +10093,7 @@ define("game/templates/consent", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 2,
+            "line": 29,
             "column": 0
           }
         },
@@ -10067,20 +10105,75 @@ define("game/templates/consent", ["exports"], function (exports) {
       hasRendered: false,
       buildFragment: function buildFragment(dom) {
         var el0 = dom.createDocumentFragment();
-        var el1 = dom.createElement("h1");
-        var el2 = dom.createTextNode(" consent ");
+        var el1 = dom.createElement("div");
+        dom.setAttribute(el1, "class", "container");
+        dom.setAttribute(el1, "id", "consent-box");
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createComment("");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("h2");
+        dom.setAttribute(el2, "id", "consent-title");
+        var el3 = dom.createTextNode(" Want to win a $10 Amazon gift card?");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("\n  I would like to invite you to participate in a research project. CodeReadingDojo is a new educationally-oriented mobile game application, aimed at promoting the development of code reading skills in a new and fun way. Data collected during the project will help evaluate the impact of game-based learning on code reading, and results will be published in academic papers and a master’s thesis.\n");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("\nAll data obtained from participants will be kept confidential and will only be reported in combined format. We won’t use your name or any other personally identifiable information in any publications.\n");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("\nYour participation is voluntary and will not affect your grades or relationship with Virginia Tech in any way. Participation in this research will not place you at more than minimal risk of physical or psychological harm. If you agree to participate, you are also giving us permission to use collected data (such as game level completed and completion time) in our research. If you do not wish to participate, simply do not agree at the bottom; you still can play the game. You are free not to answer any questions or withdraw from this study at any time, for any reason. You must be 18 or older to take part in this research. If you are under 18 but still want to play the game, please select disagree below.\n");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("\nPlaying with CodeReadingDojo until you reach level 6 should take approximately an hour, although you may also want to continue to the last level (level 18). You will be able to play each level more than once.\n");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("\nIn exchange for your participation, all people who have completed through level 6 in the game by January 31st 2017 will be entered into a raffle where 20 players will be selected each to receive a $10 Amazon gift card.\n");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("\nShould you have any questions about this study, you may contact Zahra Ghaed (principal investigator), at 540-449-5717, ghaed@vt.edu or Prof. Stephen Edwards, edwards@cs.vt.edu.\n");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n");
+        dom.appendChild(el1, el2);
+        var el2 = dom.createElement("p");
+        var el3 = dom.createTextNode("\nShould you have any questions or concerns about the study’s conduct or your rights as a research subject, or need to report a research-related injury or event, you may contact the VT IRB Chair, Dr. David M. Moore at moored@vt.edu or (540) 231-4991.\n");
+        dom.appendChild(el2, el3);
+        dom.appendChild(el1, el2);
+        var el2 = dom.createTextNode("\n\n");
         dom.appendChild(el1, el2);
         dom.appendChild(el0, el1);
         var el1 = dom.createTextNode("\n");
         dom.appendChild(el0, el1);
         return el0;
       },
-      buildRenderNodes: function buildRenderNodes() {
-        return [];
+      buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+        var morphs = new Array(1);
+        morphs[0] = dom.createMorphAt(dom.childAt(fragment, [0]), 1, 1);
+        return morphs;
       },
-      statements: [],
+      statements: [["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [2, 2], [4, 14]]]]],
       locals: [],
-      templates: []
+      templates: [child0]
     };
   })());
 });
@@ -13557,7 +13650,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+15e331b6"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+468eee6c"});
 }
 
 /* jshint ignore:end */

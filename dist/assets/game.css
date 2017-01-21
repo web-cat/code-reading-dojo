@@ -6044,6 +6044,17 @@ pre {
   background-color: #660000;
   color: white; }
 
+#consent-box {
+  overflow-y: scroll;
+  height: 400px;
+  resize: none;
+  text-align: justify;
+  text-justify: inter-word; }
+
+#consent-title {
+  color: #FF6600;
+  text-align: center; }
+
 html, body {
   padding: 0;
   margin: 0; }
@@ -6141,7 +6152,7 @@ form .buttons .submit:hover {
   background-color: #14892c; }
 
 .container {
-  max-width: 400px;
+  max-width: 340px;
   width: 100%;
   margin: 0 auto;
   position: relative; }
