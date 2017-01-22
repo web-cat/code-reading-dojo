@@ -8,10 +8,8 @@
     {{/link-to}}
 
     {{#each model as |user|}}
-
       {{#if (eq user.email session.data.email)}}
-
-
+        {{#if (nnull user.password)}}
     <table class="table">
       <tbody>
         <tr>
@@ -24,6 +22,10 @@
           <td>{{user.levelcompleted}}</td>
         </tr>
 
+        <tr>
+          <th scope="row">efw</th>
+          <td>{{user.password}}</td>
+        </tr>
 
       </tbody>
     </table>
@@ -34,7 +36,7 @@
         Change
       {{/link-to}}
        
-
+  {{/if}}
     {{/if}}
   {{/each}}
     <h3>Tell us a little about your self</h3>

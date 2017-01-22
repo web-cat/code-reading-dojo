@@ -13650,7 +13650,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+468eee6c"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+01df545c"});
 }
 
 /* jshint ignore:end */

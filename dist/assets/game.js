@@ -732,7 +732,8 @@ define('game/controllers/completed', ['exports', 'ember'], function (exports, _e
         // console.log(currentLevel);
         // console.log(thisLevel);
         if (currentLevel < this.get('currentUrl')) {
-          user.set('levelcompleted', thisLevel);
+
+          user.set('levelcompleted', thisLevel.toString());
           this.set('session.data.level', this.get('currentUrl'));
           user.save();
         }
@@ -833,8 +834,9 @@ define('game/controllers/login', ['exports', 'ember'], function (exports, _ember
         m.map(function (model) {
           var email = model.get('email');
           if (email === useremail) {
-            var completed = model.get('levelcompleted');
-            // console.log("YEEEEEY");
+            var completed = parseInt(model.get('levelcompleted')) + 1;
+            console.log("YEEEEEY");
+            console.log(completed);
             current.set('session.data.level', completed);
           }
         });
@@ -901,24 +903,30 @@ define('game/controllers/signup', ['exports', 'ember'], function (exports, _embe
       save: function save(user) {
         var _this = this;
 
-        var newUser = user;
-        // console.log('+_+_+_+_+_+_+_+_');
-        // console.log(newUser.get('email'));
-        // console.log(newUser.get('password'));
-        newUser.save()['catch'](function () {
-          _this.get('session').authenticate('authenticator:devise', newUser.get('email'), newUser.get('password'))['catch'](function (reason) {
+        //let user = user;
+        var email = _ember['default'].$('#signUpEmailInput').val();
+        var password = _ember['default'].$('#signUpPasswordInput').val();
+        var passwordConfirmation = _ember['default'].$('#signUpConfirmInput').val();
+        var levelcompleted = _ember['default'].$('#levelcompleted').val();
+        var newInfo = user;
+        newInfo.set('email', email);
+        newInfo.set('password', password);
+        newInfo.set('passwordConfirmation', passwordConfirmation);
+        newInfo.set('levelcompleted', levelcompleted);
+        //user.save()
+        newInfo.save()['catch'](function () {
+
+          _this.get('session').authenticate('authenticator:devise', user.get('email'), user.get('password'))['catch'](function (reason) {
             _this.set('errorMessage', reason.error || reason);
             // console.log('######################');
             console.log(_this.get('errorMessage'));
             _this.get('notify').alert(JSON.stringify(_this.get('errorMessage')['errors']));
           });
-          // console.log('****************');
-          // console.log(this.get('email'));
-          // console.log('$$$$$$$$$$$$$');
-          _this.set('session.data.uid', newUser.get('email'));
-          _this.set('session.data.email', newUser.get('email'));
-          _this.set('session.data.authenticated.email', newUser.get('email'));
-          _this.set('session.data.level', 1);
+
+          _this.set('session.data.uid', user.get('email'));
+          _this.set('session.data.email', user.get('email'));
+          _this.set('session.data.authenticated.email', user.get('email'));
+          _this.set('session.data.level', user.get('levelcompleted'));
           // console.log('^^^^^^^^^^^^^^^');
           // console.log(this.get('session.data.level'));
           // var arr = window.location.href.split("/");
@@ -930,10 +938,14 @@ define('game/controllers/signup', ['exports', 'ember'], function (exports, _embe
           // this.set('errorMessage', error);
           // console.log(this.get('errorMessage'));
         });
+        // console.log('+_+_+_+_+_+_+_+_');
+        // console.log(user.get('email'));
+        // console.log(user.get('password'));
+
         // .then(()=>{
         //   this.get('session')
         //   .authenticate('authenticator:devise',
-        //     newUser.get('email'), newUser.get('password'))
+        //     user.get('email'), user.get('password'))
         //   .catch((reason) => {
         //     this.set('errorMessage', reason.error ||reason);
         //   });
@@ -1113,6 +1125,20 @@ define('game/helpers/gt', ['exports', 'ember'], function (exports, _ember) {
     return parseInt(params[0]) >= parseInt(params[1]);
   };
   exports['default'] = _ember['default'].Helper.helper(gt);
+});
+define('game/helpers/neq', ['exports', 'ember'], function (exports, _ember) {
+
+  var neq = function neq(params) {
+    return params[0].length !== 0;
+  };
+  exports['default'] = _ember['default'].Helper.helper(neq);
+});
+define('game/helpers/nnull', ['exports', 'ember'], function (exports, _ember) {
+
+  var nnull = function nnull(params) {
+    return params[0] === null;
+  };
+  exports['default'] = _ember['default'].Helper.helper(nnull);
 });
 define('game/helpers/pluralize', ['exports', 'ember-inflector/lib/helpers/pluralize'], function (exports, _emberInflectorLibHelpersPluralize) {
   exports['default'] = _emberInflectorLibHelpersPluralize['default'];
@@ -1545,16 +1571,6 @@ define('game/models/new', ['exports', 'ember-data/model', 'ember-data/attr'], fu
     errorindexes: (0, _emberDataAttr['default'])('string')
   });
 });
-define('game/models/profile', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
-  // import { belongsTo, hasMany } from 'ember-data/relationships';
-
-  exports['default'] = _emberDataModel['default'].extend({
-    email: (0, _emberDataAttr['default'])('string'),
-    password: (0, _emberDataAttr['default'])('string'),
-    passwordConfirmation: (0, _emberDataAttr['default'])('string'),
-    levelcompleted: (0, _emberDataAttr['default'])('string')
-  });
-});
 define('game/models/program', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
   // import { belongsTo, hasMany } from 'ember-data/relationships';
 
@@ -1563,6 +1579,16 @@ define('game/models/program', ['exports', 'ember-data/model', 'ember-data/attr']
     difficulty: (0, _emberDataAttr['default'])('string'),
     level: (0, _emberDataAttr['default'])('string'),
     errorindexes: (0, _emberDataAttr['default'])('string')
+  });
+});
+define('game/models/signup', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
+  // import { belongsTo, hasMany } from 'ember-data/relationships';
+
+  exports['default'] = _emberDataModel['default'].extend({
+    email: (0, _emberDataAttr['default'])('string'),
+    password: (0, _emberDataAttr['default'])('string'),
+    passwordConfirmation: (0, _emberDataAttr['default'])('string'),
+    levelcompleted: (0, _emberDataAttr['default'])('string')
   });
 });
 define('game/models/survey', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
@@ -2248,261 +2274,6 @@ define("game/templates/completed", ["exports"], function (exports) {
     var child1 = (function () {
       var child0 = (function () {
         var child0 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 15,
-                  "column": 8
-                },
-                "end": {
-                  "line": 18,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element16 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element16);
-              return morphs;
-            },
-            statements: [["content", "beginner-one", ["loc", [null, [16, 10], [16, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [17, 43], [17, 47]]]]], [], ["loc", [null, [17, 18], [17, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child1 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 19,
-                  "column": 8
-                },
-                "end": {
-                  "line": 22,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element15 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element15);
-              return morphs;
-            },
-            statements: [["content", "beginner-two", ["loc", [null, [20, 10], [20, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [21, 43], [21, 47]]]]], [], ["loc", [null, [21, 18], [21, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child2 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 23,
-                  "column": 8
-                },
-                "end": {
-                  "line": 26,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element14 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element14);
-              return morphs;
-            },
-            statements: [["content", "beginner-three", ["loc", [null, [24, 10], [24, 28]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [25, 43], [25, 47]]]]], [], ["loc", [null, [25, 18], [25, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child3 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 27,
-                  "column": 8
-                },
-                "end": {
-                  "line": 30,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element13 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element13);
-              return morphs;
-            },
-            statements: [["content", "beginner-four", ["loc", [null, [28, 10], [28, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [29, 43], [29, 47]]]]], [], ["loc", [null, [29, 18], [29, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child4 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 31,
-                  "column": 8
-                },
-                "end": {
-                  "line": 34,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element12 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element12);
-              return morphs;
-            },
-            statements: [["content", "beginner-five", ["loc", [null, [32, 10], [32, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [33, 43], [33, 47]]]]], [], ["loc", [null, [33, 18], [33, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child5 = (function () {
           var child0 = (function () {
             return {
               meta: {
@@ -2511,12 +2282,12 @@ define("game/templates/completed", ["exports"], function (exports) {
                 "loc": {
                   "source": null,
                   "start": {
-                    "line": 39,
-                    "column": 10
+                    "line": 18,
+                    "column": 8
                   },
                   "end": {
-                    "line": 41,
-                    "column": 10
+                    "line": 21,
+                    "column": 8
                   }
                 },
                 "moduleName": "game/templates/completed.hbs"
@@ -2527,14 +2298,931 @@ define("game/templates/completed", ["exports"], function (exports) {
               hasRendered: false,
               buildFragment: function buildFragment(dom) {
                 var el0 = dom.createDocumentFragment();
-                var el1 = dom.createTextNode("            Survey\n");
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
                 dom.appendChild(el0, el1);
                 return el0;
               },
-              buildRenderNodes: function buildRenderNodes() {
-                return [];
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element16 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element16);
+                return morphs;
               },
-              statements: [],
+              statements: [["content", "beginner-one", ["loc", [null, [19, 10], [19, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [20, 43], [20, 47]]]]], [], ["loc", [null, [20, 18], [20, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child1 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 22,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 25,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element15 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element15);
+                return morphs;
+              },
+              statements: [["content", "beginner-two", ["loc", [null, [23, 10], [23, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [24, 43], [24, 47]]]]], [], ["loc", [null, [24, 18], [24, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child2 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 26,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 29,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element14 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element14);
+                return morphs;
+              },
+              statements: [["content", "beginner-three", ["loc", [null, [27, 10], [27, 28]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [28, 43], [28, 47]]]]], [], ["loc", [null, [28, 18], [28, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child3 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 30,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 33,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element13 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element13);
+                return morphs;
+              },
+              statements: [["content", "beginner-four", ["loc", [null, [31, 10], [31, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [32, 43], [32, 47]]]]], [], ["loc", [null, [32, 18], [32, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child4 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 34,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 37,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element12 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element12);
+                return morphs;
+              },
+              statements: [["content", "beginner-five", ["loc", [null, [35, 10], [35, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [36, 43], [36, 47]]]]], [], ["loc", [null, [36, 18], [36, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child5 = (function () {
+            var child0 = (function () {
+              return {
+                meta: {
+                  "fragmentReason": false,
+                  "revision": "Ember@2.6.2",
+                  "loc": {
+                    "source": null,
+                    "start": {
+                      "line": 42,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 44,
+                      "column": 10
+                    }
+                  },
+                  "moduleName": "game/templates/completed.hbs"
+                },
+                isEmpty: false,
+                arity: 0,
+                cachedFragment: null,
+                hasRendered: false,
+                buildFragment: function buildFragment(dom) {
+                  var el0 = dom.createDocumentFragment();
+                  var el1 = dom.createTextNode("            Survey\n");
+                  dom.appendChild(el0, el1);
+                  return el0;
+                },
+                buildRenderNodes: function buildRenderNodes() {
+                  return [];
+                },
+                statements: [],
+                locals: [],
+                templates: []
+              };
+            })();
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 38,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 45,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment(" <button {{action \"survey\" user}} class=\"btn btn-info btn-lg\">Survey</button> ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createMorphAt(fragment, 5, 5, contextualElement);
+                dom.insertBoundary(fragment, null);
+                return morphs;
+              },
+              statements: [["content", "beginner-six", ["loc", [null, [39, 10], [39, 26]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary", "id", "survey"], 0, null, ["loc", [null, [42, 10], [44, 22]]]]],
+              locals: [],
+              templates: [child0]
+            };
+          })();
+          var child6 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 46,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 49,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element11 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element11);
+                return morphs;
+              },
+              statements: [["content", "intermediate-seven", ["loc", [null, [47, 10], [47, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [48, 43], [48, 47]]]]], [], ["loc", [null, [48, 18], [48, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child7 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 50,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 53,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element10 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element10);
+                return morphs;
+              },
+              statements: [["content", "intermediate-eight", ["loc", [null, [51, 10], [51, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [52, 43], [52, 47]]]]], [], ["loc", [null, [52, 18], [52, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child8 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 54,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 57,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element9 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element9);
+                return morphs;
+              },
+              statements: [["content", "intermediate-nine", ["loc", [null, [55, 10], [55, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [56, 43], [56, 47]]]]], [], ["loc", [null, [56, 18], [56, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child9 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 58,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 61,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element8 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element8);
+                return morphs;
+              },
+              statements: [["content", "intermediate-ten", ["loc", [null, [59, 10], [59, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [60, 43], [60, 47]]]]], [], ["loc", [null, [60, 18], [60, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child10 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 62,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 65,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element7 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element7);
+                return morphs;
+              },
+              statements: [["content", "intermediate-eleven", ["loc", [null, [63, 10], [63, 33]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [64, 43], [64, 47]]]]], [], ["loc", [null, [64, 18], [64, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child11 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 66,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 69,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element6 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element6);
+                return morphs;
+              },
+              statements: [["content", "intermediate-twelve", ["loc", [null, [67, 10], [67, 33]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [68, 43], [68, 47]]]]], [], ["loc", [null, [68, 18], [68, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child12 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 70,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 73,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element5 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element5);
+                return morphs;
+              },
+              statements: [["content", "advanced-thirteen", ["loc", [null, [71, 10], [71, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [72, 43], [72, 47]]]]], [], ["loc", [null, [72, 18], [72, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child13 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 74,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 77,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element4 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element4);
+                return morphs;
+              },
+              statements: [["content", "advanced-fourteen", ["loc", [null, [75, 10], [75, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [76, 43], [76, 47]]]]], [], ["loc", [null, [76, 18], [76, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child14 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 78,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 81,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element3 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element3);
+                return morphs;
+              },
+              statements: [["content", "advanced-fifteen", ["loc", [null, [79, 10], [79, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [80, 43], [80, 47]]]]], [], ["loc", [null, [80, 18], [80, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child15 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 82,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 85,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element2 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element2);
+                return morphs;
+              },
+              statements: [["content", "advanced-sixteen", ["loc", [null, [83, 10], [83, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [84, 43], [84, 47]]]]], [], ["loc", [null, [84, 18], [84, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child16 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 86,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 89,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element1 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element1);
+                return morphs;
+              },
+              statements: [["content", "advanced-seventeen", ["loc", [null, [87, 10], [87, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [88, 43], [88, 47]]]]], [], ["loc", [null, [88, 18], [88, 49]]]]],
+              locals: [],
+              templates: []
+            };
+          })();
+          var child17 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 90,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 93,
+                    "column": 8
+                  }
+                },
+                "moduleName": "game/templates/completed.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createComment("");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n          ");
+                dom.appendChild(el0, el1);
+                var el1 = dom.createElement("button");
+                dom.setAttribute(el1, "class", "btn btn-info btn-lg");
+                var el2 = dom.createTextNode("Next Level");
+                dom.appendChild(el1, el2);
+                dom.appendChild(el0, el1);
+                var el1 = dom.createTextNode("\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+                var element0 = dom.childAt(fragment, [3]);
+                var morphs = new Array(2);
+                morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+                morphs[1] = dom.createElementMorph(element0);
+                return morphs;
+              },
+              statements: [["content", "advanced-eighteen", ["loc", [null, [91, 10], [91, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [92, 43], [92, 47]]]]], [], ["loc", [null, [92, 18], [92, 49]]]]],
               locals: [],
               templates: []
             };
@@ -2546,12 +3234,12 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 35,
-                  "column": 8
+                  "line": 12,
+                  "column": 6
                 },
                 "end": {
-                  "line": 42,
-                  "column": 8
+                  "line": 99,
+                  "column": 2
                 }
               },
               "moduleName": "game/templates/completed.hbs"
@@ -2562,65 +3250,77 @@ define("game/templates/completed", ["exports"], function (exports) {
             hasRendered: false,
             buildFragment: function buildFragment(dom) {
               var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
+              var el1 = dom.createTextNode("      ");
               dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
+              var el1 = dom.createElement("p");
+              var el2 = dom.createTextNode("Congradulations ");
+              dom.appendChild(el1, el2);
+              var el2 = dom.createComment("");
+              dom.appendChild(el1, el2);
+              var el2 = dom.createTextNode(", you've completed the level!");
+              dom.appendChild(el1, el2);
               dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n\n          ");
+              var el1 = dom.createTextNode("\n  ");
               dom.appendChild(el0, el1);
-              var el1 = dom.createComment(" <button {{action \"survey\" user}} class=\"btn btn-info btn-lg\">Survey</button> ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createMorphAt(fragment, 5, 5, contextualElement);
-              dom.insertBoundary(fragment, null);
-              return morphs;
-            },
-            statements: [["content", "beginner-six", ["loc", [null, [36, 10], [36, 26]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary", "id", "survey"], 0, null, ["loc", [null, [39, 10], [41, 22]]]]],
-            locals: [],
-            templates: [child0]
-          };
-        })();
-        var child6 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 43,
-                  "column": 8
-                },
-                "end": {
-                  "line": 46,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
+              var el1 = dom.createElement("div");
+              dom.setAttribute(el1, "class", "form-horizontal form-group form-group-lg row");
+              var el2 = dom.createTextNode("\n    ");
+              dom.appendChild(el1, el2);
+              var el2 = dom.createElement("div");
+              dom.setAttribute(el2, "class", "col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4");
+              var el3 = dom.createTextNode("\n      ");
+              dom.appendChild(el2, el3);
+              var el3 = dom.createElement("div");
+              dom.setAttribute(el3, "class", "container");
+              var el4 = dom.createTextNode("\n        ");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createTextNode("\n");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createComment("");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createTextNode("\n\n    ");
+              dom.appendChild(el3, el4);
+              dom.appendChild(el2, el3);
+              var el3 = dom.createTextNode("\n    ");
+              dom.appendChild(el2, el3);
+              dom.appendChild(el1, el2);
+              var el2 = dom.createTextNode("\n  ");
               dom.appendChild(el1, el2);
               dom.appendChild(el0, el1);
               var el1 = dom.createTextNode("\n");
@@ -2628,576 +3328,33 @@ define("game/templates/completed", ["exports"], function (exports) {
               return el0;
             },
             buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element11 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element11);
+              var element17 = dom.childAt(fragment, [3, 1, 1]);
+              var morphs = new Array(20);
+              morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 1, 1);
+              morphs[1] = dom.createMorphAt(element17, 1, 1);
+              morphs[2] = dom.createMorphAt(element17, 3, 3);
+              morphs[3] = dom.createMorphAt(element17, 4, 4);
+              morphs[4] = dom.createMorphAt(element17, 5, 5);
+              morphs[5] = dom.createMorphAt(element17, 6, 6);
+              morphs[6] = dom.createMorphAt(element17, 7, 7);
+              morphs[7] = dom.createMorphAt(element17, 8, 8);
+              morphs[8] = dom.createMorphAt(element17, 9, 9);
+              morphs[9] = dom.createMorphAt(element17, 10, 10);
+              morphs[10] = dom.createMorphAt(element17, 11, 11);
+              morphs[11] = dom.createMorphAt(element17, 12, 12);
+              morphs[12] = dom.createMorphAt(element17, 13, 13);
+              morphs[13] = dom.createMorphAt(element17, 14, 14);
+              morphs[14] = dom.createMorphAt(element17, 15, 15);
+              morphs[15] = dom.createMorphAt(element17, 16, 16);
+              morphs[16] = dom.createMorphAt(element17, 17, 17);
+              morphs[17] = dom.createMorphAt(element17, 18, 18);
+              morphs[18] = dom.createMorphAt(element17, 19, 19);
+              morphs[19] = dom.createMorphAt(element17, 20, 20);
               return morphs;
             },
-            statements: [["content", "intermediate-seven", ["loc", [null, [44, 10], [44, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [45, 43], [45, 47]]]]], [], ["loc", [null, [45, 18], [45, 49]]]]],
+            statements: [["content", "user.email", ["loc", [null, [13, 25], [13, 39]]]], ["content", "currentUrl", ["loc", [null, [17, 8], [17, 22]]]], ["block", "if", [["subexpr", "eq", ["1", ["get", "currentUrl", ["loc", [null, [18, 22], [18, 32]]]]], [], ["loc", [null, [18, 14], [18, 33]]]]], [], 0, null, ["loc", [null, [18, 8], [21, 15]]]], ["block", "if", [["subexpr", "eq", ["2", ["get", "currentUrl", ["loc", [null, [22, 22], [22, 32]]]]], [], ["loc", [null, [22, 14], [22, 33]]]]], [], 1, null, ["loc", [null, [22, 8], [25, 15]]]], ["block", "if", [["subexpr", "eq", ["3", ["get", "currentUrl", ["loc", [null, [26, 22], [26, 32]]]]], [], ["loc", [null, [26, 14], [26, 33]]]]], [], 2, null, ["loc", [null, [26, 8], [29, 15]]]], ["block", "if", [["subexpr", "eq", ["4", ["get", "currentUrl", ["loc", [null, [30, 22], [30, 32]]]]], [], ["loc", [null, [30, 14], [30, 33]]]]], [], 3, null, ["loc", [null, [30, 8], [33, 15]]]], ["block", "if", [["subexpr", "eq", ["5", ["get", "currentUrl", ["loc", [null, [34, 22], [34, 32]]]]], [], ["loc", [null, [34, 14], [34, 33]]]]], [], 4, null, ["loc", [null, [34, 8], [37, 15]]]], ["block", "if", [["subexpr", "eq", ["6", ["get", "currentUrl", ["loc", [null, [38, 22], [38, 32]]]]], [], ["loc", [null, [38, 14], [38, 33]]]]], [], 5, null, ["loc", [null, [38, 8], [45, 15]]]], ["block", "if", [["subexpr", "eq", ["7", ["get", "currentUrl", ["loc", [null, [46, 22], [46, 32]]]]], [], ["loc", [null, [46, 14], [46, 33]]]]], [], 6, null, ["loc", [null, [46, 8], [49, 15]]]], ["block", "if", [["subexpr", "eq", ["8", ["get", "currentUrl", ["loc", [null, [50, 22], [50, 32]]]]], [], ["loc", [null, [50, 14], [50, 33]]]]], [], 7, null, ["loc", [null, [50, 8], [53, 15]]]], ["block", "if", [["subexpr", "eq", ["9", ["get", "currentUrl", ["loc", [null, [54, 22], [54, 32]]]]], [], ["loc", [null, [54, 14], [54, 33]]]]], [], 8, null, ["loc", [null, [54, 8], [57, 15]]]], ["block", "if", [["subexpr", "eq", ["10", ["get", "currentUrl", ["loc", [null, [58, 23], [58, 33]]]]], [], ["loc", [null, [58, 14], [58, 34]]]]], [], 9, null, ["loc", [null, [58, 8], [61, 15]]]], ["block", "if", [["subexpr", "eq", ["11", ["get", "currentUrl", ["loc", [null, [62, 23], [62, 33]]]]], [], ["loc", [null, [62, 14], [62, 34]]]]], [], 10, null, ["loc", [null, [62, 8], [65, 15]]]], ["block", "if", [["subexpr", "eq", ["12", ["get", "currentUrl", ["loc", [null, [66, 23], [66, 33]]]]], [], ["loc", [null, [66, 14], [66, 34]]]]], [], 11, null, ["loc", [null, [66, 8], [69, 15]]]], ["block", "if", [["subexpr", "eq", ["13", ["get", "currentUrl", ["loc", [null, [70, 23], [70, 33]]]]], [], ["loc", [null, [70, 14], [70, 34]]]]], [], 12, null, ["loc", [null, [70, 8], [73, 15]]]], ["block", "if", [["subexpr", "eq", ["14", ["get", "currentUrl", ["loc", [null, [74, 23], [74, 33]]]]], [], ["loc", [null, [74, 14], [74, 34]]]]], [], 13, null, ["loc", [null, [74, 8], [77, 15]]]], ["block", "if", [["subexpr", "eq", ["15", ["get", "currentUrl", ["loc", [null, [78, 23], [78, 33]]]]], [], ["loc", [null, [78, 14], [78, 34]]]]], [], 14, null, ["loc", [null, [78, 8], [81, 15]]]], ["block", "if", [["subexpr", "eq", ["16", ["get", "currentUrl", ["loc", [null, [82, 23], [82, 33]]]]], [], ["loc", [null, [82, 14], [82, 34]]]]], [], 15, null, ["loc", [null, [82, 8], [85, 15]]]], ["block", "if", [["subexpr", "eq", ["17", ["get", "currentUrl", ["loc", [null, [86, 23], [86, 33]]]]], [], ["loc", [null, [86, 14], [86, 34]]]]], [], 16, null, ["loc", [null, [86, 8], [89, 15]]]], ["block", "if", [["subexpr", "eq", ["18", ["get", "currentUrl", ["loc", [null, [90, 23], [90, 33]]]]], [], ["loc", [null, [90, 14], [90, 34]]]]], [], 17, null, ["loc", [null, [90, 8], [93, 15]]]]],
             locals: [],
-            templates: []
-          };
-        })();
-        var child7 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 47,
-                  "column": 8
-                },
-                "end": {
-                  "line": 50,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element10 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element10);
-              return morphs;
-            },
-            statements: [["content", "intermediate-eight", ["loc", [null, [48, 10], [48, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [49, 43], [49, 47]]]]], [], ["loc", [null, [49, 18], [49, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child8 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 51,
-                  "column": 8
-                },
-                "end": {
-                  "line": 54,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element9 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element9);
-              return morphs;
-            },
-            statements: [["content", "intermediate-nine", ["loc", [null, [52, 10], [52, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [53, 43], [53, 47]]]]], [], ["loc", [null, [53, 18], [53, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child9 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 55,
-                  "column": 8
-                },
-                "end": {
-                  "line": 58,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element8 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element8);
-              return morphs;
-            },
-            statements: [["content", "intermediate-ten", ["loc", [null, [56, 10], [56, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [57, 43], [57, 47]]]]], [], ["loc", [null, [57, 18], [57, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child10 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 59,
-                  "column": 8
-                },
-                "end": {
-                  "line": 62,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element7 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element7);
-              return morphs;
-            },
-            statements: [["content", "intermediate-eleven", ["loc", [null, [60, 10], [60, 33]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [61, 43], [61, 47]]]]], [], ["loc", [null, [61, 18], [61, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child11 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 63,
-                  "column": 8
-                },
-                "end": {
-                  "line": 66,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element6 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element6);
-              return morphs;
-            },
-            statements: [["content", "intermediate-twelve", ["loc", [null, [64, 10], [64, 33]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [65, 43], [65, 47]]]]], [], ["loc", [null, [65, 18], [65, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child12 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 67,
-                  "column": 8
-                },
-                "end": {
-                  "line": 70,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element5 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element5);
-              return morphs;
-            },
-            statements: [["content", "advanced-thirteen", ["loc", [null, [68, 10], [68, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [69, 43], [69, 47]]]]], [], ["loc", [null, [69, 18], [69, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child13 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 71,
-                  "column": 8
-                },
-                "end": {
-                  "line": 74,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element4 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element4);
-              return morphs;
-            },
-            statements: [["content", "advanced-fourteen", ["loc", [null, [72, 10], [72, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [73, 43], [73, 47]]]]], [], ["loc", [null, [73, 18], [73, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child14 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 75,
-                  "column": 8
-                },
-                "end": {
-                  "line": 78,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element3 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element3);
-              return morphs;
-            },
-            statements: [["content", "advanced-fifteen", ["loc", [null, [76, 10], [76, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [77, 43], [77, 47]]]]], [], ["loc", [null, [77, 18], [77, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child15 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 79,
-                  "column": 8
-                },
-                "end": {
-                  "line": 82,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element2 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element2);
-              return morphs;
-            },
-            statements: [["content", "advanced-sixteen", ["loc", [null, [80, 10], [80, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [81, 43], [81, 47]]]]], [], ["loc", [null, [81, 18], [81, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child16 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 83,
-                  "column": 8
-                },
-                "end": {
-                  "line": 86,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element1 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element1);
-              return morphs;
-            },
-            statements: [["content", "advanced-seventeen", ["loc", [null, [84, 10], [84, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [85, 43], [85, 47]]]]], [], ["loc", [null, [85, 18], [85, 49]]]]],
-            locals: [],
-            templates: []
-          };
-        })();
-        var child17 = (function () {
-          return {
-            meta: {
-              "fragmentReason": false,
-              "revision": "Ember@2.6.2",
-              "loc": {
-                "source": null,
-                "start": {
-                  "line": 87,
-                  "column": 8
-                },
-                "end": {
-                  "line": 90,
-                  "column": 8
-                }
-              },
-              "moduleName": "game/templates/completed.hbs"
-            },
-            isEmpty: false,
-            arity: 0,
-            cachedFragment: null,
-            hasRendered: false,
-            buildFragment: function buildFragment(dom) {
-              var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createComment("");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n          ");
-              dom.appendChild(el0, el1);
-              var el1 = dom.createElement("button");
-              dom.setAttribute(el1, "class", "btn btn-info btn-lg");
-              var el2 = dom.createTextNode("Next Level");
-              dom.appendChild(el1, el2);
-              dom.appendChild(el0, el1);
-              var el1 = dom.createTextNode("\n");
-              dom.appendChild(el0, el1);
-              return el0;
-            },
-            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-              var element0 = dom.childAt(fragment, [3]);
-              var morphs = new Array(2);
-              morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-              morphs[1] = dom.createElementMorph(element0);
-              return morphs;
-            },
-            statements: [["content", "advanced-eighteen", ["loc", [null, [88, 10], [88, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [89, 43], [89, 47]]]]], [], ["loc", [null, [89, 18], [89, 49]]]]],
-            locals: [],
-            templates: []
+            templates: [child0, child1, child2, child3, child4, child5, child6, child7, child8, child9, child10, child11, child12, child13, child14, child15, child16, child17]
           };
         })();
         return {
@@ -3207,11 +3364,11 @@ define("game/templates/completed", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 9,
+                "line": 10,
                 "column": 4
               },
               "end": {
-                "line": 96,
+                "line": 100,
                 "column": 2
               }
             },
@@ -3223,111 +3380,26 @@ define("game/templates/completed", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("      ");
+            var el1 = dom.createTextNode("1");
             dom.appendChild(el0, el1);
-            var el1 = dom.createElement("p");
-            var el2 = dom.createTextNode("Congradulations ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createComment("");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode(", you've completed the level!");
-            dom.appendChild(el1, el2);
+            var el1 = dom.createComment("");
             dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n  ");
+            var el1 = dom.createTextNode("2\n");
             dom.appendChild(el0, el1);
-            var el1 = dom.createElement("div");
-            dom.setAttribute(el1, "class", "form-horizontal form-group form-group-lg row");
-            var el2 = dom.createTextNode("\n    ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("div");
-            dom.setAttribute(el2, "class", "col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4");
-            var el3 = dom.createTextNode("\n      ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("div");
-            dom.setAttribute(el3, "class", "container");
-            var el4 = dom.createTextNode("\n        ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n\n    ");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n    ");
-            dom.appendChild(el2, el3);
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n  ");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n");
+            var el1 = dom.createComment("");
             dom.appendChild(el0, el1);
             return el0;
           },
           buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var element17 = dom.childAt(fragment, [3, 1, 1]);
-            var morphs = new Array(20);
-            morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 1, 1);
-            morphs[1] = dom.createMorphAt(element17, 1, 1);
-            morphs[2] = dom.createMorphAt(element17, 3, 3);
-            morphs[3] = dom.createMorphAt(element17, 4, 4);
-            morphs[4] = dom.createMorphAt(element17, 5, 5);
-            morphs[5] = dom.createMorphAt(element17, 6, 6);
-            morphs[6] = dom.createMorphAt(element17, 7, 7);
-            morphs[7] = dom.createMorphAt(element17, 8, 8);
-            morphs[8] = dom.createMorphAt(element17, 9, 9);
-            morphs[9] = dom.createMorphAt(element17, 10, 10);
-            morphs[10] = dom.createMorphAt(element17, 11, 11);
-            morphs[11] = dom.createMorphAt(element17, 12, 12);
-            morphs[12] = dom.createMorphAt(element17, 13, 13);
-            morphs[13] = dom.createMorphAt(element17, 14, 14);
-            morphs[14] = dom.createMorphAt(element17, 15, 15);
-            morphs[15] = dom.createMorphAt(element17, 16, 16);
-            morphs[16] = dom.createMorphAt(element17, 17, 17);
-            morphs[17] = dom.createMorphAt(element17, 18, 18);
-            morphs[18] = dom.createMorphAt(element17, 19, 19);
-            morphs[19] = dom.createMorphAt(element17, 20, 20);
+            var morphs = new Array(2);
+            morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+            morphs[1] = dom.createMorphAt(fragment, 3, 3, contextualElement);
+            dom.insertBoundary(fragment, null);
             return morphs;
           },
-          statements: [["content", "user.email", ["loc", [null, [10, 25], [10, 39]]]], ["content", "currentUrl", ["loc", [null, [14, 8], [14, 22]]]], ["block", "if", [["subexpr", "eq", ["1", ["get", "currentUrl", ["loc", [null, [15, 22], [15, 32]]]]], [], ["loc", [null, [15, 14], [15, 33]]]]], [], 0, null, ["loc", [null, [15, 8], [18, 15]]]], ["block", "if", [["subexpr", "eq", ["2", ["get", "currentUrl", ["loc", [null, [19, 22], [19, 32]]]]], [], ["loc", [null, [19, 14], [19, 33]]]]], [], 1, null, ["loc", [null, [19, 8], [22, 15]]]], ["block", "if", [["subexpr", "eq", ["3", ["get", "currentUrl", ["loc", [null, [23, 22], [23, 32]]]]], [], ["loc", [null, [23, 14], [23, 33]]]]], [], 2, null, ["loc", [null, [23, 8], [26, 15]]]], ["block", "if", [["subexpr", "eq", ["4", ["get", "currentUrl", ["loc", [null, [27, 22], [27, 32]]]]], [], ["loc", [null, [27, 14], [27, 33]]]]], [], 3, null, ["loc", [null, [27, 8], [30, 15]]]], ["block", "if", [["subexpr", "eq", ["5", ["get", "currentUrl", ["loc", [null, [31, 22], [31, 32]]]]], [], ["loc", [null, [31, 14], [31, 33]]]]], [], 4, null, ["loc", [null, [31, 8], [34, 15]]]], ["block", "if", [["subexpr", "eq", ["6", ["get", "currentUrl", ["loc", [null, [35, 22], [35, 32]]]]], [], ["loc", [null, [35, 14], [35, 33]]]]], [], 5, null, ["loc", [null, [35, 8], [42, 15]]]], ["block", "if", [["subexpr", "eq", ["7", ["get", "currentUrl", ["loc", [null, [43, 22], [43, 32]]]]], [], ["loc", [null, [43, 14], [43, 33]]]]], [], 6, null, ["loc", [null, [43, 8], [46, 15]]]], ["block", "if", [["subexpr", "eq", ["8", ["get", "currentUrl", ["loc", [null, [47, 22], [47, 32]]]]], [], ["loc", [null, [47, 14], [47, 33]]]]], [], 7, null, ["loc", [null, [47, 8], [50, 15]]]], ["block", "if", [["subexpr", "eq", ["9", ["get", "currentUrl", ["loc", [null, [51, 22], [51, 32]]]]], [], ["loc", [null, [51, 14], [51, 33]]]]], [], 8, null, ["loc", [null, [51, 8], [54, 15]]]], ["block", "if", [["subexpr", "eq", ["10", ["get", "currentUrl", ["loc", [null, [55, 23], [55, 33]]]]], [], ["loc", [null, [55, 14], [55, 34]]]]], [], 9, null, ["loc", [null, [55, 8], [58, 15]]]], ["block", "if", [["subexpr", "eq", ["11", ["get", "currentUrl", ["loc", [null, [59, 23], [59, 33]]]]], [], ["loc", [null, [59, 14], [59, 34]]]]], [], 10, null, ["loc", [null, [59, 8], [62, 15]]]], ["block", "if", [["subexpr", "eq", ["12", ["get", "currentUrl", ["loc", [null, [63, 23], [63, 33]]]]], [], ["loc", [null, [63, 14], [63, 34]]]]], [], 11, null, ["loc", [null, [63, 8], [66, 15]]]], ["block", "if", [["subexpr", "eq", ["13", ["get", "currentUrl", ["loc", [null, [67, 23], [67, 33]]]]], [], ["loc", [null, [67, 14], [67, 34]]]]], [], 12, null, ["loc", [null, [67, 8], [70, 15]]]], ["block", "if", [["subexpr", "eq", ["14", ["get", "currentUrl", ["loc", [null, [71, 23], [71, 33]]]]], [], ["loc", [null, [71, 14], [71, 34]]]]], [], 13, null, ["loc", [null, [71, 8], [74, 15]]]], ["block", "if", [["subexpr", "eq", ["15", ["get", "currentUrl", ["loc", [null, [75, 23], [75, 33]]]]], [], ["loc", [null, [75, 14], [75, 34]]]]], [], 14, null, ["loc", [null, [75, 8], [78, 15]]]], ["block", "if", [["subexpr", "eq", ["16", ["get", "currentUrl", ["loc", [null, [79, 23], [79, 33]]]]], [], ["loc", [null, [79, 14], [79, 34]]]]], [], 15, null, ["loc", [null, [79, 8], [82, 15]]]], ["block", "if", [["subexpr", "eq", ["17", ["get", "currentUrl", ["loc", [null, [83, 23], [83, 33]]]]], [], ["loc", [null, [83, 14], [83, 34]]]]], [], 16, null, ["loc", [null, [83, 8], [86, 15]]]], ["block", "if", [["subexpr", "eq", ["18", ["get", "currentUrl", ["loc", [null, [87, 23], [87, 33]]]]], [], ["loc", [null, [87, 14], [87, 34]]]]], [], 17, null, ["loc", [null, [87, 8], [90, 15]]]]],
+          statements: [["content", "user.password", ["loc", [null, [11, 1], [11, 18]]]], ["block", "if", [["subexpr", "nnull", [["get", "user.password", ["loc", [null, [12, 19], [12, 32]]]]], [], ["loc", [null, [12, 12], [12, 33]]]]], [], 0, null, ["loc", [null, [12, 6], [99, 9]]]]],
           locals: [],
-          templates: [child0, child1, child2, child3, child4, child5, child6, child7, child8, child9, child10, child11, child12, child13, child14, child15, child16, child17]
+          templates: [child0]
         };
       })();
       return {
@@ -3341,7 +3413,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               "column": 2
             },
             "end": {
-              "line": 97,
+              "line": 101,
               "column": 0
             }
           },
@@ -3353,18 +3425,19 @@ define("game/templates/completed", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
           var morphs = new Array(1);
-          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-          dom.insertBoundary(fragment, 0);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
           dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["block", "if", [["subexpr", "eq", [["get", "session.data.email", ["loc", [null, [9, 14], [9, 32]]]], ["get", "user.email", ["loc", [null, [9, 33], [9, 43]]]]], [], ["loc", [null, [9, 10], [9, 44]]]]], [], 0, null, ["loc", [null, [9, 4], [96, 9]]]]],
+        statements: [["block", "if", [["subexpr", "eq", [["get", "session.data.email", ["loc", [null, [10, 14], [10, 32]]]], ["get", "user.email", ["loc", [null, [10, 33], [10, 43]]]]], [], ["loc", [null, [10, 10], [10, 44]]]]], [], 0, null, ["loc", [null, [10, 4], [100, 9]]]]],
         locals: ["user"],
         templates: [child0]
       };
@@ -3383,7 +3456,7 @@ define("game/templates/completed", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 99,
+            "line": 103,
             "column": 0
           }
         },
@@ -3426,7 +3499,7 @@ define("game/templates/completed", ["exports"], function (exports) {
         morphs[1] = dom.createMorphAt(dom.childAt(fragment, [2]), 3, 3);
         return morphs;
       },
-      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [2, 8], [2, 31]]]]], [], 0, null, ["loc", [null, [2, 2], [4, 9]]]], ["block", "each", [["get", "model", ["loc", [null, [8, 10], [8, 15]]]]], [], 1, null, ["loc", [null, [8, 2], [97, 9]]]]],
+      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [2, 8], [2, 31]]]]], [], 0, null, ["loc", [null, [2, 2], [4, 9]]]], ["block", "each", [["get", "model", ["loc", [null, [8, 10], [8, 15]]]]], [], 1, null, ["loc", [null, [8, 2], [101, 9]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -8879,7 +8952,7 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
             "column": 0
           },
           "end": {
-            "line": 61,
+            "line": 68,
             "column": 0
           }
         },
@@ -9045,6 +9118,32 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
         dom.setAttribute(el6, "class", "form-group");
         var el7 = dom.createTextNode("\n                        ");
         dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        dom.setAttribute(el7, "for", "levelcompleted");
+        dom.setAttribute(el7, "class", "col-md-3 control-label");
+        var el8 = dom.createTextNode("Level Completed");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-9");
+        var el8 = dom.createTextNode("\n                            ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                        ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                    ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
         var el7 = dom.createComment(" Button ");
         dom.appendChild(el6, el7);
         var el7 = dom.createTextNode("\n                        ");
@@ -9097,17 +9196,18 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [2, 3]);
         var element1 = dom.childAt(element0, [3, 3, 1]);
-        var morphs = new Array(6);
+        var morphs = new Array(7);
         morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
         morphs[1] = dom.createMorphAt(element0, 1, 1);
         morphs[2] = dom.createElementMorph(element1);
         morphs[3] = dom.createMorphAt(dom.childAt(element1, [5, 3]), 1, 1);
         morphs[4] = dom.createMorphAt(dom.childAt(element1, [7, 3]), 1, 1);
         morphs[5] = dom.createMorphAt(dom.childAt(element1, [9, 3]), 1, 1);
+        morphs[6] = dom.createMorphAt(dom.childAt(element1, [11, 3]), 1, 1);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 6], [8, 18]]]], ["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [14, 59], [14, 90]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [29, 40], [29, 50]]]]], [], []], "id", "signUpEmailInput", "type", "text", "class", "form-control", "name", "userEmail", "placeholder", "Email (username)"], ["loc", [null, [29, 26], [29, 155]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [37, 40], [37, 53]]]]], [], []], "id", "signUpPasswordInput", "type", "password", "class", "form-control", "name", "userPassword", "placeholder", "Password"], ["loc", [null, [37, 26], [37, 161]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [44, 42], [44, 67]]]]], [], []], "id", "signUpConfirmInput", "type", "password", "class", "form-control", "name", "icode", "placeholder", "Confirm Password"], ["loc", [null, [44, 28], [44, 174]]]]],
+      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 6], [8, 18]]]], ["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [14, 59], [14, 90]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [29, 40], [29, 50]]]]], [], []], "id", "signUpEmailInput", "type", "text", "class", "form-control", "name", "userEmail", "placeholder", "Email (username)"], ["loc", [null, [29, 26], [29, 155]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [37, 40], [37, 53]]]]], [], []], "id", "signUpPasswordInput", "type", "password", "class", "form-control", "name", "userPassword", "placeholder", "Password"], ["loc", [null, [37, 26], [37, 161]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [44, 42], [44, 67]]]]], [], []], "id", "signUpConfirmInput", "type", "password", "class", "form-control", "name", "icode", "placeholder", "Confirm Password"], ["loc", [null, [44, 28], [44, 174]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.levelcompleted", ["loc", [null, [51, 42], [51, 61]]]]], [], []], "id", "levelcompleted", "type", "text", "class", "form-control", "name", "levelcompleted", "placeholder", "1"], ["loc", [null, [51, 28], [51, 154]]]]],
       locals: [],
       templates: [child0]
     };
@@ -12392,6 +12492,42 @@ define("game/templates/profile", ["exports"], function (exports) {
     var child1 = (function () {
       var child0 = (function () {
         var child0 = (function () {
+          var child0 = (function () {
+            return {
+              meta: {
+                "fragmentReason": false,
+                "revision": "Ember@2.6.2",
+                "loc": {
+                  "source": null,
+                  "start": {
+                    "line": 35,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 37,
+                    "column": 6
+                  }
+                },
+                "moduleName": "game/templates/profile.hbs"
+              },
+              isEmpty: false,
+              arity: 0,
+              cachedFragment: null,
+              hasRendered: false,
+              buildFragment: function buildFragment(dom) {
+                var el0 = dom.createDocumentFragment();
+                var el1 = dom.createTextNode("        Change\n");
+                dom.appendChild(el0, el1);
+                return el0;
+              },
+              buildRenderNodes: function buildRenderNodes() {
+                return [];
+              },
+              statements: [],
+              locals: [],
+              templates: []
+            };
+          })();
           return {
             meta: {
               "fragmentReason": false,
@@ -12399,12 +12535,12 @@ define("game/templates/profile", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 33,
-                  "column": 6
+                  "line": 12,
+                  "column": 8
                 },
                 "end": {
-                  "line": 35,
-                  "column": 6
+                  "line": 39,
+                  "column": 2
                 }
               },
               "moduleName": "game/templates/profile.hbs"
@@ -12415,16 +12551,102 @@ define("game/templates/profile", ["exports"], function (exports) {
             hasRendered: false,
             buildFragment: function buildFragment(dom) {
               var el0 = dom.createDocumentFragment();
-              var el1 = dom.createTextNode("        Change\n");
+              var el1 = dom.createTextNode("    ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("table");
+              dom.setAttribute(el1, "class", "table");
+              var el2 = dom.createTextNode("\n      ");
+              dom.appendChild(el1, el2);
+              var el2 = dom.createElement("tbody");
+              var el3 = dom.createTextNode("\n        ");
+              dom.appendChild(el2, el3);
+              var el3 = dom.createElement("tr");
+              var el4 = dom.createTextNode("\n          ");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createElement("th");
+              dom.setAttribute(el4, "scope", "row");
+              var el5 = dom.createTextNode("Email");
+              dom.appendChild(el4, el5);
+              dom.appendChild(el3, el4);
+              var el4 = dom.createTextNode("\n          ");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createElement("td");
+              var el5 = dom.createComment("");
+              dom.appendChild(el4, el5);
+              dom.appendChild(el3, el4);
+              var el4 = dom.createTextNode("\n        ");
+              dom.appendChild(el3, el4);
+              dom.appendChild(el2, el3);
+              var el3 = dom.createTextNode("\n\n        ");
+              dom.appendChild(el2, el3);
+              var el3 = dom.createElement("tr");
+              var el4 = dom.createTextNode("\n          ");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createElement("th");
+              dom.setAttribute(el4, "scope", "row");
+              var el5 = dom.createTextNode("Levelcompleted");
+              dom.appendChild(el4, el5);
+              dom.appendChild(el3, el4);
+              var el4 = dom.createTextNode("\n          ");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createElement("td");
+              var el5 = dom.createComment("");
+              dom.appendChild(el4, el5);
+              dom.appendChild(el3, el4);
+              var el4 = dom.createTextNode("\n        ");
+              dom.appendChild(el3, el4);
+              dom.appendChild(el2, el3);
+              var el3 = dom.createTextNode("\n\n        ");
+              dom.appendChild(el2, el3);
+              var el3 = dom.createElement("tr");
+              var el4 = dom.createTextNode("\n          ");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createElement("th");
+              dom.setAttribute(el4, "scope", "row");
+              var el5 = dom.createTextNode("efw");
+              dom.appendChild(el4, el5);
+              dom.appendChild(el3, el4);
+              var el4 = dom.createTextNode("\n          ");
+              dom.appendChild(el3, el4);
+              var el4 = dom.createElement("td");
+              var el5 = dom.createComment("");
+              dom.appendChild(el4, el5);
+              dom.appendChild(el3, el4);
+              var el4 = dom.createTextNode("\n        ");
+              dom.appendChild(el3, el4);
+              dom.appendChild(el2, el3);
+              var el3 = dom.createTextNode("\n\n      ");
+              dom.appendChild(el2, el3);
+              dom.appendChild(el1, el2);
+              var el2 = dom.createTextNode("\n    ");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n\n       \n    ");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createElement("label");
+              var el2 = dom.createTextNode("My data can be used for research purposes.");
+              dom.appendChild(el1, el2);
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("\n");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createComment("");
+              dom.appendChild(el0, el1);
+              var el1 = dom.createTextNode("       \n");
               dom.appendChild(el0, el1);
               return el0;
             },
-            buildRenderNodes: function buildRenderNodes() {
-              return [];
+            buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
+              var element0 = dom.childAt(fragment, [1, 1]);
+              var morphs = new Array(4);
+              morphs[0] = dom.createMorphAt(dom.childAt(element0, [1, 3]), 0, 0);
+              morphs[1] = dom.createMorphAt(dom.childAt(element0, [3, 3]), 0, 0);
+              morphs[2] = dom.createMorphAt(dom.childAt(element0, [5, 3]), 0, 0);
+              morphs[3] = dom.createMorphAt(fragment, 5, 5, contextualElement);
+              return morphs;
             },
-            statements: [],
+            statements: [["content", "user.email", ["loc", [null, [17, 14], [17, 28]]]], ["content", "user.levelcompleted", ["loc", [null, [22, 14], [22, 37]]]], ["content", "user.password", ["loc", [null, [27, 14], [27, 31]]]], ["block", "link-to", ["consent"], ["tagName", "button"], 0, null, ["loc", [null, [35, 6], [37, 18]]]]],
             locals: [],
-            templates: []
+            templates: [child0]
           };
         })();
         return {
@@ -12434,11 +12656,11 @@ define("game/templates/profile", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 12,
+                "line": 11,
                 "column": 6
               },
               "end": {
-                "line": 38,
+                "line": 40,
                 "column": 4
               }
             },
@@ -12450,80 +12672,18 @@ define("game/templates/profile", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("\n\n    ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createElement("table");
-            dom.setAttribute(el1, "class", "table");
-            var el2 = dom.createTextNode("\n      ");
-            dom.appendChild(el1, el2);
-            var el2 = dom.createElement("tbody");
-            var el3 = dom.createTextNode("\n        ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("tr");
-            var el4 = dom.createTextNode("\n          ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("th");
-            dom.setAttribute(el4, "scope", "row");
-            var el5 = dom.createTextNode("Email");
-            dom.appendChild(el4, el5);
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n          ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("td");
-            var el5 = dom.createComment("");
-            dom.appendChild(el4, el5);
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n        ");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n\n        ");
-            dom.appendChild(el2, el3);
-            var el3 = dom.createElement("tr");
-            var el4 = dom.createTextNode("\n          ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("th");
-            dom.setAttribute(el4, "scope", "row");
-            var el5 = dom.createTextNode("Levelcompleted");
-            dom.appendChild(el4, el5);
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n          ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createElement("td");
-            var el5 = dom.createComment("");
-            dom.appendChild(el4, el5);
-            dom.appendChild(el3, el4);
-            var el4 = dom.createTextNode("\n        ");
-            dom.appendChild(el3, el4);
-            dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n\n\n      ");
-            dom.appendChild(el2, el3);
-            dom.appendChild(el1, el2);
-            var el2 = dom.createTextNode("\n    ");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n\n       \n    ");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createElement("label");
-            var el2 = dom.createTextNode("My data can be used for research purposes.");
-            dom.appendChild(el1, el2);
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n");
-            dom.appendChild(el0, el1);
             var el1 = dom.createComment("");
-            dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("       \n\n");
             dom.appendChild(el0, el1);
             return el0;
           },
           buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
-            var element0 = dom.childAt(fragment, [1, 1]);
-            var morphs = new Array(3);
-            morphs[0] = dom.createMorphAt(dom.childAt(element0, [1, 3]), 0, 0);
-            morphs[1] = dom.createMorphAt(dom.childAt(element0, [3, 3]), 0, 0);
-            morphs[2] = dom.createMorphAt(fragment, 5, 5, contextualElement);
+            var morphs = new Array(1);
+            morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+            dom.insertBoundary(fragment, 0);
+            dom.insertBoundary(fragment, null);
             return morphs;
           },
-          statements: [["content", "user.email", ["loc", [null, [19, 14], [19, 28]]]], ["content", "user.levelcompleted", ["loc", [null, [24, 14], [24, 37]]]], ["block", "link-to", ["consent"], ["tagName", "button"], 0, null, ["loc", [null, [33, 6], [35, 18]]]]],
+          statements: [["block", "if", [["subexpr", "nnull", [["get", "user.password", ["loc", [null, [12, 21], [12, 34]]]]], [], ["loc", [null, [12, 14], [12, 35]]]]], [], 0, null, ["loc", [null, [12, 8], [39, 9]]]]],
           locals: [],
           templates: [child0]
         };
@@ -12539,7 +12699,7 @@ define("game/templates/profile", ["exports"], function (exports) {
               "column": 4
             },
             "end": {
-              "line": 39,
+              "line": 41,
               "column": 2
             }
           },
@@ -12551,19 +12711,18 @@ define("game/templates/profile", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
           var morphs = new Array(1);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
           dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["block", "if", [["subexpr", "eq", [["get", "user.email", ["loc", [null, [12, 16], [12, 26]]]], ["get", "session.data.email", ["loc", [null, [12, 27], [12, 45]]]]], [], ["loc", [null, [12, 12], [12, 46]]]]], [], 0, null, ["loc", [null, [12, 6], [38, 11]]]]],
+        statements: [["block", "if", [["subexpr", "eq", [["get", "user.email", ["loc", [null, [11, 16], [11, 26]]]], ["get", "session.data.email", ["loc", [null, [11, 27], [11, 45]]]]], [], ["loc", [null, [11, 12], [11, 46]]]]], [], 0, null, ["loc", [null, [11, 6], [40, 11]]]]],
         locals: ["user"],
         templates: [child0]
       };
@@ -12582,7 +12741,7 @@ define("game/templates/profile", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 136,
+            "line": 138,
             "column": 0
           }
         },
@@ -13057,7 +13216,7 @@ define("game/templates/profile", ["exports"], function (exports) {
         morphs[2] = dom.createMorphAt(element1, 3, 3);
         return morphs;
       },
-      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [5, 23], [5, 54]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 4], [8, 16]]]], ["block", "each", [["get", "model", ["loc", [null, [10, 12], [10, 17]]]]], [], 1, null, ["loc", [null, [10, 4], [39, 11]]]]],
+      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [5, 23], [5, 54]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 4], [8, 16]]]], ["block", "each", [["get", "model", ["loc", [null, [10, 12], [10, 17]]]]], [], 1, null, ["loc", [null, [10, 4], [41, 11]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -13650,7 +13809,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+468eee6c"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+01df545c"});
 }
 
 /* jshint ignore:end */

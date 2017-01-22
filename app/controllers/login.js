@@ -27,8 +27,9 @@ export default Ember.Controller.extend({
       m.map(function(model) {
       var email = model.get('email');
       if (email===useremail) {
-        var completed = model.get('levelcompleted');
-        // console.log("YEEEEEY");
+        var completed = parseInt(model.get('levelcompleted')) + 1;
+         console.log("YEEEEEY");
+         console.log(completed);
         current.set('session.data.level', completed);
       }
       });
