@@ -1,0 +1,14 @@
+com.embercordova.game.BuildConfig -> a.a.a.a:
+    boolean DEBUG -> a
+com.embercordova.game.R -> a.a.a.b:
+com.embercordova.game.R$attr -> a.a.a.c:
+com.embercordova.game.R$drawable -> a.a.a.d:
+    int screen -> screen
+com.embercordova.game.R$mipmap -> a.a.a.e:
+    int icon -> icon
+com.embercordova.game.R$string -> a.a.a.f:
+    int activity_name -> activity_name
+    int app_name -> app_name
+    int launcher_name -> launcher_name
+com.embercordova.game.R$xml -> a.a.a.g:
+    int config -> config

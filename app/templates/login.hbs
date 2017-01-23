@@ -1,7 +1,9 @@
 {{ember-notify messageStyle='bootstrap' classPrefix="custom-notify"}}
 
 <div class="jumbotron text-center">
-  <img id="new-logo" src="assets/images/logo.png" >
+  {{#link-to 'new'}}
+    <img id="new-logo" src="assets/images/logo.png">
+  {{/link-to}}
   <h1 id="index-title">CodeReadingDojo</h1>
   <h4>Sign in to CodeReadingDojo</h4>
     <div class="form-horizontal form-group form-group-lg row">
@@ -13,7 +15,7 @@
               <p class="user-pass">password:</p>
               {{input type="password" value=password class="form-control" placeholder="Password" autofocus="autofocus"}}
 
-              <button id="index-button" class="btn btn-primary btn-lg btn-block"  type="submit">Submit</button>
+              <button id="index-button" class="btn btn-primary btn-lg btn-block"  type="submit">Log In</button>
               {{#link-to 'signup' id="signup-login"}}
                 Sign Up
               {{/link-to}}

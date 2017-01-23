@@ -306,6 +306,24 @@ define('game/tests/helpers/module-for-acceptance.jshint', ['exports'], function 
     assert.ok(true, 'helpers/module-for-acceptance.js should pass jshint.');
   });
 });
+define('game/tests/helpers/neq.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | helpers/neq.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'helpers/neq.js should pass jshint.');
+  });
+});
+define('game/tests/helpers/nnull.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | helpers/nnull.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'helpers/nnull.js should pass jshint.');
+  });
+});
 define('game/tests/helpers/resolver', ['exports', 'game/resolver', 'game/config/environment'], function (exports, _gameResolver, _gameConfigEnvironment) {
 
   var resolver = _gameResolver['default'].create();
@@ -410,15 +428,6 @@ define('game/tests/models/new.jshint', ['exports'], function (exports) {
     assert.ok(true, 'models/new.js should pass jshint.');
   });
 });
-define('game/tests/models/profile.jshint', ['exports'], function (exports) {
-  'use strict';
-
-  QUnit.module('JSHint | models/profile.js');
-  QUnit.test('should pass jshint', function (assert) {
-    assert.expect(1);
-    assert.ok(true, 'models/profile.js should pass jshint.');
-  });
-});
 define('game/tests/models/program.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -426,6 +435,15 @@ define('game/tests/models/program.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'models/program.js should pass jshint.');
+  });
+});
+define('game/tests/models/signup.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/signup.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/signup.js should pass jshint.');
   });
 });
 define('game/tests/models/survey.jshint', ['exports'], function (exports) {

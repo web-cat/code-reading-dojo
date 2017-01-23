@@ -9,7 +9,7 @@
 
     {{#each model as |user|}}
       {{#if (eq user.email session.data.email)}}
-        {{#if (nnull user.password)}}
+
     <table class="table">
       <tbody>
         <tr>
@@ -37,7 +37,7 @@
       {{/link-to}}
        
   {{/if}}
-    {{/if}}
+
   {{/each}}
     <h3>Tell us a little about your self</h3>
     <label class="statement"> Your Gender</label>

@@ -8,7 +8,7 @@ export default Ember.Controller.extend({
       let email = Ember.$('#signUpEmailInput').val();
       let password = Ember.$('#signUpPasswordInput').val();
       let passwordConfirmation = Ember.$('#signUpConfirmInput').val();
-      let levelcompleted = Ember.$('#levelcompleted').val();
+      let levelcompleted = '1';
       let newInfo = user;
       newInfo.set('email', email);
       newInfo.set('password', password);

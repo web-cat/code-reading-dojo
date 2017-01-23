@@ -5,7 +5,9 @@
 {{/if}}
 
 
-<img id="new-logo" src="assets/images/logo.png" />
+{{#link-to 'new'}}
+  <img id="new-logo" src="assets/images/logo.png">
+{{/link-to}}
 <div class="container">
   <form id="contact" {{action "submit" on="submit"}}>
 {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button"}}

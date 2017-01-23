@@ -33,7 +33,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
-    serverTokenEndpoint: 'http://172.31.7.87:3000/users/sign_in',
+    serverTokenEndpoint: 'http://codereadingdojo.cs.vt.edu/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
         if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.email) && !isEmpty(data.client)) {
@@ -732,7 +732,8 @@ define('game/controllers/completed', ['exports', 'ember'], function (exports, _e
         // console.log(currentLevel);
         // console.log(thisLevel);
         if (currentLevel < this.get('currentUrl')) {
-          user.set('levelcompleted', thisLevel);
+
+          user.set('levelcompleted', thisLevel.toString());
           this.set('session.data.level', this.get('currentUrl'));
           user.save();
         }
@@ -833,8 +834,9 @@ define('game/controllers/login', ['exports', 'ember'], function (exports, _ember
         m.map(function (model) {
           var email = model.get('email');
           if (email === useremail) {
-            var completed = model.get('levelcompleted');
-            // console.log("YEEEEEY");
+            var completed = parseInt(model.get('levelcompleted')) + 1;
+            console.log("YEEEEEY");
+            console.log(completed);
             current.set('session.data.level', completed);
           }
         });
@@ -901,24 +903,30 @@ define('game/controllers/signup', ['exports', 'ember'], function (exports, _embe
       save: function save(user) {
         var _this = this;
 
-        var newUser = user;
-        // console.log('+_+_+_+_+_+_+_+_');
-        // console.log(newUser.get('email'));
-        // console.log(newUser.get('password'));
-        newUser.save()['catch'](function () {
-          _this.get('session').authenticate('authenticator:devise', newUser.get('email'), newUser.get('password'))['catch'](function (reason) {
+        //let user = user;
+        var email = _ember['default'].$('#signUpEmailInput').val();
+        var password = _ember['default'].$('#signUpPasswordInput').val();
+        var passwordConfirmation = _ember['default'].$('#signUpConfirmInput').val();
+        var levelcompleted = _ember['default'].$('#levelcompleted').val();
+        var newInfo = user;
+        newInfo.set('email', email);
+        newInfo.set('password', password);
+        newInfo.set('passwordConfirmation', passwordConfirmation);
+        newInfo.set('levelcompleted', levelcompleted);
+        //user.save()
+        newInfo.save()['catch'](function () {
+
+          _this.get('session').authenticate('authenticator:devise', user.get('email'), user.get('password'))['catch'](function (reason) {
             _this.set('errorMessage', reason.error || reason);
             // console.log('######################');
             console.log(_this.get('errorMessage'));
             _this.get('notify').alert(JSON.stringify(_this.get('errorMessage')['errors']));
           });
-          // console.log('****************');
-          // console.log(this.get('email'));
-          // console.log('$$$$$$$$$$$$$');
-          _this.set('session.data.uid', newUser.get('email'));
-          _this.set('session.data.email', newUser.get('email'));
-          _this.set('session.data.authenticated.email', newUser.get('email'));
-          _this.set('session.data.level', 1);
+
+          _this.set('session.data.uid', user.get('email'));
+          _this.set('session.data.email', user.get('email'));
+          _this.set('session.data.authenticated.email', user.get('email'));
+          _this.set('session.data.level', user.get('levelcompleted'));
           // console.log('^^^^^^^^^^^^^^^');
           // console.log(this.get('session.data.level'));
           // var arr = window.location.href.split("/");
@@ -930,10 +938,14 @@ define('game/controllers/signup', ['exports', 'ember'], function (exports, _embe
           // this.set('errorMessage', error);
           // console.log(this.get('errorMessage'));
         });
+        // console.log('+_+_+_+_+_+_+_+_');
+        // console.log(user.get('email'));
+        // console.log(user.get('password'));
+
         // .then(()=>{
         //   this.get('session')
         //   .authenticate('authenticator:devise',
-        //     newUser.get('email'), newUser.get('password'))
+        //     user.get('email'), user.get('password'))
         //   .catch((reason) => {
         //     this.set('errorMessage', reason.error ||reason);
         //   });
@@ -1113,6 +1125,20 @@ define('game/helpers/gt', ['exports', 'ember'], function (exports, _ember) {
     return parseInt(params[0]) >= parseInt(params[1]);
   };
   exports['default'] = _ember['default'].Helper.helper(gt);
+});
+define('game/helpers/neq', ['exports', 'ember'], function (exports, _ember) {
+
+  var neq = function neq(params) {
+    return params[0].length !== 0;
+  };
+  exports['default'] = _ember['default'].Helper.helper(neq);
+});
+define('game/helpers/nnull', ['exports', 'ember'], function (exports, _ember) {
+
+  var nnull = function nnull(params) {
+    return params[0] == null;
+  };
+  exports['default'] = _ember['default'].Helper.helper(nnull);
 });
 define('game/helpers/pluralize', ['exports', 'ember-inflector/lib/helpers/pluralize'], function (exports, _emberInflectorLibHelpersPluralize) {
   exports['default'] = _emberInflectorLibHelpersPluralize['default'];
@@ -1545,16 +1571,6 @@ define('game/models/new', ['exports', 'ember-data/model', 'ember-data/attr'], fu
     errorindexes: (0, _emberDataAttr['default'])('string')
   });
 });
-define('game/models/profile', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
-  // import { belongsTo, hasMany } from 'ember-data/relationships';
-
-  exports['default'] = _emberDataModel['default'].extend({
-    email: (0, _emberDataAttr['default'])('string'),
-    password: (0, _emberDataAttr['default'])('string'),
-    passwordConfirmation: (0, _emberDataAttr['default'])('string'),
-    levelcompleted: (0, _emberDataAttr['default'])('string')
-  });
-});
 define('game/models/program', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
   // import { belongsTo, hasMany } from 'ember-data/relationships';
 
@@ -1563,6 +1579,16 @@ define('game/models/program', ['exports', 'ember-data/model', 'ember-data/attr']
     difficulty: (0, _emberDataAttr['default'])('string'),
     level: (0, _emberDataAttr['default'])('string'),
     errorindexes: (0, _emberDataAttr['default'])('string')
+  });
+});
+define('game/models/signup', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
+  // import { belongsTo, hasMany } from 'ember-data/relationships';
+
+  exports['default'] = _emberDataModel['default'].extend({
+    email: (0, _emberDataAttr['default'])('string'),
+    password: (0, _emberDataAttr['default'])('string'),
+    passwordConfirmation: (0, _emberDataAttr['default'])('string'),
+    levelcompleted: (0, _emberDataAttr['default'])('string')
   });
 });
 define('game/models/survey', ['exports', 'ember-data/model', 'ember-data/attr'], function (exports, _emberDataModel, _emberDataAttr) {
@@ -2255,11 +2281,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 15,
+                  "line": 16,
                   "column": 8
                 },
                 "end": {
-                  "line": 18,
+                  "line": 19,
                   "column": 8
                 }
               },
@@ -2293,7 +2319,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element16);
               return morphs;
             },
-            statements: [["content", "beginner-one", ["loc", [null, [16, 10], [16, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [17, 43], [17, 47]]]]], [], ["loc", [null, [17, 18], [17, 49]]]]],
+            statements: [["content", "beginner-one", ["loc", [null, [17, 10], [17, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [18, 43], [18, 47]]]]], [], ["loc", [null, [18, 18], [18, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2306,11 +2332,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 19,
+                  "line": 20,
                   "column": 8
                 },
                 "end": {
-                  "line": 22,
+                  "line": 23,
                   "column": 8
                 }
               },
@@ -2344,7 +2370,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element15);
               return morphs;
             },
-            statements: [["content", "beginner-two", ["loc", [null, [20, 10], [20, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [21, 43], [21, 47]]]]], [], ["loc", [null, [21, 18], [21, 49]]]]],
+            statements: [["content", "beginner-two", ["loc", [null, [21, 10], [21, 26]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [22, 43], [22, 47]]]]], [], ["loc", [null, [22, 18], [22, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2357,11 +2383,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 23,
+                  "line": 24,
                   "column": 8
                 },
                 "end": {
-                  "line": 26,
+                  "line": 27,
                   "column": 8
                 }
               },
@@ -2395,7 +2421,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element14);
               return morphs;
             },
-            statements: [["content", "beginner-three", ["loc", [null, [24, 10], [24, 28]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [25, 43], [25, 47]]]]], [], ["loc", [null, [25, 18], [25, 49]]]]],
+            statements: [["content", "beginner-three", ["loc", [null, [25, 10], [25, 28]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [26, 43], [26, 47]]]]], [], ["loc", [null, [26, 18], [26, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2408,11 +2434,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 27,
+                  "line": 28,
                   "column": 8
                 },
                 "end": {
-                  "line": 30,
+                  "line": 31,
                   "column": 8
                 }
               },
@@ -2446,7 +2472,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element13);
               return morphs;
             },
-            statements: [["content", "beginner-four", ["loc", [null, [28, 10], [28, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [29, 43], [29, 47]]]]], [], ["loc", [null, [29, 18], [29, 49]]]]],
+            statements: [["content", "beginner-four", ["loc", [null, [29, 10], [29, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [30, 43], [30, 47]]]]], [], ["loc", [null, [30, 18], [30, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2459,11 +2485,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 31,
+                  "line": 32,
                   "column": 8
                 },
                 "end": {
-                  "line": 34,
+                  "line": 35,
                   "column": 8
                 }
               },
@@ -2497,7 +2523,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element12);
               return morphs;
             },
-            statements: [["content", "beginner-five", ["loc", [null, [32, 10], [32, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [33, 43], [33, 47]]]]], [], ["loc", [null, [33, 18], [33, 49]]]]],
+            statements: [["content", "beginner-five", ["loc", [null, [33, 10], [33, 27]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [34, 43], [34, 47]]]]], [], ["loc", [null, [34, 18], [34, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2511,11 +2537,11 @@ define("game/templates/completed", ["exports"], function (exports) {
                 "loc": {
                   "source": null,
                   "start": {
-                    "line": 39,
+                    "line": 40,
                     "column": 10
                   },
                   "end": {
-                    "line": 41,
+                    "line": 42,
                     "column": 10
                   }
                 },
@@ -2546,11 +2572,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 35,
+                  "line": 36,
                   "column": 8
                 },
                 "end": {
-                  "line": 42,
+                  "line": 43,
                   "column": 8
                 }
               },
@@ -2583,7 +2609,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               dom.insertBoundary(fragment, null);
               return morphs;
             },
-            statements: [["content", "beginner-six", ["loc", [null, [36, 10], [36, 26]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary", "id", "survey"], 0, null, ["loc", [null, [39, 10], [41, 22]]]]],
+            statements: [["content", "beginner-six", ["loc", [null, [37, 10], [37, 26]]]], ["block", "link-to", ["survey"], ["class", "btn btn-primary", "id", "survey"], 0, null, ["loc", [null, [40, 10], [42, 22]]]]],
             locals: [],
             templates: [child0]
           };
@@ -2596,11 +2622,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 43,
+                  "line": 44,
                   "column": 8
                 },
                 "end": {
-                  "line": 46,
+                  "line": 47,
                   "column": 8
                 }
               },
@@ -2634,7 +2660,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element11);
               return morphs;
             },
-            statements: [["content", "intermediate-seven", ["loc", [null, [44, 10], [44, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [45, 43], [45, 47]]]]], [], ["loc", [null, [45, 18], [45, 49]]]]],
+            statements: [["content", "intermediate-seven", ["loc", [null, [45, 10], [45, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [46, 43], [46, 47]]]]], [], ["loc", [null, [46, 18], [46, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2647,11 +2673,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 47,
+                  "line": 48,
                   "column": 8
                 },
                 "end": {
-                  "line": 50,
+                  "line": 51,
                   "column": 8
                 }
               },
@@ -2685,7 +2711,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element10);
               return morphs;
             },
-            statements: [["content", "intermediate-eight", ["loc", [null, [48, 10], [48, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [49, 43], [49, 47]]]]], [], ["loc", [null, [49, 18], [49, 49]]]]],
+            statements: [["content", "intermediate-eight", ["loc", [null, [49, 10], [49, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [50, 43], [50, 47]]]]], [], ["loc", [null, [50, 18], [50, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2698,11 +2724,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 51,
+                  "line": 52,
                   "column": 8
                 },
                 "end": {
-                  "line": 54,
+                  "line": 55,
                   "column": 8
                 }
               },
@@ -2736,7 +2762,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element9);
               return morphs;
             },
-            statements: [["content", "intermediate-nine", ["loc", [null, [52, 10], [52, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [53, 43], [53, 47]]]]], [], ["loc", [null, [53, 18], [53, 49]]]]],
+            statements: [["content", "intermediate-nine", ["loc", [null, [53, 10], [53, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [54, 43], [54, 47]]]]], [], ["loc", [null, [54, 18], [54, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2749,11 +2775,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 55,
+                  "line": 56,
                   "column": 8
                 },
                 "end": {
-                  "line": 58,
+                  "line": 59,
                   "column": 8
                 }
               },
@@ -2787,7 +2813,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element8);
               return morphs;
             },
-            statements: [["content", "intermediate-ten", ["loc", [null, [56, 10], [56, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [57, 43], [57, 47]]]]], [], ["loc", [null, [57, 18], [57, 49]]]]],
+            statements: [["content", "intermediate-ten", ["loc", [null, [57, 10], [57, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [58, 43], [58, 47]]]]], [], ["loc", [null, [58, 18], [58, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2800,11 +2826,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 59,
+                  "line": 60,
                   "column": 8
                 },
                 "end": {
-                  "line": 62,
+                  "line": 63,
                   "column": 8
                 }
               },
@@ -2838,7 +2864,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element7);
               return morphs;
             },
-            statements: [["content", "intermediate-eleven", ["loc", [null, [60, 10], [60, 33]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [61, 43], [61, 47]]]]], [], ["loc", [null, [61, 18], [61, 49]]]]],
+            statements: [["content", "intermediate-eleven", ["loc", [null, [61, 10], [61, 33]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [62, 43], [62, 47]]]]], [], ["loc", [null, [62, 18], [62, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2851,11 +2877,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 63,
+                  "line": 64,
                   "column": 8
                 },
                 "end": {
-                  "line": 66,
+                  "line": 67,
                   "column": 8
                 }
               },
@@ -2889,7 +2915,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element6);
               return morphs;
             },
-            statements: [["content", "intermediate-twelve", ["loc", [null, [64, 10], [64, 33]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [65, 43], [65, 47]]]]], [], ["loc", [null, [65, 18], [65, 49]]]]],
+            statements: [["content", "intermediate-twelve", ["loc", [null, [65, 10], [65, 33]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [66, 43], [66, 47]]]]], [], ["loc", [null, [66, 18], [66, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2902,11 +2928,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 67,
+                  "line": 68,
                   "column": 8
                 },
                 "end": {
-                  "line": 70,
+                  "line": 71,
                   "column": 8
                 }
               },
@@ -2940,7 +2966,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element5);
               return morphs;
             },
-            statements: [["content", "advanced-thirteen", ["loc", [null, [68, 10], [68, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [69, 43], [69, 47]]]]], [], ["loc", [null, [69, 18], [69, 49]]]]],
+            statements: [["content", "advanced-thirteen", ["loc", [null, [69, 10], [69, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [70, 43], [70, 47]]]]], [], ["loc", [null, [70, 18], [70, 49]]]]],
             locals: [],
             templates: []
           };
@@ -2953,11 +2979,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 71,
+                  "line": 72,
                   "column": 8
                 },
                 "end": {
-                  "line": 74,
+                  "line": 75,
                   "column": 8
                 }
               },
@@ -2991,7 +3017,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element4);
               return morphs;
             },
-            statements: [["content", "advanced-fourteen", ["loc", [null, [72, 10], [72, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [73, 43], [73, 47]]]]], [], ["loc", [null, [73, 18], [73, 49]]]]],
+            statements: [["content", "advanced-fourteen", ["loc", [null, [73, 10], [73, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [74, 43], [74, 47]]]]], [], ["loc", [null, [74, 18], [74, 49]]]]],
             locals: [],
             templates: []
           };
@@ -3004,11 +3030,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 75,
+                  "line": 76,
                   "column": 8
                 },
                 "end": {
-                  "line": 78,
+                  "line": 79,
                   "column": 8
                 }
               },
@@ -3042,7 +3068,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element3);
               return morphs;
             },
-            statements: [["content", "advanced-fifteen", ["loc", [null, [76, 10], [76, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [77, 43], [77, 47]]]]], [], ["loc", [null, [77, 18], [77, 49]]]]],
+            statements: [["content", "advanced-fifteen", ["loc", [null, [77, 10], [77, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [78, 43], [78, 47]]]]], [], ["loc", [null, [78, 18], [78, 49]]]]],
             locals: [],
             templates: []
           };
@@ -3055,11 +3081,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 79,
+                  "line": 80,
                   "column": 8
                 },
                 "end": {
-                  "line": 82,
+                  "line": 83,
                   "column": 8
                 }
               },
@@ -3093,7 +3119,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element2);
               return morphs;
             },
-            statements: [["content", "advanced-sixteen", ["loc", [null, [80, 10], [80, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [81, 43], [81, 47]]]]], [], ["loc", [null, [81, 18], [81, 49]]]]],
+            statements: [["content", "advanced-sixteen", ["loc", [null, [81, 10], [81, 30]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [82, 43], [82, 47]]]]], [], ["loc", [null, [82, 18], [82, 49]]]]],
             locals: [],
             templates: []
           };
@@ -3106,11 +3132,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 83,
+                  "line": 84,
                   "column": 8
                 },
                 "end": {
-                  "line": 86,
+                  "line": 87,
                   "column": 8
                 }
               },
@@ -3144,7 +3170,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element1);
               return morphs;
             },
-            statements: [["content", "advanced-seventeen", ["loc", [null, [84, 10], [84, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [85, 43], [85, 47]]]]], [], ["loc", [null, [85, 18], [85, 49]]]]],
+            statements: [["content", "advanced-seventeen", ["loc", [null, [85, 10], [85, 32]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [86, 43], [86, 47]]]]], [], ["loc", [null, [86, 18], [86, 49]]]]],
             locals: [],
             templates: []
           };
@@ -3157,11 +3183,11 @@ define("game/templates/completed", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 87,
+                  "line": 88,
                   "column": 8
                 },
                 "end": {
-                  "line": 90,
+                  "line": 91,
                   "column": 8
                 }
               },
@@ -3195,7 +3221,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               morphs[1] = dom.createElementMorph(element0);
               return morphs;
             },
-            statements: [["content", "advanced-eighteen", ["loc", [null, [88, 10], [88, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [89, 43], [89, 47]]]]], [], ["loc", [null, [89, 18], [89, 49]]]]],
+            statements: [["content", "advanced-eighteen", ["loc", [null, [89, 10], [89, 31]]]], ["element", "action", ["getCurrentUrl", ["get", "user", ["loc", [null, [90, 43], [90, 47]]]]], [], ["loc", [null, [90, 18], [90, 49]]]]],
             locals: [],
             templates: []
           };
@@ -3207,11 +3233,11 @@ define("game/templates/completed", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 9,
+                "line": 10,
                 "column": 4
               },
               "end": {
-                "line": 96,
+                "line": 98,
                 "column": 2
               }
             },
@@ -3223,7 +3249,7 @@ define("game/templates/completed", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("      ");
+            var el1 = dom.createTextNode("\n      ");
             dom.appendChild(el0, el1);
             var el1 = dom.createElement("p");
             var el2 = dom.createTextNode("Congradulations ");
@@ -3245,10 +3271,6 @@ define("game/templates/completed", ["exports"], function (exports) {
             dom.appendChild(el2, el3);
             var el3 = dom.createElement("div");
             dom.setAttribute(el3, "class", "container");
-            var el4 = dom.createTextNode("\n        ");
-            dom.appendChild(el3, el4);
-            var el4 = dom.createComment("");
-            dom.appendChild(el3, el4);
             var el4 = dom.createTextNode("\n");
             dom.appendChild(el3, el4);
             var el4 = dom.createComment("");
@@ -3296,36 +3318,35 @@ define("game/templates/completed", ["exports"], function (exports) {
             var el2 = dom.createTextNode("\n  ");
             dom.appendChild(el1, el2);
             dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("\n");
+            var el1 = dom.createTextNode("\n\n");
             dom.appendChild(el0, el1);
             return el0;
           },
           buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
             var element17 = dom.childAt(fragment, [3, 1, 1]);
-            var morphs = new Array(20);
+            var morphs = new Array(19);
             morphs[0] = dom.createMorphAt(dom.childAt(fragment, [1]), 1, 1);
             morphs[1] = dom.createMorphAt(element17, 1, 1);
-            morphs[2] = dom.createMorphAt(element17, 3, 3);
-            morphs[3] = dom.createMorphAt(element17, 4, 4);
-            morphs[4] = dom.createMorphAt(element17, 5, 5);
-            morphs[5] = dom.createMorphAt(element17, 6, 6);
-            morphs[6] = dom.createMorphAt(element17, 7, 7);
-            morphs[7] = dom.createMorphAt(element17, 8, 8);
-            morphs[8] = dom.createMorphAt(element17, 9, 9);
-            morphs[9] = dom.createMorphAt(element17, 10, 10);
-            morphs[10] = dom.createMorphAt(element17, 11, 11);
-            morphs[11] = dom.createMorphAt(element17, 12, 12);
-            morphs[12] = dom.createMorphAt(element17, 13, 13);
-            morphs[13] = dom.createMorphAt(element17, 14, 14);
-            morphs[14] = dom.createMorphAt(element17, 15, 15);
-            morphs[15] = dom.createMorphAt(element17, 16, 16);
-            morphs[16] = dom.createMorphAt(element17, 17, 17);
-            morphs[17] = dom.createMorphAt(element17, 18, 18);
-            morphs[18] = dom.createMorphAt(element17, 19, 19);
-            morphs[19] = dom.createMorphAt(element17, 20, 20);
+            morphs[2] = dom.createMorphAt(element17, 2, 2);
+            morphs[3] = dom.createMorphAt(element17, 3, 3);
+            morphs[4] = dom.createMorphAt(element17, 4, 4);
+            morphs[5] = dom.createMorphAt(element17, 5, 5);
+            morphs[6] = dom.createMorphAt(element17, 6, 6);
+            morphs[7] = dom.createMorphAt(element17, 7, 7);
+            morphs[8] = dom.createMorphAt(element17, 8, 8);
+            morphs[9] = dom.createMorphAt(element17, 9, 9);
+            morphs[10] = dom.createMorphAt(element17, 10, 10);
+            morphs[11] = dom.createMorphAt(element17, 11, 11);
+            morphs[12] = dom.createMorphAt(element17, 12, 12);
+            morphs[13] = dom.createMorphAt(element17, 13, 13);
+            morphs[14] = dom.createMorphAt(element17, 14, 14);
+            morphs[15] = dom.createMorphAt(element17, 15, 15);
+            morphs[16] = dom.createMorphAt(element17, 16, 16);
+            morphs[17] = dom.createMorphAt(element17, 17, 17);
+            morphs[18] = dom.createMorphAt(element17, 18, 18);
             return morphs;
           },
-          statements: [["content", "user.email", ["loc", [null, [10, 25], [10, 39]]]], ["content", "currentUrl", ["loc", [null, [14, 8], [14, 22]]]], ["block", "if", [["subexpr", "eq", ["1", ["get", "currentUrl", ["loc", [null, [15, 22], [15, 32]]]]], [], ["loc", [null, [15, 14], [15, 33]]]]], [], 0, null, ["loc", [null, [15, 8], [18, 15]]]], ["block", "if", [["subexpr", "eq", ["2", ["get", "currentUrl", ["loc", [null, [19, 22], [19, 32]]]]], [], ["loc", [null, [19, 14], [19, 33]]]]], [], 1, null, ["loc", [null, [19, 8], [22, 15]]]], ["block", "if", [["subexpr", "eq", ["3", ["get", "currentUrl", ["loc", [null, [23, 22], [23, 32]]]]], [], ["loc", [null, [23, 14], [23, 33]]]]], [], 2, null, ["loc", [null, [23, 8], [26, 15]]]], ["block", "if", [["subexpr", "eq", ["4", ["get", "currentUrl", ["loc", [null, [27, 22], [27, 32]]]]], [], ["loc", [null, [27, 14], [27, 33]]]]], [], 3, null, ["loc", [null, [27, 8], [30, 15]]]], ["block", "if", [["subexpr", "eq", ["5", ["get", "currentUrl", ["loc", [null, [31, 22], [31, 32]]]]], [], ["loc", [null, [31, 14], [31, 33]]]]], [], 4, null, ["loc", [null, [31, 8], [34, 15]]]], ["block", "if", [["subexpr", "eq", ["6", ["get", "currentUrl", ["loc", [null, [35, 22], [35, 32]]]]], [], ["loc", [null, [35, 14], [35, 33]]]]], [], 5, null, ["loc", [null, [35, 8], [42, 15]]]], ["block", "if", [["subexpr", "eq", ["7", ["get", "currentUrl", ["loc", [null, [43, 22], [43, 32]]]]], [], ["loc", [null, [43, 14], [43, 33]]]]], [], 6, null, ["loc", [null, [43, 8], [46, 15]]]], ["block", "if", [["subexpr", "eq", ["8", ["get", "currentUrl", ["loc", [null, [47, 22], [47, 32]]]]], [], ["loc", [null, [47, 14], [47, 33]]]]], [], 7, null, ["loc", [null, [47, 8], [50, 15]]]], ["block", "if", [["subexpr", "eq", ["9", ["get", "currentUrl", ["loc", [null, [51, 22], [51, 32]]]]], [], ["loc", [null, [51, 14], [51, 33]]]]], [], 8, null, ["loc", [null, [51, 8], [54, 15]]]], ["block", "if", [["subexpr", "eq", ["10", ["get", "currentUrl", ["loc", [null, [55, 23], [55, 33]]]]], [], ["loc", [null, [55, 14], [55, 34]]]]], [], 9, null, ["loc", [null, [55, 8], [58, 15]]]], ["block", "if", [["subexpr", "eq", ["11", ["get", "currentUrl", ["loc", [null, [59, 23], [59, 33]]]]], [], ["loc", [null, [59, 14], [59, 34]]]]], [], 10, null, ["loc", [null, [59, 8], [62, 15]]]], ["block", "if", [["subexpr", "eq", ["12", ["get", "currentUrl", ["loc", [null, [63, 23], [63, 33]]]]], [], ["loc", [null, [63, 14], [63, 34]]]]], [], 11, null, ["loc", [null, [63, 8], [66, 15]]]], ["block", "if", [["subexpr", "eq", ["13", ["get", "currentUrl", ["loc", [null, [67, 23], [67, 33]]]]], [], ["loc", [null, [67, 14], [67, 34]]]]], [], 12, null, ["loc", [null, [67, 8], [70, 15]]]], ["block", "if", [["subexpr", "eq", ["14", ["get", "currentUrl", ["loc", [null, [71, 23], [71, 33]]]]], [], ["loc", [null, [71, 14], [71, 34]]]]], [], 13, null, ["loc", [null, [71, 8], [74, 15]]]], ["block", "if", [["subexpr", "eq", ["15", ["get", "currentUrl", ["loc", [null, [75, 23], [75, 33]]]]], [], ["loc", [null, [75, 14], [75, 34]]]]], [], 14, null, ["loc", [null, [75, 8], [78, 15]]]], ["block", "if", [["subexpr", "eq", ["16", ["get", "currentUrl", ["loc", [null, [79, 23], [79, 33]]]]], [], ["loc", [null, [79, 14], [79, 34]]]]], [], 15, null, ["loc", [null, [79, 8], [82, 15]]]], ["block", "if", [["subexpr", "eq", ["17", ["get", "currentUrl", ["loc", [null, [83, 23], [83, 33]]]]], [], ["loc", [null, [83, 14], [83, 34]]]]], [], 16, null, ["loc", [null, [83, 8], [86, 15]]]], ["block", "if", [["subexpr", "eq", ["18", ["get", "currentUrl", ["loc", [null, [87, 23], [87, 33]]]]], [], ["loc", [null, [87, 14], [87, 34]]]]], [], 17, null, ["loc", [null, [87, 8], [90, 15]]]]],
+          statements: [["content", "user.email", ["loc", [null, [12, 25], [12, 39]]]], ["block", "if", [["subexpr", "eq", ["1", ["get", "currentUrl", ["loc", [null, [16, 22], [16, 32]]]]], [], ["loc", [null, [16, 14], [16, 33]]]]], [], 0, null, ["loc", [null, [16, 8], [19, 15]]]], ["block", "if", [["subexpr", "eq", ["2", ["get", "currentUrl", ["loc", [null, [20, 22], [20, 32]]]]], [], ["loc", [null, [20, 14], [20, 33]]]]], [], 1, null, ["loc", [null, [20, 8], [23, 15]]]], ["block", "if", [["subexpr", "eq", ["3", ["get", "currentUrl", ["loc", [null, [24, 22], [24, 32]]]]], [], ["loc", [null, [24, 14], [24, 33]]]]], [], 2, null, ["loc", [null, [24, 8], [27, 15]]]], ["block", "if", [["subexpr", "eq", ["4", ["get", "currentUrl", ["loc", [null, [28, 22], [28, 32]]]]], [], ["loc", [null, [28, 14], [28, 33]]]]], [], 3, null, ["loc", [null, [28, 8], [31, 15]]]], ["block", "if", [["subexpr", "eq", ["5", ["get", "currentUrl", ["loc", [null, [32, 22], [32, 32]]]]], [], ["loc", [null, [32, 14], [32, 33]]]]], [], 4, null, ["loc", [null, [32, 8], [35, 15]]]], ["block", "if", [["subexpr", "eq", ["6", ["get", "currentUrl", ["loc", [null, [36, 22], [36, 32]]]]], [], ["loc", [null, [36, 14], [36, 33]]]]], [], 5, null, ["loc", [null, [36, 8], [43, 15]]]], ["block", "if", [["subexpr", "eq", ["7", ["get", "currentUrl", ["loc", [null, [44, 22], [44, 32]]]]], [], ["loc", [null, [44, 14], [44, 33]]]]], [], 6, null, ["loc", [null, [44, 8], [47, 15]]]], ["block", "if", [["subexpr", "eq", ["8", ["get", "currentUrl", ["loc", [null, [48, 22], [48, 32]]]]], [], ["loc", [null, [48, 14], [48, 33]]]]], [], 7, null, ["loc", [null, [48, 8], [51, 15]]]], ["block", "if", [["subexpr", "eq", ["9", ["get", "currentUrl", ["loc", [null, [52, 22], [52, 32]]]]], [], ["loc", [null, [52, 14], [52, 33]]]]], [], 8, null, ["loc", [null, [52, 8], [55, 15]]]], ["block", "if", [["subexpr", "eq", ["10", ["get", "currentUrl", ["loc", [null, [56, 23], [56, 33]]]]], [], ["loc", [null, [56, 14], [56, 34]]]]], [], 9, null, ["loc", [null, [56, 8], [59, 15]]]], ["block", "if", [["subexpr", "eq", ["11", ["get", "currentUrl", ["loc", [null, [60, 23], [60, 33]]]]], [], ["loc", [null, [60, 14], [60, 34]]]]], [], 10, null, ["loc", [null, [60, 8], [63, 15]]]], ["block", "if", [["subexpr", "eq", ["12", ["get", "currentUrl", ["loc", [null, [64, 23], [64, 33]]]]], [], ["loc", [null, [64, 14], [64, 34]]]]], [], 11, null, ["loc", [null, [64, 8], [67, 15]]]], ["block", "if", [["subexpr", "eq", ["13", ["get", "currentUrl", ["loc", [null, [68, 23], [68, 33]]]]], [], ["loc", [null, [68, 14], [68, 34]]]]], [], 12, null, ["loc", [null, [68, 8], [71, 15]]]], ["block", "if", [["subexpr", "eq", ["14", ["get", "currentUrl", ["loc", [null, [72, 23], [72, 33]]]]], [], ["loc", [null, [72, 14], [72, 34]]]]], [], 13, null, ["loc", [null, [72, 8], [75, 15]]]], ["block", "if", [["subexpr", "eq", ["15", ["get", "currentUrl", ["loc", [null, [76, 23], [76, 33]]]]], [], ["loc", [null, [76, 14], [76, 34]]]]], [], 14, null, ["loc", [null, [76, 8], [79, 15]]]], ["block", "if", [["subexpr", "eq", ["16", ["get", "currentUrl", ["loc", [null, [80, 23], [80, 33]]]]], [], ["loc", [null, [80, 14], [80, 34]]]]], [], 15, null, ["loc", [null, [80, 8], [83, 15]]]], ["block", "if", [["subexpr", "eq", ["17", ["get", "currentUrl", ["loc", [null, [84, 23], [84, 33]]]]], [], ["loc", [null, [84, 14], [84, 34]]]]], [], 16, null, ["loc", [null, [84, 8], [87, 15]]]], ["block", "if", [["subexpr", "eq", ["18", ["get", "currentUrl", ["loc", [null, [88, 23], [88, 33]]]]], [], ["loc", [null, [88, 14], [88, 34]]]]], [], 17, null, ["loc", [null, [88, 8], [91, 15]]]]],
           locals: [],
           templates: [child0, child1, child2, child3, child4, child5, child6, child7, child8, child9, child10, child11, child12, child13, child14, child15, child16, child17]
         };
@@ -3341,7 +3362,7 @@ define("game/templates/completed", ["exports"], function (exports) {
               "column": 2
             },
             "end": {
-              "line": 97,
+              "line": 99,
               "column": 0
             }
           },
@@ -3353,18 +3374,19 @@ define("game/templates/completed", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
+          var el1 = dom.createTextNode("\n");
+          dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
           var morphs = new Array(1);
-          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
-          dom.insertBoundary(fragment, 0);
+          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
           dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["block", "if", [["subexpr", "eq", [["get", "session.data.email", ["loc", [null, [9, 14], [9, 32]]]], ["get", "user.email", ["loc", [null, [9, 33], [9, 43]]]]], [], ["loc", [null, [9, 10], [9, 44]]]]], [], 0, null, ["loc", [null, [9, 4], [96, 9]]]]],
+        statements: [["block", "if", [["subexpr", "eq", [["get", "session.data.email", ["loc", [null, [10, 14], [10, 32]]]], ["get", "user.email", ["loc", [null, [10, 33], [10, 43]]]]], [], ["loc", [null, [10, 10], [10, 44]]]]], [], 0, null, ["loc", [null, [10, 4], [98, 9]]]]],
         locals: ["user"],
         templates: [child0]
       };
@@ -3383,7 +3405,7 @@ define("game/templates/completed", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 99,
+            "line": 101,
             "column": 0
           }
         },
@@ -3426,7 +3448,7 @@ define("game/templates/completed", ["exports"], function (exports) {
         morphs[1] = dom.createMorphAt(dom.childAt(fragment, [2]), 3, 3);
         return morphs;
       },
-      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [2, 8], [2, 31]]]]], [], 0, null, ["loc", [null, [2, 2], [4, 9]]]], ["block", "each", [["get", "model", ["loc", [null, [8, 10], [8, 15]]]]], [], 1, null, ["loc", [null, [8, 2], [97, 9]]]]],
+      statements: [["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [2, 8], [2, 31]]]]], [], 0, null, ["loc", [null, [2, 2], [4, 9]]]], ["block", "each", [["get", "model", ["loc", [null, [8, 10], [8, 15]]]]], [], 1, null, ["loc", [null, [8, 2], [99, 9]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -8879,7 +8901,7 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
             "column": 0
           },
           "end": {
-            "line": 61,
+            "line": 68,
             "column": 0
           }
         },
@@ -9045,6 +9067,32 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
         dom.setAttribute(el6, "class", "form-group");
         var el7 = dom.createTextNode("\n                        ");
         dom.appendChild(el6, el7);
+        var el7 = dom.createElement("label");
+        dom.setAttribute(el7, "for", "levelcompleted");
+        dom.setAttribute(el7, "class", "col-md-3 control-label");
+        var el8 = dom.createTextNode("Level Completed");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
+        var el7 = dom.createElement("div");
+        dom.setAttribute(el7, "class", "col-md-9");
+        var el8 = dom.createTextNode("\n                            ");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createComment("");
+        dom.appendChild(el7, el8);
+        var el8 = dom.createTextNode("\n                        ");
+        dom.appendChild(el7, el8);
+        dom.appendChild(el6, el7);
+        var el7 = dom.createTextNode("\n                    ");
+        dom.appendChild(el6, el7);
+        dom.appendChild(el5, el6);
+        var el6 = dom.createTextNode("\n\n                    ");
+        dom.appendChild(el5, el6);
+        var el6 = dom.createElement("div");
+        dom.setAttribute(el6, "class", "form-group");
+        var el7 = dom.createTextNode("\n                        ");
+        dom.appendChild(el6, el7);
         var el7 = dom.createComment(" Button ");
         dom.appendChild(el6, el7);
         var el7 = dom.createTextNode("\n                        ");
@@ -9097,17 +9145,18 @@ define("game/templates/components/signup-form", ["exports"], function (exports) 
       buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
         var element0 = dom.childAt(fragment, [2, 3]);
         var element1 = dom.childAt(element0, [3, 3, 1]);
-        var morphs = new Array(6);
+        var morphs = new Array(7);
         morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
         morphs[1] = dom.createMorphAt(element0, 1, 1);
         morphs[2] = dom.createElementMorph(element1);
         morphs[3] = dom.createMorphAt(dom.childAt(element1, [5, 3]), 1, 1);
         morphs[4] = dom.createMorphAt(dom.childAt(element1, [7, 3]), 1, 1);
         morphs[5] = dom.createMorphAt(dom.childAt(element1, [9, 3]), 1, 1);
+        morphs[6] = dom.createMorphAt(dom.childAt(element1, [11, 3]), 1, 1);
         dom.insertBoundary(fragment, 0);
         return morphs;
       },
-      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 6], [8, 18]]]], ["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [14, 59], [14, 90]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [29, 40], [29, 50]]]]], [], []], "id", "signUpEmailInput", "type", "text", "class", "form-control", "name", "userEmail", "placeholder", "Email (username)"], ["loc", [null, [29, 26], [29, 155]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [37, 40], [37, 53]]]]], [], []], "id", "signUpPasswordInput", "type", "password", "class", "form-control", "name", "userPassword", "placeholder", "Password"], ["loc", [null, [37, 26], [37, 161]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [44, 42], [44, 67]]]]], [], []], "id", "signUpConfirmInput", "type", "password", "class", "form-control", "name", "icode", "placeholder", "Confirm Password"], ["loc", [null, [44, 28], [44, 174]]]]],
+      statements: [["inline", "ember-notify", [], ["messageStyle", "bootstrap", "classPrefix", "custom-notify"], ["loc", [null, [1, 0], [1, 69]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 6], [8, 18]]]], ["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [14, 59], [14, 90]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.email", ["loc", [null, [29, 40], [29, 50]]]]], [], []], "id", "signUpEmailInput", "type", "text", "class", "form-control", "name", "userEmail", "placeholder", "Email (username)"], ["loc", [null, [29, 26], [29, 155]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.password", ["loc", [null, [37, 40], [37, 53]]]]], [], []], "id", "signUpPasswordInput", "type", "password", "class", "form-control", "name", "userPassword", "placeholder", "Password"], ["loc", [null, [37, 26], [37, 161]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.passwordConfirmation", ["loc", [null, [44, 42], [44, 67]]]]], [], []], "id", "signUpConfirmInput", "type", "password", "class", "form-control", "name", "icode", "placeholder", "Confirm Password"], ["loc", [null, [44, 28], [44, 174]]]], ["inline", "input", [], ["value", ["subexpr", "@mut", [["get", "user.levelcompleted", ["loc", [null, [51, 42], [51, 61]]]]], [], []], "id", "levelcompleted", "type", "text", "class", "form-control", "name", "levelcompleted", "placeholder", "1"], ["loc", [null, [51, 28], [51, 154]]]]],
       locals: [],
       templates: [child0]
     };
@@ -12399,11 +12448,11 @@ define("game/templates/profile", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 33,
+                  "line": 35,
                   "column": 6
                 },
                 "end": {
-                  "line": 35,
+                  "line": 37,
                   "column": 6
                 }
               },
@@ -12434,12 +12483,12 @@ define("game/templates/profile", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 12,
+                "line": 11,
                 "column": 6
               },
               "end": {
-                "line": 38,
-                "column": 4
+                "line": 39,
+                "column": 2
               }
             },
             "moduleName": "game/templates/profile.hbs"
@@ -12450,7 +12499,7 @@ define("game/templates/profile", ["exports"], function (exports) {
           hasRendered: false,
           buildFragment: function buildFragment(dom) {
             var el0 = dom.createDocumentFragment();
-            var el1 = dom.createTextNode("\n\n    ");
+            var el1 = dom.createTextNode("\n    ");
             dom.appendChild(el0, el1);
             var el1 = dom.createElement("table");
             dom.setAttribute(el1, "class", "table");
@@ -12495,7 +12544,26 @@ define("game/templates/profile", ["exports"], function (exports) {
             var el4 = dom.createTextNode("\n        ");
             dom.appendChild(el3, el4);
             dom.appendChild(el2, el3);
-            var el3 = dom.createTextNode("\n\n\n      ");
+            var el3 = dom.createTextNode("\n\n        ");
+            dom.appendChild(el2, el3);
+            var el3 = dom.createElement("tr");
+            var el4 = dom.createTextNode("\n          ");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createElement("th");
+            dom.setAttribute(el4, "scope", "row");
+            var el5 = dom.createTextNode("efw");
+            dom.appendChild(el4, el5);
+            dom.appendChild(el3, el4);
+            var el4 = dom.createTextNode("\n          ");
+            dom.appendChild(el3, el4);
+            var el4 = dom.createElement("td");
+            var el5 = dom.createComment("");
+            dom.appendChild(el4, el5);
+            dom.appendChild(el3, el4);
+            var el4 = dom.createTextNode("\n        ");
+            dom.appendChild(el3, el4);
+            dom.appendChild(el2, el3);
+            var el3 = dom.createTextNode("\n\n      ");
             dom.appendChild(el2, el3);
             dom.appendChild(el1, el2);
             var el2 = dom.createTextNode("\n    ");
@@ -12511,19 +12579,20 @@ define("game/templates/profile", ["exports"], function (exports) {
             dom.appendChild(el0, el1);
             var el1 = dom.createComment("");
             dom.appendChild(el0, el1);
-            var el1 = dom.createTextNode("       \n\n");
+            var el1 = dom.createTextNode("       \n");
             dom.appendChild(el0, el1);
             return el0;
           },
           buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
             var element0 = dom.childAt(fragment, [1, 1]);
-            var morphs = new Array(3);
+            var morphs = new Array(4);
             morphs[0] = dom.createMorphAt(dom.childAt(element0, [1, 3]), 0, 0);
             morphs[1] = dom.createMorphAt(dom.childAt(element0, [3, 3]), 0, 0);
-            morphs[2] = dom.createMorphAt(fragment, 5, 5, contextualElement);
+            morphs[2] = dom.createMorphAt(dom.childAt(element0, [5, 3]), 0, 0);
+            morphs[3] = dom.createMorphAt(fragment, 5, 5, contextualElement);
             return morphs;
           },
-          statements: [["content", "user.email", ["loc", [null, [19, 14], [19, 28]]]], ["content", "user.levelcompleted", ["loc", [null, [24, 14], [24, 37]]]], ["block", "link-to", ["consent"], ["tagName", "button"], 0, null, ["loc", [null, [33, 6], [35, 18]]]]],
+          statements: [["content", "user.email", ["loc", [null, [17, 14], [17, 28]]]], ["content", "user.levelcompleted", ["loc", [null, [22, 14], [22, 37]]]], ["content", "user.password", ["loc", [null, [27, 14], [27, 31]]]], ["block", "link-to", ["consent"], ["tagName", "button"], 0, null, ["loc", [null, [35, 6], [37, 18]]]]],
           locals: [],
           templates: [child0]
         };
@@ -12539,7 +12608,7 @@ define("game/templates/profile", ["exports"], function (exports) {
               "column": 4
             },
             "end": {
-              "line": 39,
+              "line": 41,
               "column": 2
             }
           },
@@ -12551,19 +12620,19 @@ define("game/templates/profile", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("\n");
-          dom.appendChild(el0, el1);
           var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
+          var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
           var morphs = new Array(1);
-          morphs[0] = dom.createMorphAt(fragment, 1, 1, contextualElement);
-          dom.insertBoundary(fragment, null);
+          morphs[0] = dom.createMorphAt(fragment, 0, 0, contextualElement);
+          dom.insertBoundary(fragment, 0);
           return morphs;
         },
-        statements: [["block", "if", [["subexpr", "eq", [["get", "user.email", ["loc", [null, [12, 16], [12, 26]]]], ["get", "session.data.email", ["loc", [null, [12, 27], [12, 45]]]]], [], ["loc", [null, [12, 12], [12, 46]]]]], [], 0, null, ["loc", [null, [12, 6], [38, 11]]]]],
+        statements: [["block", "if", [["subexpr", "eq", [["get", "user.email", ["loc", [null, [11, 16], [11, 26]]]], ["get", "session.data.email", ["loc", [null, [11, 27], [11, 45]]]]], [], ["loc", [null, [11, 12], [11, 46]]]]], [], 0, null, ["loc", [null, [11, 6], [39, 9]]]]],
         locals: ["user"],
         templates: [child0]
       };
@@ -12582,7 +12651,7 @@ define("game/templates/profile", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 136,
+            "line": 138,
             "column": 0
           }
         },
@@ -13057,7 +13126,7 @@ define("game/templates/profile", ["exports"], function (exports) {
         morphs[2] = dom.createMorphAt(element1, 3, 3);
         return morphs;
       },
-      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [5, 23], [5, 54]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 4], [8, 16]]]], ["block", "each", [["get", "model", ["loc", [null, [10, 12], [10, 17]]]]], [], 1, null, ["loc", [null, [10, 4], [39, 11]]]]],
+      statements: [["element", "action", ["submit"], ["on", "submit"], ["loc", [null, [5, 23], [5, 54]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [6, 4], [8, 16]]]], ["block", "each", [["get", "model", ["loc", [null, [10, 12], [10, 17]]]]], [], 1, null, ["loc", [null, [10, 4], [41, 11]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -13650,7 +13719,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+01df545c"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+d92fecd7"});
 }
 
 /* jshint ignore:end */

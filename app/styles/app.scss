@@ -62,6 +62,11 @@ pre {
   margin-top: 10px;
 }
 
+#index-button:hover {
+  background-color: #FF6600;
+  color: black;
+}
+
 .jumbotron.text-center {
   height:100%;
   background-color: #646464;
@@ -227,6 +232,12 @@ pre {
 #signup-login {
   float: left;
   color: #FF6600;
+  text-decoration: underline;
+}
+
+#signup-login:hover {
+  color: #660000;
+  text-decoration: underline;
 }
 
 #start-button{

@@ -1,0 +1,332 @@
+_____________________________________________________________________
++ Program class: a/a/a/a
+  Superclass:    java/lang/Object
+  Major version: 0x32
+  Minor version: 0x0
+  Access flags:  0x31
+    = public final class a.a.a.a extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 14):
+  + Integer [0]
+  + Class [a/a/a/a]
+  + Class [java/lang/Object]
+  + Methodref [java/lang/Object.<init> ()V]
+  + NameAndType [<init> ()V]
+  + Utf8 [()V]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [ConstantValue]
+  + Utf8 [Z]
+  + Utf8 [a]
+  + Utf8 [a/a/a/a]
+  + Utf8 [java/lang/Object]
+
+Fields (count = 1):
+  + Field:        a Z
+    Access flags: 0x19
+      = public static final boolean a
+    Class member attributes (count = 1):
+    + Constant value attribute:
+    + Integer [0]
+
+Methods (count = 1):
+  - Method:       <init>()V
+    Access flags: 0x1
+      = public a()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 5, locals = 1, stack = 1):
+      [0] aload_0 v0
+      [1] invokespecial #4
+        + Methodref [java/lang/Object.<init> ()V]
+      [4] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 0):
+
+Class file attributes (count = 0):
+
+_____________________________________________________________________
++ Program class: a/a/a/b
+  Superclass:    java/lang/Object
+  Major version: 0x32
+  Minor version: 0x0
+  Access flags:  0x31
+    = public final class a.a.a.b extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 10):
+  + Class [a/a/a/b]
+  + Class [java/lang/Object]
+  + Methodref [java/lang/Object.<init> ()V]
+  + NameAndType [<init> ()V]
+  + Utf8 [()V]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [a/a/a/b]
+  + Utf8 [java/lang/Object]
+
+Fields (count = 0):
+
+Methods (count = 1):
+  - Method:       <init>()V
+    Access flags: 0x1
+      = public b()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 5, locals = 1, stack = 1):
+      [0] aload_0 v0
+      [1] invokespecial #3
+        + Methodref [java/lang/Object.<init> ()V]
+      [4] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 0):
+
+Class file attributes (count = 0):
+
+_____________________________________________________________________
++ Program class: a/a/a/c
+  Superclass:    java/lang/Object
+  Major version: 0x32
+  Minor version: 0x0
+  Access flags:  0x31
+    = public final class a.a.a.c extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 10):
+  + Class [a/a/a/c]
+  + Class [java/lang/Object]
+  + Methodref [java/lang/Object.<init> ()V]
+  + NameAndType [<init> ()V]
+  + Utf8 [()V]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [a/a/a/c]
+  + Utf8 [java/lang/Object]
+
+Fields (count = 0):
+
+Methods (count = 1):
+  - Method:       <init>()V
+    Access flags: 0x1
+      = public c()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 5, locals = 1, stack = 1):
+      [0] aload_0 v0
+      [1] invokespecial #3
+        + Methodref [java/lang/Object.<init> ()V]
+      [4] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 0):
+
+Class file attributes (count = 0):
+
+_____________________________________________________________________
++ Program class: a/a/a/d
+  Superclass:    java/lang/Object
+  Major version: 0x32
+  Minor version: 0x0
+  Access flags:  0x31
+    = public final class a.a.a.d extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 14):
+  + Integer [2130837504]
+  + Class [a/a/a/d]
+  + Class [java/lang/Object]
+  + Methodref [java/lang/Object.<init> ()V]
+  + NameAndType [<init> ()V]
+  + Utf8 [()V]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [ConstantValue]
+  + Utf8 [I]
+  + Utf8 [a/a/a/d]
+  + Utf8 [java/lang/Object]
+  + Utf8 [screen]
+
+Fields (count = 1):
+  + Field:        screen I
+    Access flags: 0x19
+      = public static final int screen
+    Class member attributes (count = 1):
+    + Constant value attribute:
+    + Integer [2130837504]
+
+Methods (count = 1):
+  - Method:       <init>()V
+    Access flags: 0x1
+      = public d()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 5, locals = 1, stack = 1):
+      [0] aload_0 v0
+      [1] invokespecial #4
+        + Methodref [java/lang/Object.<init> ()V]
+      [4] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 0):
+
+Class file attributes (count = 0):
+
+_____________________________________________________________________
++ Program class: a/a/a/e
+  Superclass:    java/lang/Object
+  Major version: 0x32
+  Minor version: 0x0
+  Access flags:  0x31
+    = public final class a.a.a.e extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 14):
+  + Integer [2130903040]
+  + Class [a/a/a/e]
+  + Class [java/lang/Object]
+  + Methodref [java/lang/Object.<init> ()V]
+  + NameAndType [<init> ()V]
+  + Utf8 [()V]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [ConstantValue]
+  + Utf8 [I]
+  + Utf8 [a/a/a/e]
+  + Utf8 [icon]
+  + Utf8 [java/lang/Object]
+
+Fields (count = 1):
+  + Field:        icon I
+    Access flags: 0x19
+      = public static final int icon
+    Class member attributes (count = 1):
+    + Constant value attribute:
+    + Integer [2130903040]
+
+Methods (count = 1):
+  - Method:       <init>()V
+    Access flags: 0x1
+      = public e()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 5, locals = 1, stack = 1):
+      [0] aload_0 v0
+      [1] invokespecial #4
+        + Methodref [java/lang/Object.<init> ()V]
+      [4] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 0):
+
+Class file attributes (count = 0):
+
+_____________________________________________________________________
++ Program class: a/a/a/f
+  Superclass:    java/lang/Object
+  Major version: 0x32
+  Minor version: 0x0
+  Access flags:  0x31
+    = public final class a.a.a.f extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 18):
+  + Integer [2131034112]
+  + Integer [2131034113]
+  + Integer [2131034114]
+  + Class [a/a/a/f]
+  + Class [java/lang/Object]
+  + Methodref [java/lang/Object.<init> ()V]
+  + NameAndType [<init> ()V]
+  + Utf8 [()V]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [ConstantValue]
+  + Utf8 [I]
+  + Utf8 [a/a/a/f]
+  + Utf8 [activity_name]
+  + Utf8 [app_name]
+  + Utf8 [java/lang/Object]
+  + Utf8 [launcher_name]
+
+Fields (count = 3):
+  + Field:        activity_name I
+    Access flags: 0x19
+      = public static final int activity_name
+    Class member attributes (count = 1):
+    + Constant value attribute:
+    + Integer [2131034114]
+  + Field:        app_name I
+    Access flags: 0x19
+      = public static final int app_name
+    Class member attributes (count = 1):
+    + Constant value attribute:
+    + Integer [2131034112]
+  + Field:        launcher_name I
+    Access flags: 0x19
+      = public static final int launcher_name
+    Class member attributes (count = 1):
+    + Constant value attribute:
+    + Integer [2131034113]
+
+Methods (count = 1):
+  - Method:       <init>()V
+    Access flags: 0x1
+      = public f()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 5, locals = 1, stack = 1):
+      [0] aload_0 v0
+      [1] invokespecial #6
+        + Methodref [java/lang/Object.<init> ()V]
+      [4] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 0):
+
+Class file attributes (count = 0):
+
+_____________________________________________________________________
++ Program class: a/a/a/g
+  Superclass:    java/lang/Object
+  Major version: 0x32
+  Minor version: 0x0
+  Access flags:  0x31
+    = public final class a.a.a.g extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 14):
+  + Integer [2130968576]
+  + Class [a/a/a/g]
+  + Class [java/lang/Object]
+  + Methodref [java/lang/Object.<init> ()V]
+  + NameAndType [<init> ()V]
+  + Utf8 [()V]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [ConstantValue]
+  + Utf8 [I]
+  + Utf8 [a/a/a/g]
+  + Utf8 [config]
+  + Utf8 [java/lang/Object]
+
+Fields (count = 1):
+  + Field:        config I
+    Access flags: 0x19
+      = public static final int config
+    Class member attributes (count = 1):
+    + Constant value attribute:
+    + Integer [2130968576]
+
+Methods (count = 1):
+  - Method:       <init>()V
+    Access flags: 0x1
+      = public g()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 5, locals = 1, stack = 1):
+      [0] aload_0 v0
+      [1] invokespecial #4
+        + Methodref [java/lang/Object.<init> ()V]
+      [4] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 0):
+
+Class file attributes (count = 0):
+
