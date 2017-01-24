@@ -16,9 +16,13 @@
 
   <!-- Footer consists of buttons and seperators -->
   <div id="footer-content">
-    <button >About Us</button>
+    {{#link-to 'about' id="about-us"}}
+    About
+    {{/link-to}}
     <label> | </label>
-    <button >Contact</button>
+    {{#link-to 'contact' id="contact-us"}}
+       Contact
+    {{/link-to}}
   </div>
-  <label> Copyright © 2016. CodeReadingDojo </label>
+  <label> Copyright © 2016-2017. Virginia Tech </label>
 </div>

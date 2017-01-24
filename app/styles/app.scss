@@ -52,18 +52,28 @@ pre {
   width: 25%;
 }
 
+.survey-notcompleted {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+.survey-completed {
+  width: 25%;
+}
+
 #index-button {
   // margin-left: 30%;
   // margin-right: 30%;
   background-color: #660000;
-  border-color: #660000;
-  color:white;
+  border-color: #4d0000;
+  color: white;
   width: 40% !important;
   margin-top: 10px;
 }
 
 #index-button:hover {
   background-color: #FF6600;
+  border-color: #E65C00;
   color: black;
 }
 
@@ -136,13 +146,13 @@ pre {
 
 #survey{
   background-color: #FF6600;
-  border-color: #660000;
-  color: #660000;
-  // margin-right: 10px;
+  border-color: #E65C00;
+  color: black;
+  margin-right: 30%;
+  margin-left: 30%;
+  width: 35%;
   margin-top: 10px;
   margin-bottom: 10px;
-  // background-color: #660000;
-  // border-color: #660000;
 }
 
 
@@ -152,9 +162,16 @@ pre {
   margin-left:30%;
   margin-right:30%;
   max-width:40%;
-  border-color: #660000;
-  display:block;
+  border-color: #4d0000;
+  display: block;
+  color: white;
   margin-bottom: 0px;
+}
+
+#play:hover {
+  background-color: #FF6600;
+  border-color: #E65C00;
+  color: black;
 }
 
 #signup{
@@ -163,23 +180,27 @@ pre {
   margin-left:30%;
   margin-right:30%;
   max-width:40%;
-  border-color: #660000;
+  border-color: #4d0000;
+  color: white;
   display:block;
   margin-bottom: 0px;
 }
 
 #signup:hover {
   background-color: #FF6600;
+  border-color: #E65C00;
   color: black;
 }
 
 #confirm-button {
   background-color: #660000;
-  border-color: #660000;
+  border-color: #4d0000;
+  color: white;
 }
 
 #confirm-button:hover {
   background-color: #FF6600;
+  border-color: #E65C00;
   color: black;
 }
 
@@ -188,7 +209,8 @@ pre {
   margin-right: 10px;
   //margin-top: 10px;
   background-color: #660000;
-  border-color: #660000;
+  border-color: #4d0000;
+  color: white;
   padding-top: 1px;
   padding-bottom: 0px;
   display: block;
@@ -196,6 +218,7 @@ pre {
 
 #logout:hover {
   background-color: #FF6600;
+  border-color: #E65C00;
   color: black;
 }
 
@@ -203,21 +226,29 @@ pre {
   float: right;
   margin-right: 10px;
   background-color: #660000;
-  border-color: #660000;
+  border-color: #4d0000;
+  color: white;
   padding-top: 1px;
   padding-bottom: 0px;
   display: block;
+  padding-top: 1px;
+  padding-bottom: 0px;
 }
 
 #login:hover {
   background-color: #FF6600;
+  border-color: #E65C00;
   color: black;
+  padding-top: 1px;
+  padding-bottom: 0px;
 }
 
 #profile {
+  margin-left: 10px;
   margin-top: 10px;
   background-color: #660000;
-  border-color: #660000;
+  border-color: #4d0000;
+  color: white;
   padding-top: 1px;
   padding-bottom: 0px;
   display: block;
@@ -225,6 +256,7 @@ pre {
 
 #profile:hover {
   background-color: #FF6600;
+  border-color: #E65C00;
   color: black;
 }
 
@@ -242,17 +274,17 @@ pre {
 
 #start-button{
   background-color: #FF6600;
-  border-color: #660000;
+  border-color: #E65C00;
   padding-top: 1px;
   padding-bottom: 0px;
   display: block;
-  color: #660000;
+  color: black;
   // margin-bottom: 20%;
 }
 
 #retry-button{
   background-color: #660000;
-  border-color: #660000;
+  border-color: #4d0000;
   padding-top: 1px;
   padding-bottom: 0px;
   color: white;
@@ -261,30 +293,51 @@ pre {
 
 #back-button{
   background-color: #660000;
-  border-color: #660000;
+  border-color: #4d0000;
   padding-top: 1px;
   padding-bottom: 0px;
+  color: white;
   display: block;
 }
 
 #back-button:hover {
   background-color: #FF6600;
+  border-color: #E65C00;
+  color: black;
+}
+
+#back{
+  background-color: #660000;
+  border-color: #4d0000;
+  padding-top: 1px;
+  padding-bottom: 0px;
+  color: white;
+  display: block;
+  margin-top: 10px;
+}
+
+#back:hover {
+  background-color: #FF6600;
+  border-color: #E65C00;
   color: black;
 }
 
 #signup-submit {
   background-color: #660000;
-  border-color: #660000;
+  border-color: #4d0000;
+  color: white;
 }
 
 #signup-submit:hover {
   background-color: #FF6600;
+  border-color: #E65C00;
   color: black;
 }
 
 #survey:hover,
 #survey-submit:hover {
   background-color: #660000;
+  border-color: #4d0000;
   color: white;
 }
 
@@ -299,6 +352,52 @@ pre {
 #consent-title {
   color: #FF6600;
   text-align: center;
+}
+
+#about {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.name {
+  color: #660000;
+}
+
+.keyword {
+  color: #FF6600;
+}
+
+.survey-next {
+  background-color: #660000;
+  border-color: #4d0000;
+  color: white;
+}
+
+.survey-next:hover {
+  background-color: #FF6600;
+  border-color: #E65C00;
+  color: black;
+}
+
+#contact-us {
+  color: white;
+  text-decoration: underline;
+  margin-left: 5px;
+}
+
+#contact-us:hover {
+  color: black;
+  text-decoration: underline;
+}
+
+#about-us {
+  color: white;
+  text-decoration: underline;
+}
+
+#about-us:hover {
+  color: black;
+  text-decoration: underline;
 }
 
 html,body {padding:0;margin:0;}
@@ -387,7 +486,7 @@ form .buttons .submit:hover {background-color: #14892c;}
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600);
 
 .container {
-	max-width:340px;
+	max-width:400px;
 	width:100%;
 	margin:0 auto;
 	position:relative;
@@ -450,14 +549,16 @@ fieldset {
 	width:100%;
 	border:none;
 	background:#660000;
-	color:#FFF;
+  border-color: #4d0000;
+	color: white;
 	margin:0 0 5px;
 	padding:10px;
 	font-size:15px;
 }
 
 #contact button[type="submit"]:hover {
-	background:#FF6600;
+	background-color: #FF6600;
+  border-color: #E65C00;
 	-webkit-transition:background 0.3s ease-in-out;
 	-moz-transition:background 0.3s ease-in-out;
 	transition:background-color 0.3s ease-in-out;
@@ -591,11 +692,11 @@ fieldset {
 
 #next-button {
   background-color: #FF6600;
-  border-color: #660000;
+  border-color: #E65C00;
   padding-top: 1px;
   padding-bottom: 0px;
   display: block;
-  color: #660000;
+  color: black;
   // margin-bottom: 20%;
 }
 
@@ -623,10 +724,10 @@ fieldset {
     color: #80D651;
 }
 .notice-info {
-    border-color: #45ABCD;
+    border-color: #4d0000;
 }
 .notice-info>strong {
-    color: #45ABCD;
+    color: #660000;
 }
 .notice-warning {
     border-color: #FEAF20;

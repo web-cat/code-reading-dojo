@@ -3,7 +3,7 @@
     Home
   {{/link-to}} -->
   {{#if session.isAuthenticated}}
-    <p>Signed in as {{session.data.email}}</p>
+    <p>Logged in as {{session.data.email}}</p>
   {{else}}
     <button onclick={{action 'login'}}>Login</button>
   {{/if}}
@@ -32,13 +32,31 @@
         {{/if}}
       {{/each}}
 
+
+      {{#if (gt session.data.level 6)}}
+        {{#link-to 'survey' class="btn btn-primary survey-completed" id="survey"}}
+          Survey
+        {{/link-to}}
+        {{else}}
+        {{#link-to 'survey' class="btn btn-primary survey-notcompleted" id="survey"}}
+          Survey
+        {{/link-to}}
+      {{/if}}
+
+
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'intermediate')}}
           {{#if (gt session.data.level p.level)}}
             {{#link-to 'programs' p.level class="item-completed"}}
               <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
             {{/link-to}}
-          {{else}}
+          {{/if}}
+        {{/if}}
+      {{/each}}
+
+      {{#each model as |p|}}
+        {{#if (eq p.difficulty 'intermediate')}}
+          {{#if (gt p.level session.data.level)}}
             {{#link-to 'programs' p.level class="item-notcompleted"}}
               <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
             {{/link-to}}
@@ -61,9 +79,6 @@
       {{/each}}
     </div>
 
-    {{#link-to 'survey' class="btn btn-primary" id="survey"}}
-      Survey
-    {{/link-to}}
     {{#link-to 'info' class="btn btn-primary" }}
       Info
     {{/link-to}}
