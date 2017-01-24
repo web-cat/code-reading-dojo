@@ -400,7 +400,7 @@ pre {
   text-decoration: underline;
 }
 
-html,body {padding:0;margin:0;}
+html,body {padding:0;margin:0; height:100%;}
 .wrap {
   font:12px Arial, san-serif;
 }
@@ -486,7 +486,7 @@ form .buttons .submit:hover {background-color: #14892c;}
 @import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600);
 
 .container {
-	max-width:400px;
+//	max-width:400px;
 	width:100%;
 	margin:0 auto;
 	position:relative;
@@ -744,12 +744,12 @@ fieldset {
 
 #footer{
   width: 100%;
-  /*Put content to the center*/
   text-align: center;
-//  background-color: #7D1935;
   color: white;
   height: 60px;
   overflow: auto;
+  bottom:0;
+  width:100%;
 }
 
 #footer-content{
@@ -804,5 +804,12 @@ fieldset {
   }
   #footer label{
     padding-bottom: 5px;
+  }
+
+  .container {
+  	max-width:400px;
+  	width:100%;
+  	margin:0 auto;
+  	position:relative;
   }
 }

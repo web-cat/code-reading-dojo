@@ -1,8 +1,6 @@
-<h2> HERE IS YOUR PROFILE </h2>
-
 <div class="container">
 
-    <form id="contact" {{action "submit" on="submit"}}>
+    <form id="contact" >
     {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button"}}
       Back to Menu
     {{/link-to}}
@@ -21,116 +19,24 @@
           <th scope="row">Levelcompleted</th>
           <td>{{user.levelcompleted}}</td>
         </tr>
-
-        <tr>
-          <th scope="row">efw</th>
-          <td>{{user.password}}</td>
-        </tr>
-
       </tbody>
     </table>
 
        
-    <label>My data can be used for research purposes.</label>
-      {{#link-to 'consent' tagName="button"}}
-        Change
+    <label>My data can be used for research purposes
+      {{#link-to 'consent'}}
+        <i class="material-icons">mode_edit</i>
       {{/link-to}}
+    </label>
+
        
   {{/if}}
 
   {{/each}}
-    <h3>Tell us a little about your self</h3>
-    <label class="statement"> Your Gender</label>
-    <ul class='likertt'>
-        <input type="radio" name="gender" value="male">
-        <label>Male   </label>
-        <input type="radio" name="gender" value="female">
-        <label>Female</label>
+  {{#link-to 'info' tagName="button" id="play"}}
+    Complete your Profile
+  {{/link-to}}
 
-    </ul>
-      <label class="statement">How old are you?</label>
-      <ul class='likertt'>
-        <input name="age" value="" type="text" >
-      </ul>
-
-    <label class="statement">How many months/years do you have programming experience</label>
-    <ul class='likert'>
-      <li>
-        <input type="radio" name="experience" value="1">
-        <label>Less than a month</label>
-      </li>
-      <li>
-        <input type="radio" name="experience" value="2">
-        <label>1-06 months</label>
-      </li>
-      <li>
-        <input type="radio" name="experience" value="3">
-        <label>6-12 months</label>
-      </li>
-      <li>
-        <input type="radio" name="experience" value="4">
-        <label>1-2 years</label>
-      </li>
-      <li>
-        <input type="radio" name="experience" value="5">
-        <label>2+ years</label>
-      </li>
-    </ul>
-
-
-    <label class="statement">I enjoy mobile games very much</label>
-    <ul class='likert'>
-      <li>
-        <input type="radio" name="enjoy" value="1">
-        <label>Strongly disagree</label>
-      </li>
-      <li>
-        <input type="radio" name="enjoy" value="2">
-        <label>Disagree</label>
-      </li>
-      <li>
-        <input type="radio" name="enjoy" value="3">
-        <label>Neutral</label>
-      </li>
-      <li>
-        <input type="radio" name="enjoy" value="4">
-        <label>Agree</label>
-      </li>
-      <li>
-        <input type="radio" name="enjoy" value="5">
-        <label>Strongly agree</label>
-      </li>
-    </ul>
-
-<label class="statement">Which programming languages have you used before</label>
-<ul class='likertt'>
-
-  <table style="width:100%">
-  <tr>
-    <th>  <input type="checkbox" name="language" value="java">
-  <label>Java</label></th>
-    <th>  <input type="checkbox" name="language" value="c">
-  <label>C</label></th>
-    <th>  <input type="checkbox" name="language" value="c++">
-  <label>C++</label></th>
-  </tr>
-<tr>
-    <th>  <input type="checkbox" name="language" value="python">
-  <label>Python</label></th>
-    <th>  <input type="checkbox" name="language" value="javascript">
-  <label>JavaScript</label></th>
-   
-  </tr>
-<tr>
- 
-  </tr>
-
-</table>
-</ul>
-    <fieldset>
-      <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
-
-    </fieldset>
   </form>
 
 

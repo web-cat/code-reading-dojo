@@ -13,6 +13,9 @@
   {{#if (eq clicked 'true')}}
 
       {{#if (eq program.level currentUrl)}}
+      {{#link-to 'new'}}
+        <img id="new-logo" src={{concat (concat "assets/images/beginner/" program.level) ".png"}}>
+      {{/link-to}}
           {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button" invokeAction=(action 'clicked')}}
             Back to Menu
           {{/link-to}}

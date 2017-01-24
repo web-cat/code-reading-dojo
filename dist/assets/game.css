@@ -6155,7 +6155,8 @@ pre {
 
 html, body {
   padding: 0;
-  margin: 0; }
+  margin: 0;
+  height: 100%; }
 
 .wrap {
   font: 12px Arial, san-serif; }
@@ -6250,7 +6251,6 @@ form .buttons .submit:hover {
   background-color: #14892c; }
 
 .container {
-  max-width: 400px;
   width: 100%;
   margin: 0 auto;
   position: relative; }
@@ -6461,11 +6461,12 @@ fieldset {
 
 #footer {
   width: 100%;
-  /*Put content to the center*/
   text-align: center;
   color: white;
   height: 60px;
-  overflow: auto; }
+  overflow: auto;
+  bottom: 0;
+  width: 100%; }
 
 #footer-content {
   display: block;
@@ -6506,6 +6507,11 @@ fieldset {
   #footer button {
     margin: 0; }
   #footer label {
-    padding-bottom: 5px; } }
+    padding-bottom: 5px; }
+  .container {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    position: relative; } }
 
 /*# sourceMappingURL=game.css.map */
