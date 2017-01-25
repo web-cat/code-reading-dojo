@@ -21,11 +21,11 @@
           {{/link-to}}
 
           {{program-details program=program}}
-          <span class="next-level-none" id="next">
+          <div class="next-level-none" id="next">
             {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked') class="btn btn-primary btn-lg" id="next-button"}}
               Next Level
             {{/link-to}}
-          </span>
+          </div>
 
     {{/if}}
   {{/if}}

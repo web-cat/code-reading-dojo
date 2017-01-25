@@ -138,7 +138,9 @@ export default Component.extend({
           // document.getElementById("third-score").classList.add("full");
           current.get('notify').success(finalMessage, {closeAfter: 1500 });
           tap.set('success', 'yes');
-          tap.save();
+          if (current.get('session.data.consent') === "1") {
+            tap.save();
+          }
           Ember.$(this).css("background-color","#00CC66");
           //current.get('names').pushObject("YEY");
           var newCount = current.get('plusCount') + 1;
@@ -151,7 +153,9 @@ export default Component.extend({
             // document.getElementById("third-score").classList.add("full");
             current.get('notify').warning(finalMessage, {closeAfter: 1500 });
             tap.set('success', 'redundant');
-            tap.save();
+            if (current.get('session.data.consent') === "1") {
+              tap.save();
+            }
             Ember.$(this).css("background-color","#00CC66");
             //current.get('names').pushObject("YEY");
           //  var newCount = current.get('plusCount') + 1;
@@ -161,7 +165,9 @@ export default Component.extend({
           finalMessage = "No error: \"" + message + "\"";
           current.get('notify').alert(finalMessage, {closeAfter: 1500 });
           tap.set('success', 'no');
-          tap.save();
+          if (current.get('session.data.consent') === "1") {
+            tap.save();
+          }
           Ember.$(this).css("background-color","#ff4d4d");
           var newMinusCount = current.get('minusCount') + 1;
           current.set('minusCount',newMinusCount);

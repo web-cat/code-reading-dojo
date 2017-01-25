@@ -26,7 +26,9 @@ export default Controller.extend({
       // newSurvey.set('s2', s2);
       // newSurvey.set('s3', s3);
       // newSurvey.set('s4', s4);
-      newInfo.save();
+      if (this.get('session.data.consent') === "1") {
+        newInfo.save();
+      }
       var arr = window.location.href.split("/");
       arr.splice(-1,1);
       var newUrl = arr.join("/") + "/new";

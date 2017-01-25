@@ -6,5 +6,6 @@ export default Model.extend({
   email: attr('string'),
   password: attr('string'),
   passwordConfirmation: attr('string'),
-  levelcompleted: attr('string')
+  levelcompleted: attr('string'),
+  consent: attr('string')
 });

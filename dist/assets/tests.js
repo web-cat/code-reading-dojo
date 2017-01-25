@@ -97,6 +97,15 @@ define('game/tests/controllers/completed.jshint', ['exports'], function (exports
     assert.ok(true, 'controllers/completed.js should pass jshint.');
   });
 });
+define('game/tests/controllers/consent.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | controllers/consent.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(false, 'controllers/consent.js should pass jshint.\ncontrollers/consent.js: line 12, col 62, Unnecessary semicolon.\ncontrollers/consent.js: line 12, col 21, \'$\' is not defined.\n\n2 errors');
+  });
+});
 define('game/tests/controllers/index.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -401,6 +410,15 @@ define('game/tests/models/completed.jshint', ['exports'], function (exports) {
     assert.ok(true, 'models/completed.js should pass jshint.');
   });
 });
+define('game/tests/models/consent.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | models/consent.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'models/consent.js should pass jshint.');
+  });
+});
 define('game/tests/models/info.jshint', ['exports'], function (exports) {
   'use strict';
 
@@ -507,6 +525,15 @@ define('game/tests/routes/completed.jshint', ['exports'], function (exports) {
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
     assert.ok(true, 'routes/completed.js should pass jshint.');
+  });
+});
+define('game/tests/routes/consent.jshint', ['exports'], function (exports) {
+  'use strict';
+
+  QUnit.module('JSHint | routes/consent.js');
+  QUnit.test('should pass jshint', function (assert) {
+    assert.expect(1);
+    assert.ok(true, 'routes/consent.js should pass jshint.');
   });
 });
 define('game/tests/routes/index.jshint', ['exports'], function (exports) {

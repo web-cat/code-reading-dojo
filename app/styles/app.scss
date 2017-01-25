@@ -260,7 +260,6 @@ pre {
   color: black;
 }
 
-
 #signup-login {
   float: left;
   color: #FF6600;
@@ -268,6 +267,16 @@ pre {
 }
 
 #signup-login:hover {
+  color: #660000;
+  text-decoration: underline;
+}
+
+#signup-consent {
+  color: #FF6600;
+  text-decoration: underline;
+}
+
+#signup-consent:hover {
   color: #660000;
   text-decoration: underline;
 }
@@ -306,6 +315,24 @@ pre {
   color: black;
 }
 
+#submit-consent {
+  background-color: #660000;
+  border-color: #4d0000;
+  padding-top: 1px;
+  padding-bottom: 0px;
+  color: white;
+  display: block;
+  margin-left: 20px;
+}
+
+#submit-consent:hover {
+  background-color: #FF6600;
+  border-color: #E65C00;
+  color: black;
+}
+
+
+
 #back{
   background-color: #660000;
   border-color: #4d0000;
@@ -343,7 +370,7 @@ pre {
 
 #consent-box {
   overflow-y: scroll;
-  height: 400px;
+  //height: 800px;
   resize: none;
   text-align: justify;
   text-justify: inter-word;
@@ -398,6 +425,11 @@ pre {
 #about-us:hover {
   color: black;
   text-decoration: underline;
+}
+
+.consent-form {
+  display: block;
+  margin-left: 20px;
 }
 
 html,body {padding:0;margin:0; height:100%;}
@@ -792,6 +824,10 @@ fieldset {
   margin-left: 15px;
 //  font-size: 16px;
 
+}
+
+#consent-checkbox {
+  zoom: 1.5;
 }
 
 @media all and (max-width: 400px){

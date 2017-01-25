@@ -10,19 +10,36 @@
 All data obtained from participants will be kept confidential and will only be reported in combined format. We won’t use your name or any other personally identifiable information in any publications.
 </p>
 <p>
-Your participation is voluntary and will not affect your grades or relationship with Virginia Tech in any way. Participation in this research will not place you at more than minimal risk of physical or psychological harm. If you agree to participate, you are also giving us permission to use collected data (such as game level completed and completion time) in our research. If you do not wish to participate, simply do not agree at the bottom; you still can play the game. You are free not to answer any questions or withdraw from this study at any time, for any reason. You must be 18 or older to take part in this research. If you are under 18 but still want to play the game, please select disagree below.
+Your participation is voluntary and will not affect your grades or relationship with Virginia Tech in any way. Participation in this research will not place you at more than minimal risk of physical or psychological harm. If you agree to participate, you are also giving us permission to use collected data (such as game level completed and completion time) in our research. If you do not wish to participate, simply do not agree to collect your data; you still can play the game. You are free not to answer any questions or withdraw from this study at any time, for any reason. You must be 18 or older to take part in this research. If you are under 18 but still want to play the game, please select disagree below.
 </p>
 <p>
 Playing with CodeReadingDojo until you reach level 6 should take approximately an hour, although you may also want to continue to the last level (level 18). You will be able to play each level more than once.
 </p>
 <p>
-In exchange for your participation, all people who have completed through level 6 in the game by January 31st 2017 will be entered into a raffle where 20 players will be selected each to receive a $10 Amazon gift card.
+In exchange for your participation, all people who have completed through level 6 in the game by <strong class="name">Feb 5th 2017</strong> will be entered into a raffle where 20 players will be selected each to receive a <strong class="name">$10 Amazon gift card</strong>.
 </p>
 <p>
-Should you have any questions about this study, you may contact Zahra Ghaed (principal investigator), at 540-449-5717, ghaed@vt.edu or Prof. Stephen Edwards, edwards@cs.vt.edu.
+Should you have any questions about this study, you may contact <strong class="name">Zahra Ghaed</strong> (principal investigator), at <strong class="name">540-449-5717</strong>, <strong class="name">ghaed@vt.edu</strong> or <strong class="name">Prof. Stephen Edwards</strong>, edwards@cs.vt.edu.
 </p>
 <p>
 Should you have any questions or concerns about the study’s conduct or your rights as a research subject, or need to report a research-related injury or event, you may contact the VT IRB Chair, Dr. David M. Moore at moored@vt.edu or (540) 231-4991.
 </p>
-
 </div>
+{{#if session.isAuthenticated}}
+  {{#each model as |user|}}
+    {{#if (eq session.data.email user.email)}}
+      {{#if (nnull user.password)}}
+      <label class="consent-form"><input type="radio" name="consent" value="1">
+      I agree
+      </label>
+      <label class="consent-form"><input type="radio" name="consent" value="0">
+      I disagree
+      </label>
+
+      {{#link-to 'new' class="btn btn-primary" id="submit-consent" tagName="button" invokeAction=(action 'submit' user)}}
+        Submit
+      {{/link-to}}
+      {{/if}}
+    {{/if}}
+  {{/each}}
+{{/if}}

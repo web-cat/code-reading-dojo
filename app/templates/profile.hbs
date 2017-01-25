@@ -7,7 +7,7 @@
 
     {{#each model as |user|}}
       {{#if (eq user.email session.data.email)}}
-
+        {{#if (nnull user.password)}}
     <table class="table">
       <tbody>
         <tr>
@@ -31,7 +31,7 @@
 
        
   {{/if}}
-
+  {{/if}}
   {{/each}}
   {{#link-to 'info' tagName="button" id="play"}}
     Complete your Profile

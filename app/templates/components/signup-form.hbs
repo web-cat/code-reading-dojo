@@ -13,8 +13,8 @@
             <div class="panel-body">
               <form id="save-user" class="form-horizontal" {{action "submit" on="submit"}}>
                     <div id="signupalert" style="display:none" class="alert alert-danger">
-                                    <p>Error:</p>
-                                    <span></span>
+                          <p>Error:</p>
+                          <span></span>
                         </div>
                     <!-- <div class="form-group">
                         <label for="userName" class="col-md-3 control-label">Full Name</label>
@@ -51,6 +51,19 @@
                             {{input value=user.levelcompleted id="levelcompleted" type="text" class="form-control" name="levelcompleted" placeholder="1"}}
                         </div>
                     </div> -->
+
+                    <div class="form-group">
+                        <!-- <label for="consent" class="col-md-3 control-label"><input id="consent-checkbox" type="checkbox" name="consent" value="consent"></label> -->
+                        <div class="col-md-9">
+                          <label ><input id="consent-checkbox" type="checkbox" name="consent" value="1" checked>
+                          My data can be used for research purposes.
+                          </label>
+                          {{#link-to 'consent' id="signup-consent"}}
+                            What is this?
+                            <!-- <i class="material-icons">mode_edit</i> -->
+                          {{/link-to}}
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <!-- Button -->

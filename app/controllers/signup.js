@@ -9,15 +9,21 @@ export default Ember.Controller.extend({
       let password = Ember.$('#signUpPasswordInput').val();
       let passwordConfirmation = Ember.$('#signUpConfirmInput').val();
       let levelcompleted = '1';
+      let consentVal = "2";
+      if(Ember.$('#consent-checkbox').is(":checked")){
+           consentVal = "1";
+      } else {
+        consentVal = "0";
+      }
+      //console.log('^^^^^^^^^^^^^^^^^^^^^');
+      //console.log(consentVal);
       let newInfo = user;
       newInfo.set('email', email);
       newInfo.set('password', password);
       newInfo.set('passwordConfirmation', passwordConfirmation);
       newInfo.set('levelcompleted', levelcompleted);
-//user.save()
+      newInfo.set('consent', consentVal);
       newInfo.save()
-
-
       .catch( () => {
 
         this.get('session').authenticate('authenticator:devise', user.get('email'), user.get('password'))
@@ -28,10 +34,11 @@ export default Ember.Controller.extend({
           this.get('notify').alert(JSON.stringify(this.get('errorMessage')['errors']));
         });
 
-        this.set('session.data.uid', user.get('email'));
-        this.set('session.data.email', user.get('email'));
-        this.set('session.data.authenticated.email', user.get('email'));
-        this.set('session.data.level', user.get('levelcompleted'));
+        this.set('session.data.uid', newInfo.get('email'));
+        this.set('session.data.email', newInfo.get('email'));
+        this.set('session.data.authenticated.email', newInfo.get('email'));
+        this.set('session.data.level', newInfo.get('levelcompleted'));
+        this.set('session.data.consent', newInfo.get('consent'));
         // console.log('^^^^^^^^^^^^^^^');
         // console.log(this.get('session.data.level'));
         // var arr = window.location.href.split("/");

@@ -20,6 +20,7 @@ export default Ember.Controller.extend({
       this.set('session.data.email', this.get('email'));
       this.set('session.data.authenticated.email', this.get('email'));
       this.set('session.data.level', 1);
+
       var current = this;
       var useremail = this.get('email');
       // console.log("LOGGGGIIIIIN");
@@ -28,9 +29,11 @@ export default Ember.Controller.extend({
       var email = model.get('email');
       if (email===useremail) {
         var completed = parseInt(model.get('levelcompleted')) + 1;
-         console.log("YEEEEEY");
-         console.log(completed);
+        var consent = model.get('consent');
+        console.log("YEEEEEY");
+        console.log(consent);
         current.set('session.data.level', completed);
+        current.set('session.data.consent', consent);
       }
       });
       // this.set('session.data.level',users[0]);
