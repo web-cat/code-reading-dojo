@@ -3,6 +3,6 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({//AuthenticatedRouteMixin, {
   model() {
-    return this.store.findAll('user');
+    return this.store.query('user', { role: 'admin' });
   }
 });

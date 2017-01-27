@@ -103,7 +103,7 @@ define('game/tests/controllers/consent.jshint', ['exports'], function (exports) 
   QUnit.module('JSHint | controllers/consent.js');
   QUnit.test('should pass jshint', function (assert) {
     assert.expect(1);
-    assert.ok(false, 'controllers/consent.js should pass jshint.\ncontrollers/consent.js: line 12, col 62, Unnecessary semicolon.\ncontrollers/consent.js: line 12, col 21, \'$\' is not defined.\n\n2 errors');
+    assert.ok(true, 'controllers/consent.js should pass jshint.');
   });
 });
 define('game/tests/controllers/index.jshint', ['exports'], function (exports) {

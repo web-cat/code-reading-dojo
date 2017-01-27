@@ -33,7 +33,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
-    serverTokenEndpoint: 'http://192.168.1.102:3000/users/sign_in',
+    serverTokenEndpoint: 'http://192.168.0.101:3000/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
         if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.email) && !isEmpty(data.client)) {
@@ -762,7 +762,7 @@ define('game/controllers/consent', ['exports', 'ember'], function (exports, _emb
       submit: function submit(user) {
         // console.log('*********************');
         // console.log(JSON.stringify(user));
-        var consent = $('input[name="consent"]:checked').val();;
+        var consent = _ember['default'].$('input[name="consent"]:checked').val();
         console.log('*********************');
         console.log(consent);
         // console.log(thisLevel);
@@ -1739,7 +1739,7 @@ define('game/routes/application', ['exports', 'ember', 'ember-simple-auth/mixins
 define('game/routes/completed', ['exports', 'ember', 'ember-simple-auth/mixins/authenticated-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsAuthenticatedRouteMixin) {
   exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsAuthenticatedRouteMixin['default'], {
     model: function model() {
-      return this.store.findAll('user');
+      return this.store.query('user', { role: 'admin' });
     }
   });
 });
@@ -1748,7 +1748,7 @@ define('game/routes/consent', ['exports', 'ember'], function (exports, _ember) {
 
   exports['default'] = _ember['default'].Route.extend({ //AuthenticatedRouteMixin, {
     model: function model() {
-      return this.store.findAll('user');
+      return this.store.query('user', { role: 'admin' });
     }
   });
 });
@@ -1765,7 +1765,7 @@ define('game/routes/info', ['exports', 'ember', 'ember-simple-auth/mixins/authen
 define('game/routes/login', ['exports', 'ember', 'ember-simple-auth/mixins/unauthenticated-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsUnauthenticatedRouteMixin) {
   exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsUnauthenticatedRouteMixin['default'], {
     model: function model() {
-      return this.store.findAll('user');
+      return this.store.query('user', { role: 'admin' });
     }
   });
 });
@@ -1779,7 +1779,7 @@ define('game/routes/new', ['exports', 'ember', 'ember-simple-auth/mixins/authent
 define('game/routes/profile', ['exports', 'ember', 'ember-simple-auth/mixins/authenticated-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsAuthenticatedRouteMixin) {
   exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsAuthenticatedRouteMixin['default'], {
     model: function model() {
-      return this.store.findAll('user');
+      return this.store.query('user', { role: 'admin' });
     }
   });
 });
@@ -14336,7 +14336,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+0d48c86f"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+37071b74"});
 }
 
 /* jshint ignore:end */
