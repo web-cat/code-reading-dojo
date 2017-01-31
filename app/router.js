@@ -22,7 +22,6 @@ Router.map(function() {
   this.route('info');
   this.route('profile');
   this.route('consent');
-  this.route('privacy');
   this.route('index', { path: '/' });
 });
 

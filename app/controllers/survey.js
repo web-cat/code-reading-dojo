@@ -41,10 +41,7 @@ export default Controller.extend({
       var arr = window.location.href.split("/");
       arr.splice(-1,1);
       var newUrl = arr.join("/") + "/new";
-      //console.log(newUrl);
-      // this.set('session.data.level', parseInt(this.get('session.data.level'))+1);
-      // console.log('^^^^^^^LEVEL^^^^^^');
-      // console.log(this.get('session.data.level'));
+      console.log(newUrl);
       window.location.replace(newUrl);
       // .catch((error) => {
       //   // var arr = window.location.href.split("/");

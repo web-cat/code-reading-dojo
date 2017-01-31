@@ -22,9 +22,6 @@ export default Controller.extend({
     },
     clicked: function(){
       if(this.get('clicked')==='true'){
-        this.set('session.data.currentlevel', this.get('currentUrl'));
-        //console.log("##@#@#@#@#@##@#");
-        //console.log(this.get('session.data.currentlevel'));
         Ember.$('#new-logo').hide();
         this.set('clicked','false');
       } else {

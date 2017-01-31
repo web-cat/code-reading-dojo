@@ -9,25 +9,12 @@ export default Controller.extend({
     save(info){
       let userId = this.get('session.data.email');
       let gender = Ember.$('input[name=gender]:checked', '#contact').val();
-      // console.log('###############');
-      // console.log(userId);
-      // console.log(gender);
+      console.log('###############');
+      console.log(userId);
+      console.log(gender);
       let experience = Ember.$('input[name=experience]:checked', '#contact').val();
       let enjoy = Ember.$('input[name=enjoy]:checked', '#contact').val();
-
-      var checkboxes = Ember.$('input[name=language]', '#contact');
-      var language = "";
-      for (var i=0, n=checkboxes.length; i<n; i++)
-      {
-          if (checkboxes[i].checked)
-          {
-              language += ","+checkboxes[i].value;
-          }
-      }
-
-      //console.log('###############');
-      //console.log(language);
-      // let language = Ember.$('input[name=language]:checked', '#contact').val();
+      let language = Ember.$('input[name=language]:checked', '#contact').val();
       let age = Ember.$('input[name=age]', '#contact').val();
       let newInfo = info;
       newInfo.set('email', userId);
@@ -45,7 +32,7 @@ export default Controller.extend({
       var arr = window.location.href.split("/");
       arr.splice(-1,1);
       var newUrl = arr.join("/") + "/new";
-      //console.log(newUrl);
+      console.log(newUrl);
       window.location.replace(newUrl);
       // .catch((error) => {
       //   // var arr = window.location.href.split("/");
