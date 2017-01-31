@@ -33,7 +33,7 @@ define('game/authenticators/devise', ['exports', 'ember-simple-auth/authenticato
   var isEmpty = _ember['default'].isEmpty;
   var run = _ember['default'].run;
   exports['default'] = _emberSimpleAuthAuthenticatorsDevise['default'].extend({
-    serverTokenEndpoint: 'http://192.168.0.101:3000/users/sign_in',
+    serverTokenEndpoint: 'http://codereadingdojo.cs.vt.edu/users/sign_in',
     restore: function restore(data) {
       return new RSVP.Promise(function (resolve, reject) {
         if (!isEmpty(data.accessToken) && !isEmpty(data.expiry) && !isEmpty(data.tokenType) && !isEmpty(data.email) && !isEmpty(data.client)) {
@@ -81,7 +81,7 @@ define('game/authenticators/oauth2', ['exports', 'ember-simple-auth/authenticato
 });
 define('game/authorizers/devise', ['exports', 'ember-simple-auth/authorizers/devise'], function (exports, _emberSimpleAuthAuthorizersDevise) {
   exports['default'] = _emberSimpleAuthAuthorizersDevise['default'].extend({
-    serverTokenEndpoint: 'http://192.168.0.101:3000/token'
+    serverTokenEndpoint: 'http://codereadingdojo.cs.vt.edu/token'
   });
 });
 // app/authorizers/devise.js
@@ -1811,18 +1811,6 @@ define('game/routes/info', ['exports', 'ember', 'ember-simple-auth/mixins/authen
 define('game/routes/login', ['exports', 'ember', 'ember-simple-auth/mixins/unauthenticated-route-mixin'], function (exports, _ember, _emberSimpleAuthMixinsUnauthenticatedRouteMixin) {
   exports['default'] = _ember['default'].Route.extend(_emberSimpleAuthMixinsUnauthenticatedRouteMixin['default'], {
     model: function model() {
-      //     console.log("IS THAT YOU?");
-      //
-      //     var glob = function myFunction(file) {
-      //       // console.log(jQuery.get('http://localhost:4200/assets/key.txt'));
-      //       return jQuery.get('http://localhost:4200/assets/key.txt');
-      //     }
-      //     var x = glob();
-      //     for(var key in x) {
-      //     console.log('key: ' + key +  'value: ' + x[key]);
-      // }
-      // //  var msg = Ember.$.ajax({type: "GET", url: "http://localhost:4200/assets/key.txt", async: false}).responseText;
-      //     console.log(x);
       return this.store.query('user', { role: 'tjjNCQMsXGXLLEKHGE6FBZthLJdvHbmqkvZQfHybMUdSZTmG6cXNJtPKmkQJ9duud4C5AmjzVCXPS39HPvDRaUtRWL6DwTetMmyn' });
     }
 
@@ -11894,7 +11882,7 @@ define("game/templates/consent", ["exports"], function (exports) {
         hasRendered: false,
         buildFragment: function buildFragment(dom) {
           var el0 = dom.createDocumentFragment();
-          var el1 = dom.createTextNode("    Back to Menu\n");
+          var el1 = dom.createTextNode("    Back to Signup page\n");
           dom.appendChild(el0, el1);
           return el0;
         },
@@ -12265,7 +12253,7 @@ define("game/templates/consent", ["exports"], function (exports) {
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [2, 2], [4, 14]]]], ["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [28, 6], [28, 29]]]]], [], 1, null, ["loc", [null, [28, 0], [45, 7]]]]],
+      statements: [["block", "link-to", ["signup"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button"], 0, null, ["loc", [null, [2, 2], [4, 14]]]], ["block", "if", [["get", "session.isAuthenticated", ["loc", [null, [28, 6], [28, 29]]]]], [], 1, null, ["loc", [null, [28, 0], [45, 7]]]]],
       locals: [],
       templates: [child0, child1]
     };
@@ -15503,6 +15491,42 @@ define("game/templates/programs", ["exports"], function (exports) {
       };
     })();
     var child1 = (function () {
+      var child0 = (function () {
+        return {
+          meta: {
+            "fragmentReason": false,
+            "revision": "Ember@2.6.2",
+            "loc": {
+              "source": null,
+              "start": {
+                "line": 10,
+                "column": 2
+              },
+              "end": {
+                "line": 12,
+                "column": 2
+              }
+            },
+            "moduleName": "game/templates/programs.hbs"
+          },
+          isEmpty: false,
+          arity: 0,
+          cachedFragment: null,
+          hasRendered: false,
+          buildFragment: function buildFragment(dom) {
+            var el0 = dom.createDocumentFragment();
+            var el1 = dom.createTextNode("  Back to Menu\n");
+            dom.appendChild(el0, el1);
+            return el0;
+          },
+          buildRenderNodes: function buildRenderNodes() {
+            return [];
+          },
+          statements: [],
+          locals: [],
+          templates: []
+        };
+      })();
       return {
         meta: {
           "fragmentReason": false,
@@ -15514,7 +15538,7 @@ define("game/templates/programs", ["exports"], function (exports) {
               "column": 0
             },
             "end": {
-              "line": 10,
+              "line": 13,
               "column": 0
             }
           },
@@ -15542,17 +15566,21 @@ define("game/templates/programs", ["exports"], function (exports) {
           dom.appendChild(el0, el1);
           var el1 = dom.createTextNode("\n");
           dom.appendChild(el0, el1);
+          var el1 = dom.createComment("");
+          dom.appendChild(el0, el1);
           return el0;
         },
         buildRenderNodes: function buildRenderNodes(dom, fragment, contextualElement) {
           var element1 = dom.childAt(fragment, [3]);
-          var morphs = new Array(1);
+          var morphs = new Array(2);
           morphs[0] = dom.createElementMorph(element1);
+          morphs[1] = dom.createMorphAt(fragment, 5, 5, contextualElement);
+          dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["element", "action", ["getCurrentUrl", "clicked"], [], ["loc", [null, [9, 61], [9, 97]]]]],
+        statements: [["element", "action", ["getCurrentUrl", "clicked"], [], ["loc", [null, [9, 61], [9, 97]]]], ["block", "link-to", ["new"], ["id", "skip-ready"], 0, null, ["loc", [null, [10, 2], [12, 14]]]]],
         locals: [],
-        templates: []
+        templates: [child0]
       };
     })();
     var child2 = (function () {
@@ -15566,11 +15594,11 @@ define("game/templates/programs", ["exports"], function (exports) {
                 "loc": {
                   "source": null,
                   "start": {
-                    "line": 16,
+                    "line": 19,
                     "column": 6
                   },
                   "end": {
-                    "line": 18,
+                    "line": 21,
                     "column": 6
                   }
                 },
@@ -15597,7 +15625,7 @@ define("game/templates/programs", ["exports"], function (exports) {
                 morphs[0] = dom.createAttrMorph(element0, 'src');
                 return morphs;
               },
-              statements: [["attribute", "src", ["subexpr", "concat", [["subexpr", "concat", ["assets/images/beginner/", ["get", "program.level", ["loc", [null, [17, 74], [17, 87]]]]], [], ["loc", [null, [17, 40], [17, 88]]]], ".png"], [], ["loc", [null, [17, 31], [17, 97]]]]]],
+              statements: [["attribute", "src", ["subexpr", "concat", [["subexpr", "concat", ["assets/images/beginner/", ["get", "program.level", ["loc", [null, [20, 74], [20, 87]]]]], [], ["loc", [null, [20, 40], [20, 88]]]], ".png"], [], ["loc", [null, [20, 31], [20, 97]]]]]],
               locals: [],
               templates: []
             };
@@ -15610,11 +15638,11 @@ define("game/templates/programs", ["exports"], function (exports) {
                 "loc": {
                   "source": null,
                   "start": {
-                    "line": 19,
+                    "line": 22,
                     "column": 10
                   },
                   "end": {
-                    "line": 21,
+                    "line": 24,
                     "column": 10
                   }
                 },
@@ -15646,11 +15674,11 @@ define("game/templates/programs", ["exports"], function (exports) {
                 "loc": {
                   "source": null,
                   "start": {
-                    "line": 25,
+                    "line": 28,
                     "column": 12
                   },
                   "end": {
-                    "line": 27,
+                    "line": 30,
                     "column": 12
                   }
                 },
@@ -15681,11 +15709,11 @@ define("game/templates/programs", ["exports"], function (exports) {
               "loc": {
                 "source": null,
                 "start": {
-                  "line": 15,
+                  "line": 18,
                   "column": 6
                 },
                 "end": {
-                  "line": 30,
+                  "line": 33,
                   "column": 4
                 }
               },
@@ -15730,7 +15758,7 @@ define("game/templates/programs", ["exports"], function (exports) {
               dom.insertBoundary(fragment, 0);
               return morphs;
             },
-            statements: [["block", "link-to", ["new"], [], 0, null, ["loc", [null, [16, 6], [18, 18]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button", "invokeAction", ["subexpr", "action", ["clicked"], [], ["loc", [null, [19, 98], [19, 116]]]]], 1, null, ["loc", [null, [19, 10], [21, 22]]]], ["inline", "program-details", [], ["program", ["subexpr", "@mut", [["get", "program", ["loc", [null, [23, 36], [23, 43]]]]], [], []]], ["loc", [null, [23, 10], [23, 45]]]], ["block", "link-to", ["completed", ["subexpr", "add", [["get", "currentUrl", ["loc", [null, [25, 40], [25, 50]]]], "1"], [], ["loc", [null, [25, 35], [25, 55]]]]], ["tagName", "button", "invokeAction", ["subexpr", "action", ["clicked"], [], ["loc", [null, [25, 86], [25, 104]]]], "class", "btn btn-primary btn-lg", "id", "next-button"], 2, null, ["loc", [null, [25, 12], [27, 24]]]]],
+            statements: [["block", "link-to", ["new"], [], 0, null, ["loc", [null, [19, 6], [21, 18]]]], ["block", "link-to", ["new"], ["class", "btn btn-primary", "id", "back-button", "tagName", "button", "invokeAction", ["subexpr", "action", ["clicked"], [], ["loc", [null, [22, 98], [22, 116]]]]], 1, null, ["loc", [null, [22, 10], [24, 22]]]], ["inline", "program-details", [], ["program", ["subexpr", "@mut", [["get", "program", ["loc", [null, [26, 36], [26, 43]]]]], [], []]], ["loc", [null, [26, 10], [26, 45]]]], ["block", "link-to", ["completed", ["subexpr", "add", [["get", "currentUrl", ["loc", [null, [28, 40], [28, 50]]]], "1"], [], ["loc", [null, [28, 35], [28, 55]]]]], ["tagName", "button", "invokeAction", ["subexpr", "action", ["clicked"], [], ["loc", [null, [28, 86], [28, 104]]]], "class", "btn btn-primary btn-lg", "id", "next-button"], 2, null, ["loc", [null, [28, 12], [30, 24]]]]],
             locals: [],
             templates: [child0, child1, child2]
           };
@@ -15742,11 +15770,11 @@ define("game/templates/programs", ["exports"], function (exports) {
             "loc": {
               "source": null,
               "start": {
-                "line": 13,
+                "line": 16,
                 "column": 2
               },
               "end": {
-                "line": 31,
+                "line": 34,
                 "column": 2
               }
             },
@@ -15770,7 +15798,7 @@ define("game/templates/programs", ["exports"], function (exports) {
             dom.insertBoundary(fragment, null);
             return morphs;
           },
-          statements: [["block", "if", [["subexpr", "eq", [["get", "program.level", ["loc", [null, [15, 16], [15, 29]]]], ["get", "currentUrl", ["loc", [null, [15, 30], [15, 40]]]]], [], ["loc", [null, [15, 12], [15, 41]]]]], [], 0, null, ["loc", [null, [15, 6], [30, 11]]]]],
+          statements: [["block", "if", [["subexpr", "eq", [["get", "program.level", ["loc", [null, [18, 16], [18, 29]]]], ["get", "currentUrl", ["loc", [null, [18, 30], [18, 40]]]]], [], ["loc", [null, [18, 12], [18, 41]]]]], [], 0, null, ["loc", [null, [18, 6], [33, 11]]]]],
           locals: [],
           templates: [child0]
         };
@@ -15782,11 +15810,11 @@ define("game/templates/programs", ["exports"], function (exports) {
           "loc": {
             "source": null,
             "start": {
-              "line": 12,
+              "line": 15,
               "column": 0
             },
             "end": {
-              "line": 32,
+              "line": 35,
               "column": 0
             }
           },
@@ -15809,7 +15837,7 @@ define("game/templates/programs", ["exports"], function (exports) {
           dom.insertBoundary(fragment, null);
           return morphs;
         },
-        statements: [["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [13, 12], [13, 19]]]], "true"], [], ["loc", [null, [13, 8], [13, 27]]]]], [], 0, null, ["loc", [null, [13, 2], [31, 9]]]]],
+        statements: [["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [16, 12], [16, 19]]]], "true"], [], ["loc", [null, [16, 8], [16, 27]]]]], [], 0, null, ["loc", [null, [16, 2], [34, 9]]]]],
         locals: ["program"],
         templates: [child0]
       };
@@ -15828,7 +15856,7 @@ define("game/templates/programs", ["exports"], function (exports) {
             "column": 0
           },
           "end": {
-            "line": 33,
+            "line": 36,
             "column": 0
           }
         },
@@ -15864,7 +15892,7 @@ define("game/templates/programs", ["exports"], function (exports) {
         dom.insertBoundary(fragment, null);
         return morphs;
       },
-      statements: [["block", "link-to", ["new"], [], 0, null, ["loc", [null, [2, 2], [4, 14]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [5, 10], [5, 17]]]], "false"], [], ["loc", [null, [5, 6], [5, 26]]]]], [], 1, null, ["loc", [null, [5, 0], [10, 7]]]], ["block", "each", [["get", "model", ["loc", [null, [12, 8], [12, 13]]]]], [], 2, null, ["loc", [null, [12, 0], [32, 9]]]]],
+      statements: [["block", "link-to", ["new"], [], 0, null, ["loc", [null, [2, 2], [4, 14]]]], ["block", "if", [["subexpr", "eq", [["get", "clicked", ["loc", [null, [5, 10], [5, 17]]]], "false"], [], ["loc", [null, [5, 6], [5, 26]]]]], [], 1, null, ["loc", [null, [5, 0], [13, 7]]]], ["block", "each", [["get", "model", ["loc", [null, [15, 8], [15, 13]]]]], [], 2, null, ["loc", [null, [15, 0], [35, 9]]]]],
       locals: [],
       templates: [child0, child1, child2]
     };
@@ -16092,7 +16120,7 @@ catch(err) {
 /* jshint ignore:start */
 
 if (!runningTests) {
-  require("game/app")["default"].create({"name":"game","version":"0.0.0+afb28fd6"});
+  require("game/app")["default"].create({"name":"game","version":"0.0.0+ff1396b3"});
 }
 
 /* jshint ignore:end */

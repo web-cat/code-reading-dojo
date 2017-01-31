@@ -284,6 +284,20 @@ pre {
   text-decoration: underline;
 }
 
+#skip-ready {
+  color: #660000;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  background: none;
+  display: block;
+}
+
+#skip-ready:hover {
+  color: #FF6600;
+  text-decoration: underline;
+}
+
 #signup-consent {
   color: #FF6600;
   text-decoration: underline;
@@ -446,7 +460,7 @@ pre {
   margin-left: 10px;
 }
 
-#aprivacy:hover {
+#privacy:hover {
   color: black;
   text-decoration: underline;
 }

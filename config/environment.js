@@ -1,7 +1,7 @@
 /* jshint node: true */
 module.exports = function(environment) {
   var ENV = {
-    host: 'http://192.168.0.101:3000',
+    host: 'http://codereadingdojo.cs.vt.edu',
     modulePrefix: 'game',
     environment: environment,
     baseURL: '',
@@ -19,7 +19,7 @@ module.exports = function(environment) {
     }
   };
 
-  ENV.SERVER_URL = 'http://192.168.0.101:3000';
+  ENV.SERVER_URL = 'http://codereadingdojo.cs.vt.edu';
 
 
 

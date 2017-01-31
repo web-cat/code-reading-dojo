@@ -7,6 +7,9 @@
   Click the word that you think is wrong. You need to find at least three errors in the code.
   </p>
   <button  id='confirm-button' class="btn btn-primary bt-lg" {{action "getCurrentUrl" "clicked"}}>Ready?</button>
+  {{#link-to 'new' id="skip-ready"}}
+  Back to Menu
+  {{/link-to}}
 {{/if}}
 </div>
 {{#each model as |program|}}
