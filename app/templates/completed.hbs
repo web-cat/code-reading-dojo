@@ -14,84 +14,88 @@
       <p>Congradulations {{user.email}}, you've completed the level!</p>
   <div class="form-horizontal form-group form-group-lg row">
     <div class="col-xs-10 col-xs-offset-1 col-sm-offset-4 col-sm-4 col-md-4">
-      <div class="container">
-        {{#if (eq '1' currentUrl)}}
+      {{#link-to 'new' class="btn btn-primary" id="back" tagName="button"}}
+        Back to Menu
+      {{/link-to}}
+        {{#if (eq '1' session.data.currentlevel)}}
           {{beginner-one}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '2' currentUrl)}}
+        {{#if (eq '2' session.data.currentlevel)}}
           {{beginner-two}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '3' currentUrl)}}
+        {{#if (eq '3' session.data.currentlevel)}}
           {{beginner-three}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '4' currentUrl)}}
+        {{#if (eq '4' session.data.currentlevel)}}
           {{beginner-four}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '5' currentUrl)}}
+        {{#if (eq '5' session.data.currentlevel)}}
           {{beginner-five}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '6' currentUrl)}}
+        {{#if (eq '6' session.data.currentlevel)}}
           {{beginner-six}}
-          {{#link-to 'survey' class="btn btn-primary" id="survey"}}
+          <!-- {{#link-to 'survey' class="btn btn-primary" id="survey" invokeAction='getCurrentUrl user'}}
             Survey
-          {{/link-to}}
+          {{/link-to}} -->
+          <button {{action "survey" user}} class="btn btn-primary" id="survey">Survey</button>
+          <button {{action "getCurrentUrl" user}} id="skip-survey">Skip to level 7</button>
         {{/if}}
-        {{#if (eq '7' currentUrl)}}
+        {{#if (eq '7' session.data.currentlevel)}}
           {{intermediate-seven}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '8' currentUrl)}}
+        {{#if (eq '8' session.data.currentlevel)}}
           {{intermediate-eight}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '9' currentUrl)}}
+        {{#if (eq '9' session.data.currentlevel)}}
           {{intermediate-nine}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '10' currentUrl)}}
+        {{#if (eq '10' session.data.currentlevel)}}
           {{intermediate-ten}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '11' currentUrl)}}
+        {{#if (eq '11' session.data.currentlevel)}}
           {{intermediate-eleven}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '12' currentUrl)}}
+        {{#if (eq '12' session.data.currentlevel)}}
           {{intermediate-twelve}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '13' currentUrl)}}
+        {{#if (eq '13' session.data.currentlevel)}}
           {{advanced-thirteen}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '14' currentUrl)}}
+        {{#if (eq '14' session.data.currentlevel)}}
           {{advanced-fourteen}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '15' currentUrl)}}
+        {{#if (eq '15' session.data.currentlevel)}}
           {{advanced-fifteen}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '16' currentUrl)}}
+        {{#if (eq '16' session.data.currentlevel)}}
           {{advanced-sixteen}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '17' currentUrl)}}
+        {{#if (eq '17' session.data.currentlevel)}}
           {{advanced-seventeen}}
           <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
         {{/if}}
-        {{#if (eq '18' currentUrl)}}
+        {{#if (eq '18' session.data.currentlevel)}}
           {{advanced-eighteen}}
-          <button {{action "getCurrentUrl" user}} class="btn btn-info survey-next">Next Level</button>
+          {{#link-to 'new' class="btn btn-primary" id="back" tagName="button"}}
+            Back to Menu
+          {{/link-to}}
         {{/if}}
 
-
-    </div>
     </div>
   </div>
 
