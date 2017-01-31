@@ -24,7 +24,7 @@
           {{#link-to 'programs' p.level class="item-completed"}}
             <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
           {{/link-to}}
-          {{else}}
+        {{else}}
           {{#link-to 'programs' p.level class="item-notcompleted"}}
             <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
           {{/link-to}}
@@ -47,18 +47,33 @@
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'intermediate')}}
           {{#if (gt session.data.level p.level)}}
-            {{#link-to 'programs' p.level class="item-completed"}}
-              <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
-            {{/link-to}}
+            {{#if (gt '9' p.level)}}
+              {{#link-to 'programs' p.level class="item-completed"}}
+                <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
+              {{/link-to}}
+            {{/if}}
+          {{/if}}
+        {{/if}}
+      {{/each}}
+      {{#each model as |p|}}
+        {{#if (eq p.difficulty 'intermediate')}}
+          {{#if (gt session.data.level p.level)}}
+            {{#if (gt p.level '10')}}
+
+              {{#link-to 'programs' p.level class="item-completed"}}
+                <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
+              {{/link-to}}
+            {{/if}}
           {{/if}}
         {{/if}}
       {{/each}}
 
+
       {{#each model as |p|}}
         {{#if (eq p.difficulty 'intermediate')}}
-          {{#if (gt p.level session.data.level)}}
+          {{#if (gt p.level (add session.data.level '1'))}}
             {{#link-to 'programs' p.level class="item-notcompleted"}}
-              <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/intermediate/" p.level) ".png"}}>
+              <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
             {{/link-to}}
           {{/if}}
         {{/if}}
@@ -68,19 +83,16 @@
         {{#if (eq p.difficulty 'advanced')}}
           {{#if (gt session.data.level p.level)}}
             {{#link-to 'programs' p.level class="item-completed"}}
-                <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
+                <img class="item-completed" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
             {{/link-to}}
           {{else}}
             {{#link-to 'programs' p.level class="item-notcompleted"}}
-                <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/advanced/" p.level) ".png"}}>
+                <img class="item-notcompleted" id={{p.level}} src={{concat (concat "assets/images/beginner/" p.level) ".png"}}>
             {{/link-to}}
           {{/if}}
         {{/if}}
       {{/each}}
     </div>
 
-    {{#link-to 'info' class="btn btn-primary" }}
-      Info
-    {{/link-to}}
     </div>
 </div>

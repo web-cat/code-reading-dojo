@@ -30,8 +30,8 @@ export default Ember.Controller.extend({
       if (email===useremail) {
         var completed = parseInt(model.get('levelcompleted')) + 1;
         var consent = model.get('consent');
-        console.log("YEEEEEY");
-        console.log(consent);
+        //console.log("YEEEEEY");
+        //console.log(consent);
         current.set('session.data.level', completed);
         current.set('session.data.consent', consent);
       }
