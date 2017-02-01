@@ -23,6 +23,7 @@ Router.map(function() {
   this.route('profile');
   this.route('consent');
   this.route('privacy');
+  this.route('instruction');
   this.route('index', { path: '/' });
 });
 

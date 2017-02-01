@@ -17,8 +17,9 @@ export default Ember.Controller.extend({
       }
       //console.log('^^^^^^^^^^^^^^^^^^^^^');
       //console.log(consentVal);
-      let newInfo = user;
-      newInfo.set('email', email);
+      let newInfo = user;  
+      var lowerEmail = email.toLowerCase();
+      newInfo.set('email', lowerEmail);
       newInfo.set('password', password);
       newInfo.set('passwordConfirmation', passwordConfirmation);
       newInfo.set('levelcompleted', levelcompleted);

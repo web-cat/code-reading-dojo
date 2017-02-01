@@ -6047,6 +6047,29 @@ pre {
   color: #660000;
   text-decoration: underline; }
 
+#skip-survey {
+  color: #660000;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  background: none; }
+
+#skip-survey:hover {
+  color: #FF6600;
+  text-decoration: underline; }
+
+#skip-ready {
+  color: #660000;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  background: none;
+  display: block; }
+
+#skip-ready:hover {
+  color: #FF6600;
+  text-decoration: underline; }
+
 #signup-consent {
   color: #FF6600;
   text-decoration: underline; }
@@ -6058,16 +6081,21 @@ pre {
 #start-button {
   background-color: #FF6600;
   border-color: #E65C00;
-  padding-top: 1px;
-  padding-bottom: 0px;
+  padding: 10px;
   display: block;
-  color: black; }
+  color: black;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-bottom: 10px; }
 
 #retry-button {
   background-color: #660000;
   border-color: #4d0000;
-  padding-top: 1px;
-  padding-bottom: 0px;
+  padding: 10px;
+  color: black;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-top: 10px;
   color: white; }
 
 #back-button {
@@ -6153,8 +6181,8 @@ pre {
   color: white; }
 
 .survey-next:hover {
-  background-color: #FF6600;
-  border-color: #E65C00;
+  background-color: #FF6600 !important;
+  border-color: #E65C00 !important;
   color: black; }
 
 #contact-us {
@@ -6174,9 +6202,27 @@ pre {
   color: black;
   text-decoration: underline; }
 
+#privacy {
+  color: white;
+  text-decoration: underline;
+  margin-left: 10px; }
+
+#privacy:hover {
+  color: black;
+  text-decoration: underline; }
+
 .consent-form {
   display: block;
   margin-left: 20px; }
+
+#privacy-link {
+  float: left;
+  color: #660000;
+  text-decoration: underline; }
+
+#privacy-link:hover {
+  color: #FF6600;
+  text-decoration: underline; }
 
 html, body {
   padding: 0;
@@ -6277,6 +6323,7 @@ form .buttons .submit:hover {
 
 .container {
   width: 100%;
+  height: 100vh;
   margin: 0 auto;
   position: relative; }
 
@@ -6438,9 +6485,12 @@ fieldset {
 #next-button {
   background-color: #FF6600;
   border-color: #E65C00;
-  padding-top: 1px;
-  padding-bottom: 0px;
   display: block;
+  padding: 10px;
+  color: black;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-top: 10px;
   color: black; }
 
 .notice {

@@ -1,6 +1,0 @@
-com.embercordova.game.R$drawable: int screen
-com.embercordova.game.R$mipmap: int icon
-com.embercordova.game.R$string: int activity_name
-com.embercordova.game.R$string: int app_name
-com.embercordova.game.R$string: int launcher_name
-com.embercordova.game.R$xml: int config

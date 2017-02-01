@@ -1,7 +1,0 @@
-com.embercordova.game.BuildConfig
-com.embercordova.game.R
-com.embercordova.game.R$attr
-com.embercordova.game.R$drawable
-com.embercordova.game.R$mipmap
-com.embercordova.game.R$string
-com.embercordova.game.R$xml

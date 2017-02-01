@@ -6081,16 +6081,21 @@ pre {
 #start-button {
   background-color: #FF6600;
   border-color: #E65C00;
-  padding-top: 1px;
-  padding-bottom: 0px;
+  padding: 10px;
   display: block;
-  color: black; }
+  color: black;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-bottom: 10px; }
 
 #retry-button {
   background-color: #660000;
   border-color: #4d0000;
-  padding-top: 1px;
-  padding-bottom: 0px;
+  padding: 10px;
+  color: black;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-top: 10px;
   color: white; }
 
 #back-button {
@@ -6480,9 +6485,12 @@ fieldset {
 #next-button {
   background-color: #FF6600;
   border-color: #E65C00;
-  padding-top: 1px;
-  padding-bottom: 0px;
   display: block;
+  padding: 10px;
+  color: black;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-top: 10px;
   color: black; }
 
 .notice {

@@ -200,8 +200,15 @@ export default Component.extend({
             Ember.$('#next').attr("class","next-level");
             // window.location.replace(newUrl);
            }
+           else {
+             current.get('notify').alert("You lost! You can retry this level. Click on Retry.", {closeAfter: 5000 });
+             current.set('founded',[]);
+             current.set('plusCount',0);
+             current.set('minusCount',0);
+             Ember.$('#retry-button').attr("class","btn btn-primary btn-lg next-level");
+           }
         }
-        if (current.get('minusCount') > (len - 1) ) {
+        if (current.get('minusCount') >= (len - 1) ) {
           //console.log('**************');
           //(current.get('minusCount'));
           //console.log(len);

@@ -4,7 +4,10 @@
   {{/link-to}}
 {{#if (eq clicked 'false')}}
   <p>
-  Click the word that you think is wrong. You need to find at least three errors in the code.
+  Mark mistakes by touch.
+</p>
+<p>
+   You need to find at least three errors in the code.
   </p>
   <button  id='confirm-button' class="btn btn-primary bt-lg" {{action "getCurrentUrl" "clicked"}}>Ready?</button>
   {{#link-to 'new' id="skip-ready"}}
@@ -16,14 +19,21 @@
   {{#if (eq clicked 'true')}}
 
       {{#if (eq program.level currentUrl)}}
+
       {{#link-to 'new'}}
         <img id="new-logo" src={{concat (concat "assets/images/beginner/" program.level) ".png"}}>
       {{/link-to}}
+      <div class="next-level-none" id="next">
+        <center>
+        {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked') class="btn btn-primary btn-lg" id="next-button"}}
+          Next Level
+        {{/link-to}}
+      </center>
+      </div>
+          {{program-details program=program}}
           {{#link-to 'new' class="btn btn-primary" id="back-button" tagName="button" invokeAction=(action 'clicked')}}
             Back to Menu
           {{/link-to}}
-
-          {{program-details program=program}}
           <div class="next-level-none" id="next">
             {{#link-to 'completed' (add currentUrl '1') tagName="button" invokeAction=(action 'clicked') class="btn btn-primary btn-lg" id="next-button"}}
               Next Level

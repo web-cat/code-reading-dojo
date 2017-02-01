@@ -1,5 +1,20 @@
 {{ember-notify messageStyle='bootstrap' classPrefix="custom-notify"}}
 
+
+{{#if (eq clicked 'false')}}
+<center>
+  <h3>
+  Press Start to Begin
+</h3>
+  <button {{action "clickCode" program.errorindexes}} class="btn btn-primary btn-lg" id="start-button">Start</button>
+</center>
+{{/if}}
+{{#if (eq clicked 'true')}}
+<center>
+<button {{action "clickCode" program.errorindexes}} class="btn btn-primary btn-lg next-level-none" id="retry-button">Retry</button>
+</center>
+{{/if}}
+
 {{#if (eq clicked 'true')}}
 <span id="timer">
 {{x-timer autoStart='true' format='HH:MM:SS' stopRequired=false}}
@@ -23,9 +38,3 @@
   {{program.code}}
 {{/code-block}} -->
 <!-- {{#link-to 'login' id='index-button' class="btn btn-primary btn-lg" }}login{{/link-to}} -->
-{{#if (eq clicked 'false')}}
-  <button {{action "clickCode" program.errorindexes}} class="btn btn-primary btn-lg" id="start-button">Start</button>
-{{/if}}
-{{#if (eq clicked 'true')}}
-<button {{action "clickCode" program.errorindexes}} class="btn btn-primary btn-lg next-level-none" id="retry-button">Retry</button>
-{{/if}}
