@@ -7,6 +7,7 @@
   {{#link-to 'new'}}
     <img id="new-logo" src="assets/images/logo.png">
   {{/link-to}}
+    {{#if session.isAuthenticated}}
   {{#each model as |user|}}
 
     {{#if (eq session.data.email user.email)}}
@@ -101,6 +102,9 @@
 
   {{/if}}
 
-  {{/if}}
+    {{/if}}
 {{/each}}
+{{else}}
+<button {{action "next" session.data.level}} class="btn btn-info survey-next">Next Level</button>
+  {{/if}}
 </div>

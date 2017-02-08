@@ -9,6 +9,11 @@ export default Ember.Controller.extend({
     // }
     invalidateSession() {
       this.get('session').invalidate();
+    },
+    setLevel() {
+      this.set('session.data.level', 1);
+      console.log('index');
+      console.log(this.get('session.data.level'));
     }
   }
 });

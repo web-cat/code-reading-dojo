@@ -5849,7 +5849,8 @@ pre {
   max-width: 25%;
   display: block;
   margin-left: 38%;
-  margin-right: 37%; }
+  margin-right: 37%;
+  margin-top: 20px; }
 
 .item-notcompleted {
   opacity: 0.5;
@@ -6007,6 +6008,7 @@ pre {
 #login {
   float: right;
   margin-right: 10px;
+  margin-top: 20px;
   background-color: #660000;
   border-color: #4d0000;
   color: white;
@@ -6025,7 +6027,7 @@ pre {
 
 #profile {
   margin-left: 10px;
-  margin-top: 10px;
+  margin-top: 20px;
   background-color: #660000;
   border-color: #4d0000;
   color: white;
@@ -6055,6 +6057,17 @@ pre {
   background: none; }
 
 #skip-survey:hover {
+  color: #FF6600;
+  text-decoration: underline; }
+
+#skip-login {
+  color: #660000;
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  background: none; }
+
+#skip-login:hover {
   color: #FF6600;
   text-decoration: underline; }
 
@@ -6282,7 +6295,7 @@ form .likert:before {
 
 form .likert li {
   display: inline-block;
-  width: 19%;
+  width: 18%;
   text-align: center;
   vertical-align: top; }
 
@@ -6332,8 +6345,8 @@ form .buttons .submit:hover {
 
 #contact {
   background: #F9F9F9;
-  padding: 25px;
-  margin: 50px 0; }
+  padding: 5px;
+  margin: 25px 0; }
 
 #contact h3 {
   color: #F96;
@@ -6483,6 +6496,17 @@ fieldset {
   display: block; }
 
 #next-button {
+  background-color: #FF6600;
+  border-color: #E65C00;
+  display: block;
+  padding: 10px;
+  color: black;
+  padding-left: 40px;
+  padding-right: 40px;
+  margin-top: 10px;
+  color: black; }
+
+#next-button2 {
   background-color: #FF6600;
   border-color: #E65C00;
   display: block;

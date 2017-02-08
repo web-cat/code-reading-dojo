@@ -4,7 +4,7 @@
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <name>Code Reading Dojo</name>
+    <name>CodeReadingDojo</name>
     <description>
     </description>
     <content src="index.html" />

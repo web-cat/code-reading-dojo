@@ -8,6 +8,19 @@ export default Ember.Controller.extend({
   currentUrl: '1',
   clicked: 'false',
   actions: {
+    next: function(current) {
+      console.log('$$$$$$$$$$$');
+      console.log(current);
+      var level = current + 1;
+      console.log('$$$$2$$$$$$$');
+      console.log(level);
+      this.set('session.data.level', level);
+      var arr = window.location.href.split("/");
+      arr.splice(-1,1);
+      arr.splice(-1,1);
+      var newUrl = arr.join("/") + "/programs/" + String(level);
+      window.location.replace(newUrl);
+    },
     getCurrentUrl: function(user){
       // console.log(window.location.href);
       var arr = window.location.href.split("/");
@@ -23,13 +36,15 @@ export default Ember.Controller.extend({
       // console.log(JSON.stringify(user));
       var currentLevel = user.get('levelcompleted');
       var thisLevel = this.get('currentUrl');
-      // console.log('****currentLevel in user****23234234*****thisLevel by user********');
-      // console.log(currentLevel);
-      // console.log(thisLevel);
-      if (currentLevel < thisLevel) {
+      //  console.log('****currentLevel in user****23234234*****thisLevel by user********');
+      //  console.log(currentLevel);
+      //  console.log(thisLevel);
+      if (parseInt(currentLevel) < parseInt(thisLevel)) {
         user.set('levelcompleted', thisLevel.toString());
         this.set('session.data.level',thisLevel.toString());
         user.save();
+        // console.log('testing');
+        // console.log(user.get('levelcompleted'));
       }
       // console.log("^%^%^%^%^%^%^thisLevel.toString()%^%^%^%^");
       // console.log(this.get('session.data.level'));
@@ -54,7 +69,7 @@ export default Ember.Controller.extend({
       console.log('******PPLLL***************');
       console.log(currentLevel);
       console.log(thisLevel);
-      if (currentLevel < this.get('currentUrl')) {
+      if (parseInt(currentLevel) < parseInt(this.get('currentUrl'))) {
         user.set('levelcompleted', thisLevel.toString());
         this.set('session.data.level',this.get('currentUrl'));
         user.save();

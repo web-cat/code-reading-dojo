@@ -16,11 +16,15 @@
 
 <h3>Welcome!</h3>
 <p>
-CodeReadingDojo is an educationally-oriented Android game aimed at promoting Java reading skills.
+CodeReadingDojo is an educationally-oriented mobile game aimed at promoting Java reading skills.
 </p>
 {{#link-to 'signup' class="btn btn-primary" id="signup"}}
   Sign Up
 {{/link-to}}
+{{#link-to 'new' id="skip-login" invokeAction=(action 'setLevel')}}
+  Quick Play
+{{/link-to}}
+
 {{/if}}
 <br/><br/>
 </div>
